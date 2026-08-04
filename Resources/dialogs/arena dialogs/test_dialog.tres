@@ -1,0 +1,88 @@
+[gd_resource type="Resource" script_class="SproutyDialogsDialogueData" format=3 uid="uid://bhcjptu4mmhpw"]
+
+[ext_resource type="Script" uid="uid://cbjdca3iwlx36" path="res://addons/sprouty_dialogs/resources/dialogue_data.gd" id="1_anx1s"]
+
+[resource]
+script = ExtResource("1_anx1s")
+graph_data = {
+"EXAMPLE": {
+"dialogue_node_1": {
+"char_expand": true,
+"character": "muromec",
+"dialog_key": "EXAMPLE_DIALOG_1",
+"node_index": 1,
+"node_type": "dialogue_node",
+"offset": Vector2(420, 260),
+"portrait": "Neutral",
+"size": Vector2(250.00015, 377),
+"to_dialog": "",
+"to_node": ["dialogue_node_2"]
+},
+"dialogue_node_2": {
+"char_expand": true,
+"character": "muromec",
+"dialog_key": "EXAMPLE_DIALOG_2",
+"node_index": 2,
+"node_type": "dialogue_node",
+"offset": Vector2(780, 260),
+"portrait": "Neutral",
+"size": Vector2(250, 327),
+"to_dialog": "",
+"to_node": ["END"]
+},
+"start_node_1": {
+"node_index": 1,
+"node_type": "start_node",
+"offset": Vector2(20, 260),
+"size": Vector2(280, 75.00003),
+"start_id": "EXAMPLE",
+"to_dialog": "",
+"to_node": ["dialogue_node_1"]
+}
+},
+"EXAMPLE_2": {
+"dialogue_node_3": {
+"char_expand": true,
+"character": "muromec",
+"dialog_key": "EXAMPLE_2_DIALOG_3",
+"node_index": 3,
+"node_type": "dialogue_node",
+"offset": Vector2(440, 780),
+"portrait": "Neutral",
+"size": Vector2(250, 352),
+"to_dialog": "",
+"to_node": ["END"]
+},
+"start_node_2": {
+"node_index": 2,
+"node_type": "start_node",
+"offset": Vector2(40, 800),
+"size": Vector2(240, 75),
+"start_id": "EXAMPLE_2",
+"to_dialog": "",
+"to_node": ["dialogue_node_3"]
+}
+}
+}
+dialogs = {
+"EXAMPLE_2_DIALOG_3": {
+"default": "Ну вот и всё. Всех супергерой победил!",
+"en": ""
+},
+"EXAMPLE_DIALOG_1": {
+"default": "Надо показать им, кто тут [color=ff0000ff]главный[/color]! ",
+"en": ""
+},
+"EXAMPLE_DIALOG_2": {
+"default": "Кто первый!?",
+"en": ""
+}
+}
+characters = {
+"EXAMPLE": {
+"muromec": 8512914371259485574
+},
+"EXAMPLE_2": {
+"muromec": 8512914371259485574
+}
+}

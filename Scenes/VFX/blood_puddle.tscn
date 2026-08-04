@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://6flt1b1tlfaq"]
+
+[ext_resource type="Texture2D" uid="uid://cwg7qi138tysq" path="res://Assets/Art/MRB/Spirtes/VFX/blood.png" id="1_jwt0u"]
+[ext_resource type="Script" uid="uid://ysv3v2je2x6s" path="res://Scenes/VFX/blood_puddle.gd" id="2_vdcc8"]
+
+[node name="BloodPuddle" type="Sprite2D" unique_id=1152637125]
+scale = Vector2(2.67, 2.67)
+texture = ExtResource("1_jwt0u")
+script = ExtResource("2_vdcc8")

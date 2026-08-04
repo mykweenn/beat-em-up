@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://dj76j4hab6kcg"]
+
+[ext_resource type="Script" uid="uid://cletb6t0rp52v" path="res://Utils/sound_manager.gd" id="1_rdd4i"]
+[ext_resource type="AudioStream" uid="uid://c0jdkicqeawme" path="res://Assets/SFX/click.wav" id="2_ec4e4"]
+[ext_resource type="AudioStream" uid="uid://cnvmeu2xrnmmb" path="res://Assets/SFX/zsx/sfx/eat.wav" id="3_rdd4i"]
+[ext_resource type="AudioStream" uid="uid://b6kekk74od5xv" path="res://Assets/SFX/gogogo.wav" id="4_ubgt2"]
+[ext_resource type="AudioStream" uid="uid://b48vtdm7fh7ai" path="res://Assets/SFX/grunt.wav" id="5_7cl7s"]
+[ext_resource type="AudioStream" uid="uid://mnxxn74au3l" path="res://Assets/SFX/gunshot.wav" id="6_2yie3"]
+[ext_resource type="AudioStream" uid="uid://d3xr51shbhkbe" path="res://Assets/SFX/zsx/sfx/hit1.wav" id="7_ec4e4"]
+[ext_resource type="AudioStream" uid="uid://b4tu6g6sd06bm" path="res://Assets/SFX/zsx/sfx/hit2.wav" id="8_maidh"]
+[ext_resource type="AudioStream" uid="uid://ct8hxnjuuf0i6" path="res://Assets/SFX/zsx/sfx/hit3.wav" id="9_ec4e4"]
+[ext_resource type="AudioStream" uid="uid://w2twjs856b8v" path="res://Assets/SFX/knife-hit.wav" id="9_t6xiq"]
+[ext_resource type="AudioStream" uid="uid://dx7l0ddiiny5v" path="res://Assets/SFX/zsx/sfx/swing.wav" id="10_ubgt2"]
+
+[node name="SoundPlayer" type="Node" unique_id=1618086448]
+script = ExtResource("1_rdd4i")
+
+[node name="SFXClick" type="AudioStreamPlayer" parent="." unique_id=1300032766]
+stream = ExtResource("2_ec4e4")
+
+[node name="SFXFood" type="AudioStreamPlayer" parent="." unique_id=1872915180]
+stream = ExtResource("3_rdd4i")
+volume_db = -9.0
+
+[node name="SFXGogogo" type="AudioStreamPlayer" parent="." unique_id=1522432922]
+stream = ExtResource("4_ubgt2")
+
+[node name="SFXGrunt" type="AudioStreamPlayer" parent="." unique_id=1366785707]
+stream = ExtResource("5_7cl7s")
+
+[node name="SFXGunshot" type="AudioStreamPlayer" parent="." unique_id=8529361]
+stream = ExtResource("6_2yie3")
+
+[node name="SFXHit" type="AudioStreamPlayer" parent="." unique_id=167297471]
+stream = ExtResource("7_ec4e4")
+volume_db = -9.33
+
+[node name="SFXHit2" type="AudioStreamPlayer" parent="." unique_id=1118724830]
+stream = ExtResource("8_maidh")
+volume_db = -9.0
+
+[node name="SFXHit3" type="AudioStreamPlayer" parent="." unique_id=1141069974]
+stream = ExtResource("9_ec4e4")
+volume_db = -9.0
+
+[node name="SFXKnife" type="AudioStreamPlayer" parent="." unique_id=1809777561]
+stream = ExtResource("9_t6xiq")
+
+[node name="SFXSwoosh" type="AudioStreamPlayer" parent="." unique_id=490135100]
+stream = ExtResource("10_ubgt2")
+volume_db = -9.0

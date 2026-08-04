@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://b85m2inulrhf6"]
+
+[ext_resource type="Theme" uid="uid://b2qvp1u1iua2l" path="res://gui_theme.tres" id="1_q0bpi"]
+[ext_resource type="Script" uid="uid://bpyl5gada7nrf" path="res://Scenes/UI/combo_indicator.gd" id="2_6tkg3"]
+
+[node name="ComboIndicator" type="Label" unique_id=2040053683]
+offset_right = 40.0
+offset_bottom = 23.0
+theme = ExtResource("1_q0bpi")
+text = "x10"
+script = ExtResource("2_6tkg3")
+duration_combo_timeout = 3000

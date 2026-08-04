@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://dm8ch7oq7kc3i"]
+
+[ext_resource type="Script" uid="uid://d2pkd5p7rexfr" path="res://Scenes/Characters/character.gd" id="1_eu1pv"]
+[ext_resource type="Texture2D" uid="uid://5lmfmh5n708h" path="res://Assets/Art/characters/shadow.png" id="1_vu0vm"]
+[ext_resource type="PackedScene" uid="uid://dx3jlppe0tjjh" path="res://Scenes/Colliders/damage_emitter.tscn" id="3_lmtek"]
+[ext_resource type="PackedScene" uid="uid://ctnk8sbhug31k" path="res://Scenes/Colliders/damage_receiver.tscn" id="4_7qr7h"]
+
+[node name="Character" type="CharacterBody2D" unique_id=517603114]
+collision_layer = 0
+collision_mask = 0
+motion_mode = 1
+script = ExtResource("1_eu1pv")
+
+[node name="ShadowSprite" type="Sprite2D" parent="." unique_id=1441173628]
+visible = false
+texture = ExtResource("1_vu0vm")
+centered = false
+offset = Vector2(-7, 0)
+
+[node name="CharacterSprite" type="Sprite2D" parent="." unique_id=2032300748]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1248216289]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1230739656]
+
+[node name="DamageEmitter" parent="." unique_id=1811594069 instance=ExtResource("3_lmtek")]
+
+[node name="DamageReceiver" parent="." unique_id=932501841 instance=ExtResource("4_7qr7h")]
+
+[node name="CollateralDamageEmitter" parent="." unique_id=1183760786 instance=ExtResource("3_lmtek")]
+
+[node name="KnifeSprite" type="Sprite2D" parent="." unique_id=1902630521]
+
+[node name="WeaponPosition" type="Node2D" parent="KnifeSprite" unique_id=1866994207]
+position = Vector2(66, -37)
+
+[node name="GunSprite" type="Sprite2D" parent="." unique_id=1109774171]
+
+[node name="ProjectileAim" type="RayCast2D" parent="." unique_id=1168374030]
+target_position = Vector2(100, 0)
+collision_mask = 0
+
+[node name="CollectibleSensor" type="Area2D" parent="." unique_id=1625831981]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollectibleSensor" unique_id=937581208]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=468028822]
+scale = Vector2(0.06, 0.06)
+centered = false
+offset = Vector2(-861.96, -999.03)
+
+[editable path="DamageEmitter"]
+[editable path="DamageReceiver"]
+[editable path="CollateralDamageEmitter"]

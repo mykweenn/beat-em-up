@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://f4rj00eaikur"]
+
+[ext_resource type="Script" uid="uid://bhi5bgru6i4du" path="res://Scenes/UI/flickering_texture_rect.gd" id="1_v3mue"]
+
+[node name="FlickeringTextureRect" type="TextureRect" unique_id=1422744002]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_v3mue")

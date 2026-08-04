@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://byawvw8ottovj"]
+
+[ext_resource type="Script" uid="uid://cj2yrqjt15r3n" path="res://Scenes/UI/health_bar.gd" id="1_4c3qa"]
+[ext_resource type="Texture2D" uid="uid://dmu0ja65t5423" path="res://Assets/Art/ui/healthbar-tick.png" id="1_qyqjh"]
+[ext_resource type="Theme" uid="uid://d0p1lplp8gofh" path="res://Themes/hp_bar_theme.tres" id="2_1s5oa"]
+
+[node name="HealthBar" type="Control" unique_id=1097116855]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 541.0
+offset_bottom = 84.0
+script = ExtResource("1_4c3qa")
+
+[node name="HPProgressBar" type="ProgressBar" parent="." unique_id=96123695]
+z_index = 1
+layout_mode = 0
+offset_left = 1.0
+offset_right = 496.0
+offset_bottom = 79.0
+theme = ExtResource("2_1s5oa")
+value = 50.0
+show_percentage = false
+
+[node name="WhiteBorder" type="ColorRect" parent="." unique_id=637890580]
+visible = false
+layout_mode = 0
+offset_right = 3.5666668
+offset_bottom = 10.0
+scale = Vector2(30, 1)
+
+[node name="ContentBackground" type="ColorRect" parent="." unique_id=1688611658]
+visible = false
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 4.75
+offset_bottom = 9.0
+scale = Vector2(28, 1)
+color = Color(0.34637713, 0, 0.09553883, 1)
+
+[node name="HealthGauge" type="TextureRect" parent="." unique_id=1048125628]
+visible = false
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 11.5
+offset_bottom = 9.0
+scale = Vector2(10, 1)
+texture = ExtResource("1_qyqjh")
+stretch_mode = 1
+
+[node name="Timer" type="Timer" parent="." unique_id=34722046]
+wait_time = 0.4

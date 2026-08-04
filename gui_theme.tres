@@ -1,0 +1,8 @@
+[gd_resource type="Theme" format=3 uid="uid://b2qvp1u1iua2l"]
+
+[ext_resource type="FontFile" uid="uid://wj0yqrdr35o7" path="res://Assets/Fonts/Gagalin-Regular.ttf" id="1_c2e4w"]
+
+[resource]
+default_font = ExtResource("1_c2e4w")
+default_font_size = 6
+Label/colors/font_color = Color(0.95395, 0.7437336, 0, 1)

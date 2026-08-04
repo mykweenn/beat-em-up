@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://db73ao3x5mgog"]
+
+[ext_resource type="FontFile" uid="uid://wj0yqrdr35o7" path="res://Assets/Fonts/Gagalin-Regular.ttf" id="1_1qcpp"]
+[ext_resource type="Script" uid="uid://dhrd18raoxso4" path="res://Scenes/VFX/floating_text.gd" id="1_ebioe"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ebioe"]
+font = ExtResource("1_1qcpp")
+font_size = 48
+outline_size = 1
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ebioe"]
+bg_color = Color(0.9835934, 0.37982568, 3.85046e-07, 1)
+skew = Vector2(0.1, 0)
+border_width_left = 2
+border_width_top = 3
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+expand_margin_left = 4.0
+expand_margin_right = 4.0
+
+[node name="FloatingText" type="Node2D" unique_id=872510789]
+script = ExtResource("1_ebioe")
+
+[node name="Label" type="Label" parent="." unique_id=500026225]
+offset_left = -50.0
+offset_top = -31.0
+offset_right = 49.0
+offset_bottom = 28.0
+pivot_offset = Vector2(50, 31)
+text = "БАМ!"
+label_settings = SubResource("LabelSettings_ebioe")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Panel" type="Panel" parent="Label" unique_id=115298691]
+visible = false
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(51, 31)
+theme_override_styles/panel = SubResource("StyleBoxFlat_ebioe")

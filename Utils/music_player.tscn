@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dsh7jjbjd4mgi"]
+
+[ext_resource type="Script" uid="uid://7h6bf2qmxj72" path="res://Utils/music_manager.gd" id="1_yospa"]
+
+[node name="MusicPlayer" type="Node" unique_id=992477064]
+script = ExtResource("1_yospa")
+
+[node name="MusicStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=462494319]
+volume_db = -13.071
+bus = &"Music"

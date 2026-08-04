@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://rteyqs5qi2vf"]
+
+[ext_resource type="Script" uid="uid://cd0c4ad3rfkbf" path="res://Scenes/UI/hint_popup.gd" id="1_3mgbt"]
+[ext_resource type="Texture2D" uid="uid://p7tmlaha6orn" path="res://Assets/Art/nevsky characters/cat/1.6_emotions_V3.webp" id="2_3mgbt"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3mgbt"]
+atlas = ExtResource("2_3mgbt")
+region = Rect2(196.90436, 140.92096, 668.36, 622.4102)
+
+[sub_resource type="Animation" id="Animation_3mgbt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(13, 238)]
+}
+
+[sub_resource type="Animation" id="Animation_we3r0"]
+resource_name = "appear"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-500, 238), Vector2(13, 238)]
+}
+
+[sub_resource type="Animation" id="Animation_6ivwc"]
+resource_name = "disappear"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(13, 238), Vector2(-500, 238)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6ivwc"]
+_data = {
+&"RESET": SubResource("Animation_3mgbt"),
+&"appear": SubResource("Animation_we3r0"),
+&"disappear": SubResource("Animation_6ivwc")
+}
+
+[node name="HintPopup" type="Control" unique_id=290490208]
+z_index = 100
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3mgbt")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1274040132]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 13.0
+offset_top = 238.0
+offset_right = -1402.9978
+offset_bottom = -522.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer" unique_id=1814929734]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=2006233687]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+
+[node name="CharacterPicture" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=1686814449]
+unique_name_in_owner = true
+layout_mode = 2
+texture = SubResource("AtlasTexture_3mgbt")
+expand_mode = 2
+
+[node name="HintLabel" type="Label" parent="MarginContainer/HBoxContainer" unique_id=1646732964]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=159631524]
+libraries/ = SubResource("AnimationLibrary_6ivwc")

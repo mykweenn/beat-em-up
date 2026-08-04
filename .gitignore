@@ -1,0 +1,41 @@
+# Godot 4+ specific ignores
+.godot/
+
+# Android export (если используешь Android)
+android/
+
+# Imported resources cache
+.import/
+
+# Export files
+export.cfg
+export_credentials.cfg
+
+# Temporary files
+*.tmp
+.nomedia
+
+# Translations
+*.translation
+
+# Mono / C# (если используешь)
+.mono/
+data_*/
+mono_crash.*.json
+
+# ==========================================
+# VS Code specific ignores
+# ==========================================
+.vscode/
+# Если вы хотите делиться общими задачами (tasks.json) или рекомендациями плагинов (extensions.json),
+# но скрывать личные настройки и историю, расскомментируйте строки ниже вместо `.vscode/`:
+# .vscode/settings.json
+# .vscode/tasks.json
+# .vscode/launch.json
+# .vscode/workspace.json
+# .vscode/history/
+
+# Скрытые файлы операционных систем (часто создаются при открытии папок)
+.DS_Store
+Thumbs.db
+Exports/

@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://bqr7478k4nhje"]
+
+[ext_resource type="PackedScene" uid="uid://pwexnuu6vuli" path="res://Scenes/VFX/hit_particle_3d.tscn" id="1_mca3m"]
+
+[node name="HitParticleConverter3DTo2D" type="SubViewportContainer" unique_id=1712600590]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=1374767889]
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 4
+
+[node name="HitParticle3D" parent="SubViewport" unique_id=681620568 instance=ExtResource("1_mca3m")]
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport" unique_id=944790688]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.49236834)

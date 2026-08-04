@@ -1,0 +1,444 @@
+[gd_scene format=3 uid="uid://cs1glhgs1gu5i"]
+
+[ext_resource type="PackedScene" uid="uid://dm8ch7oq7kc3i" path="res://Scenes/Characters/character.tscn" id="1_tivyh"]
+[ext_resource type="Script" uid="uid://bsfnns6ucwkco" path="res://Scenes/Characters/igor_boss.gd" id="2_m1tli"]
+[ext_resource type="PackedScene" uid="uid://rteyqs5qi2vf" path="res://Scenes/UI/hint_popup.tscn" id="3_6ushf"]
+[ext_resource type="Texture2D" uid="uid://b6buxmvwxn5pn" path="res://Assets/Art/nevsky characters/enemy/big_enemy/fury_run/bigrun_00001.webp" id="4_6ushf"]
+[ext_resource type="Texture2D" uid="uid://dlfq6katgq8og" path="res://Assets/Art/nevsky characters/enemy/big_enemy/fury_run/bigrun_00002.webp" id="5_2wand"]
+[ext_resource type="Texture2D" uid="uid://b6d63l8xn2o5l" path="res://Assets/Art/nevsky characters/enemy/big_enemy/fury_run/bigrun_00003.webp" id="6_prhuh"]
+[ext_resource type="Texture2D" uid="uid://cjnq0bchbl3ds" path="res://Assets/Art/nevsky characters/enemy/big_enemy/fury_run/bigrun_00004.webp" id="7_e7wmc"]
+[ext_resource type="Texture2D" uid="uid://dn5wcfl4kx0ih" path="res://Assets/Art/nevsky characters/enemy/big_enemy/fury_run/bigrun_00005.webp" id="8_1363i"]
+[ext_resource type="Texture2D" uid="uid://cfvo4y0gj8qkw" path="res://Assets/Art/nevsky characters/enemy/big_enemy/fury_run/bigrun_00006.webp" id="9_2rgn4"]
+[ext_resource type="Texture2D" uid="uid://ci4buebam2b0q" path="res://Assets/Art/nevsky characters/enemy/big_enemy/fury_run/bigrun_00007.webp" id="10_j0k7i"]
+[ext_resource type="Texture2D" uid="uid://csrvja0j6ujwp" path="res://Assets/Art/nevsky characters/enemy/big_enemy/fury_run/bigrun_00008.webp" id="11_6p5mh"]
+[ext_resource type="Texture2D" uid="uid://caoakf2cck8pc" path="res://Assets/Art/nevsky characters/enemy/big_enemy/fury_run/bigrun_00009.webp" id="12_jonce"]
+[ext_resource type="Texture2D" uid="uid://crcj5hw0x7fhi" path="res://Assets/Art/nevsky characters/enemy/big_enemy/fury_run/bigrun_00010.webp" id="13_hehra"]
+[ext_resource type="Texture2D" uid="uid://ddpffebne3nxs" path="res://Assets/Art/nevsky characters/enemy/big_enemy/fury_run/bigrun_00011.webp" id="14_kqw84"]
+[ext_resource type="Texture2D" uid="uid://din67bar56bmq" path="res://Assets/Art/nevsky characters/enemy/big_enemy/fury_run/bigrun_00012.webp" id="15_jpwri"]
+[ext_resource type="Texture2D" uid="uid://dome542fwhc3b" path="res://Assets/Art/nevsky characters/enemy/big_enemy/fury_run/bigrun_00013.webp" id="16_3sdmq"]
+[ext_resource type="Texture2D" uid="uid://obebbws4fj3g" path="res://Assets/Art/nevsky characters/enemy/big_enemy/grounded/enemy-big-Grounded_00027.webp" id="17_g2uts"]
+[ext_resource type="Texture2D" uid="uid://b6fmicu8og1ah" path="res://Assets/Art/nevsky characters/enemy/big_enemy/grounded/enemy-big-Grounded_00028.webp" id="18_1g8e4"]
+[ext_resource type="Texture2D" uid="uid://4s5gifj64khs" path="res://Assets/Art/nevsky characters/enemy/big_enemy/hurt/enemy-big-dam_00018.webp" id="19_edxu6"]
+[ext_resource type="Texture2D" uid="uid://dlwjcb47mr1dv" path="res://Assets/Art/nevsky characters/enemy/big_enemy/hurt/enemy-big-dam_00019.webp" id="20_ltitb"]
+[ext_resource type="Texture2D" uid="uid://spgnp645j8xe" path="res://Assets/Art/nevsky characters/enemy/big_enemy/idle/enemy-big_00006_00001.webp" id="21_axkvy"]
+[ext_resource type="Texture2D" uid="uid://bhin5u41w2px" path="res://Assets/Art/nevsky characters/enemy/big_enemy/punch/enemy-big-kick_00006.webp" id="22_o3y28"]
+[ext_resource type="Texture2D" uid="uid://bmbt4m7abbv26" path="res://Assets/Art/nevsky characters/enemy/big_enemy/punch/enemy-big-kick_00007.webp" id="23_k8m7v"]
+[ext_resource type="Texture2D" uid="uid://b4dch2o1xx6tw" path="res://Assets/Art/nevsky characters/enemy/big_enemy/punch/enemy-big-kick_00008.webp" id="24_77eyv"]
+[ext_resource type="Texture2D" uid="uid://d7wuiho72nrx" path="res://Assets/Art/nevsky characters/enemy/big_enemy/punch/enemy-big-kick_00009.webp" id="25_g46kg"]
+[ext_resource type="Texture2D" uid="uid://b1jmb2b8mixbl" path="res://Assets/Art/nevsky characters/enemy/big_enemy/punch/enemy-big-kick_00010.webp" id="26_a45ff"]
+[ext_resource type="Texture2D" uid="uid://dnwg7web6kx4o" path="res://Assets/Art/nevsky characters/enemy/big_enemy/punch/enemy-big-kick_00011.webp" id="27_1xneu"]
+[ext_resource type="Texture2D" uid="uid://ds3qhpnrye4sa" path="res://Assets/Art/nevsky characters/enemy/big_enemy/punch/enemy-big-kick_00012.webp" id="28_tbgkt"]
+[ext_resource type="Texture2D" uid="uid://j4hech0jmv1s" path="res://Assets/Art/nevsky characters/enemy/big_enemy/punch/enemy-big-kick_00013.webp" id="29_jn42v"]
+[ext_resource type="Texture2D" uid="uid://cic2ne5jdnspb" path="res://Assets/Art/nevsky characters/enemy/big_enemy/punch/enemy-big-kick_00014.webp" id="30_7x5br"]
+[ext_resource type="Texture2D" uid="uid://c7iovog3mm2n0" path="res://Assets/Art/nevsky characters/enemy/big_enemy/punch/enemy-big-kick_00015.webp" id="31_lyj0y"]
+[ext_resource type="Texture2D" uid="uid://vevtwctbp7ix" path="res://Assets/Art/nevsky characters/enemy/big_enemy/punch/enemy-big-kick_00016.webp" id="32_hupss"]
+[ext_resource type="Texture2D" uid="uid://cr0efb3ynrggh" path="res://Assets/Art/nevsky characters/enemy/big_enemy/stunned/enemy-big-stan_00029.webp" id="33_7h4sp"]
+[ext_resource type="Texture2D" uid="uid://dmijlg33cd3up" path="res://Assets/Art/nevsky characters/enemy/big_enemy/walk/enemy-big_00006_00001.webp" id="34_8ao32"]
+[ext_resource type="Texture2D" uid="uid://bx72sc4npscxm" path="res://Assets/Art/nevsky characters/enemy/big_enemy/walk/enemy-big_00006_00002.webp" id="35_rb3mp"]
+[ext_resource type="Texture2D" uid="uid://bs3277tb7bhk2" path="res://Assets/Art/nevsky characters/enemy/big_enemy/walk/enemy-big_00006_00003.webp" id="36_s6pon"]
+[ext_resource type="Texture2D" uid="uid://bb4qitsyc5wc6" path="res://Assets/Art/nevsky characters/enemy/big_enemy/walk/enemy-big_00006_00004.webp" id="37_kf4lh"]
+[ext_resource type="Texture2D" uid="uid://b71cmcs1ul786" path="res://Assets/Art/nevsky characters/enemy/big_enemy/walk/enemy-big_00006_00005.webp" id="38_82y67"]
+[ext_resource type="Texture2D" uid="uid://y2kc6sv6ouw1" path="res://Assets/Art/nevsky characters/enemy/big_enemy/walk/enemy-big_00006_00006.webp" id="39_k2dyp"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_uke40"]
+load_path = "res://.godot/imported/enemy_boss.png-c7b054107b885091390756f4554f8026.ctex"
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_pw3ut"]
+radius = 7.0
+height = 78.0
+
+[sub_resource type="Animation" id="Animation_wyt6o"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [90]
+}
+
+[sub_resource type="Animation" id="Animation_uke40"]
+resource_name = "fall"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [60]
+}
+
+[sub_resource type="Animation" id="Animation_pw3ut"]
+resource_name = "fly"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [43]
+}
+
+[sub_resource type="Animation" id="Animation_3b4f2"]
+resource_name = "grounded"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [62]
+}
+
+[sub_resource type="Animation" id="Animation_qvrbp"]
+resource_name = "hurt"
+length = 0.2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [50, 51]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_action_complete"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_m1tli"]
+resource_name = "idle"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [90]
+}
+
+[sub_resource type="Animation" id="Animation_mtfcq"]
+resource_name = "recover"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [70]
+}
+
+[sub_resource type="Animation" id="Animation_w0yj5"]
+resource_name = "walk"
+length = 0.8
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [90, 91, 92, 93, 94, 95, 96, 97]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uke40"]
+_data = {
+&"RESET": SubResource("Animation_wyt6o"),
+&"fall": SubResource("Animation_uke40"),
+&"fly": SubResource("Animation_pw3ut"),
+&"grounded": SubResource("Animation_3b4f2"),
+&"hurt": SubResource("Animation_qvrbp"),
+&"idle": SubResource("Animation_m1tli"),
+&"recover": SubResource("Animation_mtfcq"),
+&"walk": SubResource("Animation_w0yj5")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m1tli"]
+size = Vector2(165, 46)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uke40"]
+size = Vector2(161, 210)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pw3ut"]
+size = Vector2(159, 84)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hehra"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_6ushf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_2wand")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_prhuh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_e7wmc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_1363i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_2rgn4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_j0k7i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_6p5mh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_jonce")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_hehra")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_kqw84")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_jpwri")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_3sdmq")
+}],
+"loop": 1,
+"name": &"fly",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("17_g2uts")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_1g8e4")
+}],
+"loop": 1,
+"name": &"grounded",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_edxu6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_ltitb")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("21_axkvy")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("22_o3y28")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_k8m7v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_77eyv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_g46kg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_a45ff")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_1xneu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_tbgkt")
+}],
+"loop": 0,
+"name": &"punch",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("29_jn42v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_7x5br")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_lyj0y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_hupss")
+}],
+"loop": 0,
+"name": &"punch_alt",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("33_7h4sp")
+}],
+"loop": 1,
+"name": &"recover",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("34_8ao32")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_rb3mp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_s6pon")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_kf4lh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_82y67")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_k2dyp")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 10.0
+}]
+
+[node name="IgorBoss" unique_id=517603114 instance=ExtResource("1_tivyh")]
+collision_layer = 4
+script = ExtResource("2_m1tli")
+distance_from_player = 400
+duration_between_attacks = 2000
+duration_vulnurable = 2000
+hint_scene = ExtResource("3_6ushf")
+damage = 5
+max_health = 50
+type = 4
+speed = 300.0
+duration_grounded = 2000.0
+flight_speed = 1200.0
+knockback_intensity = 8.0
+knockdown_intensity = 100.0
+
+[node name="CharacterSprite" parent="." index="1" unique_id=2032300748]
+visible = false
+scale = Vector2(13.9375, 13.9375)
+texture = SubResource("CompressedTexture2D_uke40")
+centered = false
+offset = Vector2(-24, -48)
+hframes = 10
+vframes = 10
+frame = 90
+
+[node name="CollisionShape2D" parent="." index="2" unique_id=1248216289]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_pw3ut")
+
+[node name="AnimationPlayer" parent="." index="3" unique_id=1230739656]
+libraries/ = SubResource("AnimationLibrary_uke40")
+
+[node name="DamageEmitter" parent="." index="4" unique_id=1811594069]
+collision_mask = 16
+
+[node name="CollisionShape2D" parent="DamageEmitter" index="0" unique_id=94639881]
+position = Vector2(168.5, -171)
+shape = SubResource("RectangleShape2D_m1tli")
+
+[node name="DamageReceiver" parent="." index="5" unique_id=932501841]
+collision_layer = 32
+
+[node name="CollisionShape2D" parent="DamageReceiver" index="0" unique_id=792311117]
+position = Vector2(5.5, -116)
+shape = SubResource("RectangleShape2D_uke40")
+
+[node name="CollateralDamageEmitter" parent="." index="6" unique_id=1183760786]
+collision_mask = 128
+
+[node name="CollisionShape2D" parent="CollateralDamageEmitter" index="0" unique_id=94639881]
+position = Vector2(4.5, -48)
+shape = SubResource("RectangleShape2D_pw3ut")
+
+[node name="ProjectileAim" parent="." index="9" unique_id=1168374030]
+scale = Vector2(1, 7)
+target_position = Vector2(783, 0)
+collision_mask = 2
+
+[node name="AnimatedSprite2D" parent="." index="11" unique_id=468028822]
+scale = Vector2(1, 1)
+sprite_frames = SubResource("SpriteFrames_hehra")
+animation = &"walk"
+frame_progress = 0.49485436
+centered = true
+offset = Vector2(0, -283.64)
+
+[editable path="DamageEmitter"]
+[editable path="DamageReceiver"]
+[editable path="CollateralDamageEmitter"]

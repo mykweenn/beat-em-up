@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://dqb3osi07wuby"]
+
+[ext_resource type="Theme" uid="uid://b2qvp1u1iua2l" path="res://gui_theme.tres" id="1_esw3e"]
+[ext_resource type="Script" uid="uid://lrfn2itha8ee" path="res://Scenes/UI/options_screen.gd" id="1_idmpt"]
+[ext_resource type="PackedScene" uid="uid://eo1sx8qfv421" path="res://Scenes/UI/controls/range_picker.tscn" id="2_ecfc1"]
+[ext_resource type="PackedScene" uid="uid://lr2fn3oy26t6" path="res://Scenes/UI/controls/toggle_picker.tscn" id="3_idmpt"]
+[ext_resource type="PackedScene" uid="uid://btuasy8kbnrv2" path="res://Scenes/UI/controls/label_picker.tscn" id="4_15tsi"]
+
+[node name="OptionsScreen" type="Control" unique_id=2117613525]
+z_index = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_idmpt")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1325471768]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.078431375, 0.078431375, 0.078431375, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="Background" unique_id=2030108800]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 13
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 13
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer" unique_id=1920685357]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="OptionsLabel" type="Label" parent="Background/MarginContainer/VBoxContainer" unique_id=1277488754]
+layout_mode = 2
+theme = ExtResource("1_esw3e")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Options"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Background/MarginContainer/VBoxContainer" unique_id=1839830430]
+layout_mode = 2
+
+[node name="MusicVolumeControl" parent="Background/MarginContainer/VBoxContainer" unique_id=1317086552 instance=ExtResource("2_ecfc1")]
+layout_mode = 2
+theme_override_constants/separation = 1
+text = "Music"
+
+[node name="SoundVolumeControl" parent="Background/MarginContainer/VBoxContainer" unique_id=1229100437 instance=ExtResource("2_ecfc1")]
+layout_mode = 2
+theme_override_constants/separation = 1
+text = "SFX"
+
+[node name="ShakeToggle" parent="Background/MarginContainer/VBoxContainer" unique_id=530455275 instance=ExtResource("3_idmpt")]
+layout_mode = 2
+theme_override_constants/separation = 1
+min_value = 0
+text = "Shake"
+
+[node name="Spacer2" type="Control" parent="Background/MarginContainer/VBoxContainer" unique_id=310828123]
+layout_mode = 2
+
+[node name="ReturnButton" parent="Background/MarginContainer/VBoxContainer" unique_id=1043627762 instance=ExtResource("4_15tsi")]
+layout_mode = 2
+theme_override_constants/separation = 1
+alignment = 1
+text = "Return"
+
+[editable path="Background/MarginContainer/VBoxContainer/MusicVolumeControl"]

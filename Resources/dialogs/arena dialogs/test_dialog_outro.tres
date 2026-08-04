@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="SproutyDialogsDialogueData" format=3 uid="uid://dabdkuc47m4"]
+
+[ext_resource type="Script" uid="uid://cbjdca3iwlx36" path="res://addons/sprouty_dialogs/resources/dialogue_data.gd" id="1_n78lx"]
+
+[resource]
+script = ExtResource("1_n78lx")
+graph_data = {
+"END_ARENA": {
+"start_node_1": {
+"node_index": 1,
+"node_type": "start_node",
+"offset": Vector2(40, 140),
+"size": Vector2(190.00006, 97),
+"start_id": "END_ARENA",
+"to_dialog": "",
+"to_node": ["dialogue_node_1"]
+}
+},
+"unplugged_nodes": {
+"dialogue_node_1": {
+"char_expand": true,
+"character": "muromec",
+"dialog_key": "_DIALOG_1",
+"node_index": 1,
+"node_type": "dialogue_node",
+"offset": Vector2(300, 140),
+"portrait": "Neutral",
+"size": Vector2(360, 352),
+"to_dialog": "",
+"to_node": ["END"]
+}
+}
+}
+dialogs = {
+"_DIALOG_1": {
+"default": "Ну вот и всё. Всех супергерой победил!",
+"en": ""
+}
+}
+characters = {
+"unplugged_nodes": {
+"muromec": 8512914371259485574
+}
+}
