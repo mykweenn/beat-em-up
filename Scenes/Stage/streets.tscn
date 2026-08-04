@@ -21,7 +21,7 @@ size = Vector2(7236.25, 20)
 size = Vector2(7236.25, 20)
 
 [node name="Streets" unique_id=402859074 instance=ExtResource("1_g7de4")]
-music = 2
+music = 6
 
 [node name="Backgrounds" parent="." index="0" unique_id=1008490267]
 position = Vector2(0, -232)

@@ -11,6 +11,7 @@
 [ext_resource type="AudioStream" uid="uid://ct8hxnjuuf0i6" path="res://Assets/SFX/zsx/sfx/hit3.wav" id="9_ec4e4"]
 [ext_resource type="AudioStream" uid="uid://w2twjs856b8v" path="res://Assets/SFX/knife-hit.wav" id="9_t6xiq"]
 [ext_resource type="AudioStream" uid="uid://dx7l0ddiiny5v" path="res://Assets/SFX/zsx/sfx/swing.wav" id="10_ubgt2"]
+[ext_resource type="AudioStream" uid="uid://cge3fwyrubt45" path="res://Assets/SFX/zsx/sfx/block.wav" id="12_maidh"]
 
 [node name="SoundPlayer" type="Node" unique_id=1618086448]
 script = ExtResource("1_rdd4i")
@@ -48,4 +49,8 @@ stream = ExtResource("9_t6xiq")
 
 [node name="SFXSwoosh" type="AudioStreamPlayer" parent="." unique_id=490135100]
 stream = ExtResource("10_ubgt2")
+volume_db = -9.0
+
+[node name="SFXParry" type="AudioStreamPlayer" parent="." unique_id=649581489]
+stream = ExtResource("12_maidh")
 volume_db = -9.0
