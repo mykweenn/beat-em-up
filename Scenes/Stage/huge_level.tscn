@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://blhlckxv5ekqe"]
+
+[ext_resource type="PackedScene" uid="uid://d1d1vdwts785r" path="res://Scenes/Characters/player.tscn" id="1_rh70s"]
+
+[node name="HugeLevel" type="Node2D" unique_id=998471419]
+
+[node name="Player" parent="." unique_id=1843396416 instance=ExtResource("1_rh70s")]
+position = Vector2(603, 833.99994)
+scale = Vector2(11.66, 11.66)
+speed = 300.0

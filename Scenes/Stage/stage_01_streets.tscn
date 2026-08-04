@@ -1,0 +1,243 @@
+[gd_scene format=3 uid="uid://dxnubrfyjja5d"]
+
+[ext_resource type="PackedScene" uid="uid://c6g8v2tyiijwi" path="res://Scenes/Stage/stage.tscn" id="1_ybrw0"]
+[ext_resource type="Texture2D" uid="uid://bhtj6r2q00usn" path="res://Assets/Art/backgrounds/street-background.png" id="2_iw4ip"]
+[ext_resource type="Texture2D" uid="uid://52340ygqlv2c" path="res://Assets/Art/props/garage-door-opened.png" id="3_e3lgk"]
+[ext_resource type="PackedScene" uid="uid://cjituhu2smwr2" path="res://Scenes/Stage/checkpoint.tscn" id="3_xnrnn"]
+[ext_resource type="Texture2D" uid="uid://b81r23wmcfxif" path="res://Assets/Art/backgrounds/bar-entrance.png" id="4_41trb"]
+[ext_resource type="PackedScene" uid="uid://63wipr5strpc" path="res://Scenes/Characters/goon_enemy.tscn" id="4_fofc4"]
+[ext_resource type="PackedScene" uid="uid://jep2uj8ujo8a" path="res://Scenes/Characters/basic_enemy.tscn" id="5_41trb"]
+[ext_resource type="Texture2D" uid="uid://cnugk46mnpngc" path="res://Assets/Art/backgrounds/bar-door.png" id="5_pc2kq"]
+[ext_resource type="PackedScene" uid="uid://bpb02voemql16" path="res://Scenes/Characters/thug_enemy.tscn" id="6_fofc4"]
+[ext_resource type="PackedScene" uid="uid://mkd8b1ouke27" path="res://Scenes/Props/barrel.tscn" id="7_41trb"]
+[ext_resource type="PackedScene" uid="uid://b5y0i12epffwx" path="res://Scenes/Props/door.tscn" id="9_7g63y"]
+[ext_resource type="PackedScene" uid="uid://cs1glhgs1gu5i" path="res://Scenes/Characters/igor_boss.tscn" id="10_6inbm"]
+[ext_resource type="Texture2D" uid="uid://c68oxwq7pd2bh" path="res://Assets/Art/backgrounds/window.png" id="13_yuqwf"]
+[ext_resource type="Texture2D" uid="uid://dwpx3f7pub4pd" path="res://Assets/Art/backgrounds/rails.png" id="14_pqoun"]
+[ext_resource type="Texture2D" uid="uid://bqu8n8323d46c" path="res://Assets/Art/particles/light.png" id="15_beq1x"]
+
+[sub_resource type="Animation" id="Animation_beq1x"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.24]
+}
+
+[sub_resource type="Animation" id="Animation_lqdk6"]
+resource_name = "light_blink"
+length = 4.0
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [1.24, 3.54, 1.0, 3.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ganby"]
+_data = {
+&"RESET": SubResource("Animation_beq1x"),
+&"light_blink": SubResource("Animation_lqdk6")
+}
+
+[sub_resource type="Environment" id="Environment_pqoun"]
+ambient_light_source = 2
+
+[node name="Stage-01-Streets" unique_id=402859074 instance=ExtResource("1_ybrw0")]
+music = 2
+
+[node name="MainBackground" parent="Backgrounds" parent_id_path=PackedInt32Array(1008490267) index="0" unique_id=1369592109]
+texture = ExtResource("2_iw4ip")
+
+[node name="DoorBackground" type="Sprite2D" parent="Backgrounds" parent_id_path=PackedInt32Array(1008490267) index="1" unique_id=871212612]
+position = Vector2(160, 16)
+texture = ExtResource("3_e3lgk")
+
+[node name="DoorBackground2" type="Sprite2D" parent="Backgrounds" parent_id_path=PackedInt32Array(1008490267) index="2" unique_id=1859364058]
+position = Vector2(260, 16)
+texture = ExtResource("3_e3lgk")
+
+[node name="BarEntrance" type="Sprite2D" parent="Backgrounds" parent_id_path=PackedInt32Array(1008490267) index="3" unique_id=2021704315]
+position = Vector2(398, 0)
+texture = ExtResource("4_41trb")
+centered = false
+
+[node name="DoorEntrance" type="Sprite2D" parent="Backgrounds" parent_id_path=PackedInt32Array(1008490267) index="4" unique_id=1894865944]
+z_index = 1
+z_as_relative = false
+position = Vector2(450, 0)
+texture = ExtResource("5_pc2kq")
+centered = false
+
+[node name="CollisionShape2D" parent="WorldColliders/StaticBody2D2" parent_id_path=PackedInt32Array(431410113) index="0" unique_id=1739475003]
+position = Vector2(204.75, 0)
+
+[node name="Checkpoint" parent="Checkpoints" parent_id_path=PackedInt32Array(1705422277) index="0" unique_id=1922420126 instance=ExtResource("3_xnrnn")]
+visible = false
+position = Vector2(100, 0)
+
+[node name="BasicEnemy" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="0" unique_id=1966584693 instance=ExtResource("5_41trb")]
+position = Vector2(113, 40)
+
+[node name="BasicEnemy2" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="1" unique_id=2024145364 instance=ExtResource("5_41trb")]
+position = Vector2(61, 92)
+
+[node name="GoonEnemy" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="2" unique_id=734331289 instance=ExtResource("4_fofc4")]
+position = Vector2(27, 91)
+can_respawn_knives = false
+
+[node name="BasicEnemy3" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="3" unique_id=962538670 instance=ExtResource("5_41trb")]
+position = Vector2(49, -25)
+
+[node name="BasicEnemy4" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="4" unique_id=16831986 instance=ExtResource("5_41trb")]
+position = Vector2(28, -21)
+
+[node name="BasicEnemy5" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="5" unique_id=1693506229 instance=ExtResource("5_41trb")]
+position = Vector2(69, -21)
+
+[node name="Checkpoint2" parent="Checkpoints" parent_id_path=PackedInt32Array(1705422277) index="1" unique_id=1516395547 instance=ExtResource("3_xnrnn")]
+visible = false
+position = Vector2(200, 0)
+nb_simultaneous_enemies = 3
+
+[node name="BasicEnemy" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="0" unique_id=335653407 instance=ExtResource("5_41trb")]
+position = Vector2(48, 31)
+
+[node name="BasicEnemy2" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="1" unique_id=325896098 instance=ExtResource("5_41trb")]
+position = Vector2(71, 31)
+
+[node name="GoonEnemy" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="2" unique_id=762203245 instance=ExtResource("4_fofc4")]
+position = Vector2(-14, 39)
+has_knife = true
+
+[node name="GoonEnemy2" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="3" unique_id=645008290 instance=ExtResource("4_fofc4")]
+position = Vector2(84, -11)
+
+[node name="GoonEnemy3" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="4" unique_id=227145823 instance=ExtResource("4_fofc4")]
+position = Vector2(118, 43)
+
+[node name="GoonEnemy4" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="5" unique_id=2066513446 instance=ExtResource("4_fofc4")]
+position = Vector2(-15, 60)
+
+[node name="BasicEnemy3" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="6" unique_id=44444594 instance=ExtResource("5_41trb")]
+position = Vector2(24, 94)
+
+[node name="BasicEnemy4" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="7" unique_id=578681114 instance=ExtResource("5_41trb")]
+position = Vector2(82, 95)
+
+[node name="BasicEnemy5" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="8" unique_id=1384808432 instance=ExtResource("5_41trb")]
+position = Vector2(17, -12)
+
+[node name="ThugEnemy" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="9" unique_id=352961395 instance=ExtResource("6_fofc4")]
+position = Vector2(-36, 62)
+
+[node name="ThugEnemy2" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="10" unique_id=1133662553 instance=ExtResource("6_fofc4")]
+position = Vector2(120, 57)
+
+[node name="ThugEnemy3" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="11" unique_id=1644464109 instance=ExtResource("6_fofc4")]
+position = Vector2(54, 92)
+
+[node name="Checkpoint3" parent="Checkpoints" parent_id_path=PackedInt32Array(1705422277) index="2" unique_id=1168583206 instance=ExtResource("3_xnrnn")]
+position = Vector2(330, 0)
+nb_simultaneous_enemies = 1
+
+[node name="Enemies" parent="Checkpoints/Checkpoint3" index="0" unique_id=214738812]
+visible = false
+
+[node name="IgorBoss" parent="Checkpoints/Checkpoint3/Enemies" index="0" unique_id=517603114 instance=ExtResource("10_6inbm")]
+position = Vector2(117, 59)
+
+[node name="Barrel" parent="Containers" parent_id_path=PackedInt32Array(2076321560) index="0" unique_id=478529645 instance=ExtResource("7_41trb")]
+position = Vector2(67, 57)
+
+[node name="Barrel2" parent="Containers" parent_id_path=PackedInt32Array(2076321560) index="1" unique_id=989589133 instance=ExtResource("7_41trb")]
+position = Vector2(175, 48)
+content_type = 1
+
+[node name="Barrel3" parent="Containers" parent_id_path=PackedInt32Array(2076321560) index="2" unique_id=2025868222 instance=ExtResource("7_41trb")]
+position = Vector2(291, 45)
+
+[node name="Barrel4" parent="Containers" parent_id_path=PackedInt32Array(2076321560) index="3" unique_id=1548974434 instance=ExtResource("7_41trb")]
+position = Vector2(351, 63)
+
+[node name="Door" parent="Doors" parent_id_path=PackedInt32Array(1367388572) index="0" unique_id=1481491630 instance=ExtResource("9_7g63y")]
+position = Vector2(161, 32)
+
+[node name="Door2" parent="Doors" parent_id_path=PackedInt32Array(1367388572) index="1" unique_id=1515205476 node_paths=PackedStringArray("enemies") instance=ExtResource("9_7g63y")]
+position = Vector2(260, 32)
+enemies = [NodePath("../../Checkpoints/Checkpoint2/Enemies/BasicEnemy"), NodePath("../../Checkpoints/Checkpoint2/Enemies/BasicEnemy2")]
+
+[node name="Window" type="Sprite2D" parent="Fixtures" parent_id_path=PackedInt32Array(1358054151) index="0" unique_id=1469178965]
+position = Vector2(311, 0)
+texture = ExtResource("13_yuqwf")
+centered = false
+
+[node name="Window2" type="Sprite2D" parent="Fixtures" parent_id_path=PackedInt32Array(1358054151) index="1" unique_id=419893400]
+position = Vector2(91, 0)
+texture = ExtResource("13_yuqwf")
+centered = false
+
+[node name="Window3" type="Sprite2D" parent="Fixtures" parent_id_path=PackedInt32Array(1358054151) index="2" unique_id=217841811]
+position = Vector2(33, 0)
+texture = ExtResource("13_yuqwf")
+centered = false
+
+[node name="Window4" type="Sprite2D" parent="Fixtures" parent_id_path=PackedInt32Array(1358054151) index="3" unique_id=1849479017]
+position = Vector2(376, 0)
+texture = ExtResource("13_yuqwf")
+centered = false
+
+[node name="Railbar" type="Sprite2D" parent="Fixtures" parent_id_path=PackedInt32Array(1358054151) index="4" unique_id=577957945]
+position = Vector2(47, 0)
+texture = ExtResource("14_pqoun")
+centered = false
+
+[node name="Railbar2" type="Sprite2D" parent="Fixtures" parent_id_path=PackedInt32Array(1358054151) index="5" unique_id=709804314]
+position = Vector2(185, 0)
+texture = ExtResource("14_pqoun")
+centered = false
+
+[node name="Railbar3" type="Sprite2D" parent="Fixtures" parent_id_path=PackedInt32Array(1358054151) index="6" unique_id=2045935275]
+position = Vector2(333, 0)
+texture = ExtResource("14_pqoun")
+centered = false
+
+[node name="Lights" type="Node2D" parent="Fixtures" parent_id_path=PackedInt32Array(1358054151) index="7" unique_id=739990818]
+
+[node name="PointLight2D" type="PointLight2D" parent="Fixtures/Lights" index="0" unique_id=2037146446]
+position = Vector2(424.00003, 19)
+scale = Vector2(0.044189468, 0.044189468)
+color = Color(0.8550099, 0.014785382, 0.52302235, 1)
+energy = 1.24
+texture = ExtResource("15_beq1x")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Fixtures/Lights/PointLight2D" index="0" unique_id=1834792592]
+libraries/ = SubResource("AnimationLibrary_ganby")
+autoplay = &"light_blink"
+
+[node name="PlayerSpawnLocation" parent="." index="6" unique_id=686465435]
+position = Vector2(23, 45)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="7" unique_id=412232156]
+environment = SubResource("Environment_pqoun")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." index="8" unique_id=1811416965]
+
+[editable path="Checkpoints/Checkpoint"]
+[editable path="Checkpoints/Checkpoint2"]
+[editable path="Checkpoints/Checkpoint3"]

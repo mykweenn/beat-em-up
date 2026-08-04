@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://q5ypbxa7271c"]
+
+[ext_resource type="Script" uid="uid://ddb4pb1m8h420" path="res://Scenes/world.gd" id="1_5a7ea"]
+[ext_resource type="PackedScene" uid="uid://dmpyv36blnrgk" path="res://Scenes/UI/ui.tscn" id="2_fo5ed"]
+[ext_resource type="Script" uid="uid://d3u5n02swqv7g" path="res://Scenes/actors_container.gd" id="3_k7acu"]
+[ext_resource type="Script" uid="uid://c7bqnpgoqtb3q" path="res://Scenes/camera.gd" id="4_5ukr8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5a7ea"]
+size = Vector2(60, 1082)
+
+[node name="World" type="Node2D" unique_id=2070951853]
+script = ExtResource("1_5a7ea")
+
+[node name="UI" parent="." unique_id=758194309 instance=ExtResource("2_fo5ed")]
+
+[node name="StageContainer" type="Node2D" parent="." unique_id=1085931344]
+
+[node name="Camera" type="Camera2D" parent="." unique_id=1279680283]
+position = Vector2(964, 542)
+position_smoothing_enabled = true
+position_smoothing_speed = 3.0
+script = ExtResource("4_5ukr8")
+duration_shake = 100
+shake_intensity = 20
+
+[node name="InvisibleWalls" type="Node2D" parent="Camera" unique_id=1669451277]
+position = Vector2(-50, -32)
+
+[node name="LeftWall" type="AnimatableBody2D" parent="Camera/InvisibleWalls" unique_id=348026015]
+position = Vector2(0, 32)
+collision_layer = 128
+collision_mask = 0
+sync_to_physics = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Camera/InvisibleWalls/LeftWall" unique_id=1583014449]
+position = Vector2(-908, 0)
+shape = SubResource("RectangleShape2D_5a7ea")
+
+[node name="RightWall" type="AnimatableBody2D" parent="Camera/InvisibleWalls" unique_id=401076088]
+position = Vector2(100, 32)
+collision_layer = 128
+collision_mask = 0
+sync_to_physics = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Camera/InvisibleWalls/RightWall" unique_id=229343620]
+position = Vector2(906, -31)
+shape = SubResource("RectangleShape2D_5a7ea")
+
+[node name="ActorsContainer" type="Node2D" parent="." unique_id=941462493]
+y_sort_enabled = true
+script = ExtResource("3_k7acu")

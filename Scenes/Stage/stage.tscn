@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://c6g8v2tyiijwi"]
+
+[ext_resource type="Script" uid="uid://btthhl2uhrwfe" path="res://Scenes/Stage/stage.gd" id="1_4g8re"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4g8re"]
+size = Vector2(453.5, 20)
+
+[node name="Stage" type="Node2D" unique_id=402859074]
+script = ExtResource("1_4g8re")
+
+[node name="Backgrounds" type="Node2D" parent="." unique_id=1008490267]
+
+[node name="MainBackground" type="Sprite2D" parent="Backgrounds" unique_id=1369592109]
+centered = false
+
+[node name="WorldColliders" type="Node2D" parent="." unique_id=2107852687]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="WorldColliders" unique_id=213431888]
+position = Vector2(1, 22)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldColliders/StaticBody2D" unique_id=835774580]
+position = Vector2(195.5, 0)
+shape = SubResource("RectangleShape2D_4g8re")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="WorldColliders" unique_id=431410113]
+position = Vector2(1, 74)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldColliders/StaticBody2D2" unique_id=1739475003]
+position = Vector2(195.5, 0)
+shape = SubResource("RectangleShape2D_4g8re")
+
+[node name="Checkpoints" type="Node2D" parent="." unique_id=1705422277]
+
+[node name="Containers" type="Node2D" parent="." unique_id=2076321560]
+
+[node name="Doors" type="Node2D" parent="." unique_id=1367388572]
+
+[node name="Fixtures" type="Node2D" parent="." unique_id=1358054151]
+
+[node name="PlayerSpawnLocation" type="Node2D" parent="." unique_id=686465435]
+
+[node name="CutsceneTriggers" type="Node2D" parent="." unique_id=1815187507]
+
+[node name="CutsceneManager" type="Node2D" parent="." unique_id=1126901294]

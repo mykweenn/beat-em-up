@@ -1,0 +1,166 @@
+[gd_scene format=3 uid="uid://63wipr5strpc"]
+
+[ext_resource type="PackedScene" uid="uid://jep2uj8ujo8a" path="res://Scenes/Characters/basic_enemy.tscn" id="1_pcdoe"]
+[ext_resource type="Texture2D" uid="uid://bbe3r7ck0sm0s" path="res://Assets/Art/characters/enemy_goon.png" id="2_oeorf"]
+[ext_resource type="Texture2D" uid="uid://u3wuya186q22" path="res://Assets/Art/nevsky characters/enemy/skeleton/fly/fly_00043.webp" id="3_uviwg"]
+[ext_resource type="Texture2D" uid="uid://dxusn7lty467v" path="res://Assets/Art/nevsky characters/enemy/skeleton/fly/fly_00042.webp" id="4_03d6b"]
+[ext_resource type="Texture2D" uid="uid://c33wor4e607p2" path="res://Assets/Art/nevsky characters/enemy/skeleton/fly/fly_00051.webp" id="5_vgvsa"]
+[ext_resource type="Texture2D" uid="uid://b63wnbmn384my" path="res://Assets/Art/nevsky characters/enemy/skeleton/hurt/hurt_00032.webp" id="6_t0qya"]
+[ext_resource type="Texture2D" uid="uid://csnpuluf7jqs6" path="res://Assets/Art/nevsky characters/enemy/skeleton/idle/idle_00031.webp" id="7_pa288"]
+[ext_resource type="Texture2D" uid="uid://uatircwe5r3m" path="res://Assets/Art/nevsky characters/enemy/skeleton/idle/idle_00035.webp" id="8_uyrgd"]
+[ext_resource type="Texture2D" uid="uid://k4urund555go" path="res://Assets/Art/nevsky characters/enemy/skeleton/punch/punch_00029.webp" id="9_s36eg"]
+[ext_resource type="Texture2D" uid="uid://c8rog1ubdaygr" path="res://Assets/Art/nevsky characters/enemy/skeleton/punch/punch_00030.webp" id="10_q6n40"]
+[ext_resource type="Texture2D" uid="uid://bbkc5iudslvni" path="res://Assets/Art/nevsky characters/enemy/skeleton/punch/punch_00033.webp" id="11_d4uq5"]
+[ext_resource type="Texture2D" uid="uid://p5ut4s8eryc5" path="res://Assets/Art/nevsky characters/enemy/skeleton/punch/punch_00034.webp" id="12_1sfbt"]
+[ext_resource type="Texture2D" uid="uid://cd4stv7p8jsy0" path="res://Assets/Art/nevsky characters/enemy/skeleton/punch-2/punch-2_00035.webp" id="13_rqvr8"]
+[ext_resource type="Texture2D" uid="uid://closm46qd70fs" path="res://Assets/Art/nevsky characters/enemy/skeleton/punch-2/punch-2_00036.webp" id="14_eih02"]
+[ext_resource type="Texture2D" uid="uid://coosmcoj3467n" path="res://Assets/Art/nevsky characters/enemy/skeleton/punch-2/punch-2_00037.webp" id="15_2621g"]
+[ext_resource type="Texture2D" uid="uid://bidvf72tl6dbo" path="res://Assets/Art/nevsky characters/enemy/skeleton/go/go-_00029.webp" id="16_gainb"]
+[ext_resource type="Texture2D" uid="uid://dac07qfhm7hu7" path="res://Assets/Art/nevsky characters/enemy/skeleton/go/go-_00030.webp" id="17_830vy"]
+[ext_resource type="Texture2D" uid="uid://c8h6u36r67mkw" path="res://Assets/Art/nevsky characters/enemy/skeleton/go/go-_00033.webp" id="18_4apme"]
+[ext_resource type="Texture2D" uid="uid://7wwotwsh2338" path="res://Assets/Art/nevsky characters/enemy/skeleton/go/go-_00034.webp" id="19_fvwia"]
+[ext_resource type="Texture2D" uid="uid://cugr210w4xtmm" path="res://Assets/Art/nevsky characters/enemy/skeleton/go/go-_00037.webp" id="20_2b6p6"]
+[ext_resource type="Texture2D" uid="uid://unfla7co8grw" path="res://Assets/Art/nevsky characters/enemy/skeleton/go/go-_00038.webp" id="21_otadm"]
+[ext_resource type="Texture2D" uid="uid://etgxdsucnnr1" path="res://Assets/Art/nevsky characters/enemy/skeleton/go/go-_00041.webp" id="22_0ar70"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qqsh1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_uviwg")
+}],
+"loop": 1,
+"name": &"fall",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_03d6b")
+}],
+"loop": 1,
+"name": &"fly",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_vgvsa")
+}],
+"loop": 1,
+"name": &"grounded",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_t0qya")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_pa288")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_uyrgd")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_s36eg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_q6n40")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_d4uq5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_1sfbt")
+}],
+"loop": 0,
+"name": &"punch",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_rqvr8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_eih02")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_2621g")
+}],
+"loop": 0,
+"name": &"punch_alt",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_gainb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_830vy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_4apme")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_fvwia")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_2b6p6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_otadm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_0ar70")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 10.0
+}]
+
+[node name="GoonEnemy" unique_id=1966584693 instance=ExtResource("1_pcdoe")]
+duration_between_range_attacks = 3000
+damage = 5
+max_health = 18
+type = 2
+can_respawn_knives = true
+duration_between_knife_respawn = 1000
+
+[node name="CharacterSprite" parent="." index="1" unique_id=2032300748]
+texture = ExtResource("2_oeorf")
+
+[node name="KnifeSprite" parent="." index="7" unique_id=1902630521]
+position = Vector2(0, -197)
+scale = Vector2(2, 2)
+centered = true
+offset = Vector2(0, -5)
+flip_h = true
+hframes = 1
+vframes = 1
+frame = 0
+
+[node name="WeaponPosition" parent="KnifeSprite" index="0" unique_id=1866994207]
+position = Vector2(88, -3)
+
+[node name="GunSprite" parent="." index="8" unique_id=1109774171]
+visible = false
+
+[node name="ProjectileAim" parent="." index="9" unique_id=1168374030]
+scale = Vector2(1, 12)
+target_position = Vector2(1932, 0)
+
+[node name="AnimatedSprite2D" parent="." index="11" unique_id=468028822]
+modulate = Color(0.92677766, 0.6496319, 0.2532995, 1)
+sprite_frames = SubResource("SpriteFrames_qqsh1")
+
+[editable path="DamageEmitter"]
+[editable path="DamageReceiver"]
+[editable path="CollateralDamageEmitter"]

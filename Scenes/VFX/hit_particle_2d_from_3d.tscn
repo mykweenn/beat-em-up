@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://vjuot2dbe0er"]
+
+[ext_resource type="Script" uid="uid://bar5is6i4cux" path="res://Scenes/VFX/hit_particle_2d_from_3d.gd" id="1_g43lh"]
+[ext_resource type="PackedScene" uid="uid://bqr7478k4nhje" path="res://Scenes/VFX/hit_particle_converter_3d_to_2d.tscn" id="1_vhlja"]
+
+[node name="HitParticle2DFrom3D" type="Node2D" unique_id=1844985527]
+script = ExtResource("1_g43lh")
+
+[node name="HitParticleConverter3DTo2D" parent="." unique_id=1712600590 instance=ExtResource("1_vhlja")]
+offset_left = -256.0
+offset_top = -463.0
+offset_right = 256.0
+offset_bottom = 49.0
+
+[node name="Camera3D" parent="HitParticleConverter3DTo2D/SubViewport" parent_id_path=PackedInt32Array(1712600590, 1374767889) index="1" unique_id=944790688]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.29839796)
+
+[connection signal="finished" from="HitParticleConverter3DTo2D/SubViewport/HitParticle3D" to="." method="_on_hit_particle_3d_finished"]
+
+[editable path="HitParticleConverter3DTo2D"]

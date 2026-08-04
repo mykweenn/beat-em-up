@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="CutsceneData" format=3 uid="uid://dskttbg26s4dr"]
+
+[ext_resource type="Script" uid="uid://ctifqb35usshf" path="res://cutscene_data.gd" id="1_7foh2"]
+[ext_resource type="Resource" uid="uid://dabdkuc47m4" path="res://Resources/dialogs/arena dialogs/test_dialog_outro.tres" id="1_ttp1s"]
+
+[resource]
+script = ExtResource("1_7foh2")
+dialog_resource = ExtResource("1_ttp1s")
+character_name = "END_ARENA"
+metadata/_custom_type_script = "uid://ctifqb35usshf"

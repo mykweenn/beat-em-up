@@ -1,0 +1,54 @@
+[gd_resource type="Theme" format=3 uid="uid://c1e3qxdoi1g3v"]
+
+[sub_resource type="SystemFont" id="SystemFont_tmyo3"]
+font_names = PackedStringArray("JetBrains Mono")
+font_weight = 500
+hinting = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tmyo3"]
+bg_color = Color(0, 0.3137255, 0.30980393, 1)
+skew = Vector2(0.725, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+expand_margin_left = 3.0
+expand_margin_top = 3.0
+expand_margin_right = 3.0
+expand_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6kevw"]
+bg_color = Color(1.4439226e-07, 0.50896233, 0.50740653, 1)
+skew = Vector2(0.725, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.7506131, 0.3412479, 1)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0cjt6"]
+bg_color = Color(0, 0.3137255, 0.30980393, 1)
+skew = Vector2(0.725, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+
+[resource]
+Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+Button/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/constants/h_separation = 4
+Button/constants/line_spacing = 0
+Button/constants/outline_size = 0
+Button/font_sizes/font_size = 30
+Button/fonts/font = SubResource("SystemFont_tmyo3")
+Button/styles/disabled = null
+Button/styles/focus = null
+Button/styles/hover = SubResource("StyleBoxFlat_tmyo3")
+Button/styles/normal = SubResource("StyleBoxFlat_6kevw")
+Button/styles/pressed = SubResource("StyleBoxFlat_0cjt6")

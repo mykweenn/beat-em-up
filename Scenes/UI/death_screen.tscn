@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://btpnsgha2adup"]
+
+[ext_resource type="Script" uid="uid://ctca0guk5kwt6" path="res://Scenes/UI/death_screen.gd" id="1_30dcm"]
+[ext_resource type="Theme" uid="uid://b2qvp1u1iua2l" path="res://gui_theme.tres" id="1_u28jg"]
+
+[node name="DeathScreen" type="MarginContainer" unique_id=192211130]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+script = ExtResource("1_30dcm")
+countdown_start = 10
+
+[node name="Border" type="ColorRect" parent="." unique_id=1061773812]
+layout_mode = 2
+color = Color(0.53333336, 0.53333336, 0.53333336, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="Border" unique_id=1250029719]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="Contents" type="ColorRect" parent="Border/MarginContainer" unique_id=792940242]
+layout_mode = 2
+color = Color(0.078431375, 0.078431375, 0.078431375, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Border/MarginContainer/Contents" unique_id=240068431]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 2
+
+[node name="Label" type="Label" parent="Border/MarginContainer/Contents/VBoxContainer" unique_id=1102316050]
+layout_mode = 2
+theme = ExtResource("1_u28jg")
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "Respawn?"
+horizontal_alignment = 1
+
+[node name="CountdownLabel" type="Label" parent="Border/MarginContainer/Contents/VBoxContainer" unique_id=309381970]
+layout_mode = 2
+theme = ExtResource("1_u28jg")
+text = "10
+"
+horizontal_alignment = 1
+
+[node name="Timer" type="Timer" parent="." unique_id=838377629]
+autostart = true

@@ -1,0 +1,246 @@
+[gd_scene format=3 uid="uid://dmbygnmdtaw0c"]
+
+[ext_resource type="Script" uid="uid://climht8y76su8" path="res://Scenes/UI/main_menu.gd" id="1_i0i02"]
+[ext_resource type="Texture2D" uid="uid://fxi0r8pxukwt" path="res://Assets/Art/nevsky assets/background/covers/cover.png" id="1_shqiv"]
+[ext_resource type="Shader" uid="uid://b4swt7qpaapnh" path="res://Resources/speed_stripes.gdshader" id="2_gcgm2"]
+[ext_resource type="Theme" uid="uid://c1e3qxdoi1g3v" path="res://Resources/themes/main_menu_theme.tres" id="3_70rqd"]
+[ext_resource type="Texture2D" uid="uid://c2uabi2r6ysib" path="res://Assets/Art/nevsky assets/background/characters/1.2.png" id="4_fdsk3"]
+[ext_resource type="Texture2D" uid="uid://cmvf8a17hcdwo" path="res://Assets/Art/nevsky assets/background/characters/ilya.png" id="5_sfmgl"]
+[ext_resource type="Texture2D" uid="uid://cjjt68xedlm8p" path="res://Assets/Art/nevsky assets/background/characters/1.4.3_situations-3-Photoroom.png" id="6_dord1"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_gcgm2"]
+noise_type = 0
+frequency = 0.09
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_fdsk3"]
+noise = SubResource("FastNoiseLite_gcgm2")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fdsk3"]
+shader = ExtResource("2_gcgm2")
+shader_parameter/noise = SubResource("NoiseTexture2D_fdsk3")
+shader_parameter/line_color_a = Color(1.604, 0.7292018, 1.2631643, 1)
+shader_parameter/line_color_b = Color(0.37296215, 0.9328703, 0.8934471, 1)
+shader_parameter/back_color = Color(0.050189428, 0.571693, 0.6837386, 1)
+shader_parameter/line_threshold = 0.8
+shader_parameter/speed = 0.01999999955296
+shader_parameter/line_length = 1000.0
+shader_parameter/angle = 60.0
+
+[sub_resource type="Gradient" id="Gradient_70rqd"]
+colors = PackedColorArray(0, 0.13408053, 0.15856731, 1, 0.0027013866, 0.2601984, 0.38891447, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gcgm2"]
+gradient = SubResource("Gradient_70rqd")
+fill = 1
+fill_from = Vector2(0.75252527, 0.36868685)
+fill_to = Vector2(0.26767677, 0.7171717)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fdsk3"]
+texture = SubResource("GradientTexture2D_gcgm2")
+
+[sub_resource type="Curve" id="Curve_70rqd"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_gcgm2"]
+curve = SubResource("Curve_70rqd")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_70rqd"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(960, 540, 1)
+spread = 180.0
+initial_velocity_min = 10.0
+initial_velocity_max = 30.0
+gravity = Vector3(0, 98, 0)
+scale_min = 3.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_gcgm2")
+color = Color(0, 0.8059736, 0.7091429, 1)
+turbulence_enabled = true
+turbulence_noise_speed = Vector3(1.69, 1.88, 0)
+turbulence_noise_speed_random = 2.2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_70rqd"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="Environment" id="Environment_70rqd"]
+background_mode = 3
+glow_enabled = true
+
+[node name="MainMenu" type="Control" unique_id=336705458]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_i0i02")
+
+[node name="ColorRect" type="Panel" parent="." unique_id=346576556]
+material = SubResource("ShaderMaterial_fdsk3")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_fdsk3")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=1061185806]
+visible = false
+position = Vector2(950, 540)
+amount = 62
+lifetime = 10.7
+preprocess = 2.0
+process_material = SubResource("ParticleProcessMaterial_70rqd")
+
+[node name="BackgroundTextureRect" type="TextureRect" parent="." unique_id=1109776617]
+visible = false
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1081.0
+texture = ExtResource("1_shqiv")
+
+[node name="Characters" type="Control" parent="." unique_id=452047908]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Char1" type="TextureRect" parent="Characters" unique_id=2013591930]
+layout_mode = 0
+offset_left = 926.0
+offset_top = 52.0
+offset_right = 1775.0
+offset_bottom = 1640.5804
+texture = ExtResource("4_fdsk3")
+expand_mode = 1
+
+[node name="Char2" type="TextureRect" parent="Characters" unique_id=958774392]
+layout_mode = 0
+offset_left = 1335.0
+offset_top = 344.0
+offset_right = 1917.0
+offset_bottom = 1744.5002
+texture = ExtResource("5_sfmgl")
+expand_mode = 1
+
+[node name="Char3" type="TextureRect" parent="Characters" unique_id=1935653706]
+layout_mode = 0
+offset_left = 586.0
+offset_top = 166.0
+offset_right = 1760.0
+offset_bottom = 1094.0
+texture = ExtResource("6_dord1")
+expand_mode = 1
+
+[node name="Panel" type="Panel" parent="." unique_id=1193484903]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -893.0
+offset_top = -265.5
+offset_right = -300.0
+offset_bottom = 265.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_70rqd")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=1109289180]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=1380716847]
+layout_mode = 2
+alignment = 1
+
+[node name="GameNameLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer" unique_id=917961614]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.853302, 0.45184183, 3.85046e-07, 1)
+theme_override_colors/font_shadow_color = Color(0.6579369, 0, 0.047433637, 1)
+theme_override_constants/line_spacing = 1
+theme_override_constants/shadow_outline_size = 1
+theme_override_font_sizes/font_size = 40
+text = "НЕВСКИЙ"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer" unique_id=1312002764]
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="Panel/MarginContainer/VBoxContainer" unique_id=678591647]
+layout_mode = 2
+theme = ExtResource("3_70rqd")
+text = "Начать игру"
+
+[node name="ContinueButton" type="Button" parent="Panel/MarginContainer/VBoxContainer" unique_id=1480069100]
+layout_mode = 2
+theme = ExtResource("3_70rqd")
+text = "Продолжить"
+
+[node name="SettingsButton" type="Button" parent="Panel/MarginContainer/VBoxContainer" unique_id=1758431684]
+layout_mode = 2
+theme = ExtResource("3_70rqd")
+text = "Настройки"
+
+[node name="ExitButton" type="Button" parent="Panel/MarginContainer/VBoxContainer" unique_id=1488763211]
+layout_mode = 2
+theme = ExtResource("3_70rqd")
+text = "Выход"
+
+[node name="Settings" type="Control" parent="." unique_id=1544515612]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="Settings" unique_id=674866199]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Settings/Panel" unique_id=525811768]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 143
+text = "ТУТ БУДУТ НАСТРОЙКИ"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BackButton" type="Button" parent="Settings" unique_id=461778975]
+layout_mode = 0
+offset_left = 433.0
+offset_top = 752.0
+offset_right = 1587.0
+offset_bottom = 874.0
+theme_override_font_sizes/font_size = 81
+text = "НАЗАД"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1938512068]
+environment = SubResource("Environment_70rqd")

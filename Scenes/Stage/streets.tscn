@@ -1,0 +1,273 @@
+[gd_scene format=3 uid="uid://b3fcjojcqe3rx"]
+
+[ext_resource type="PackedScene" uid="uid://c6g8v2tyiijwi" path="res://Scenes/Stage/stage.tscn" id="1_g7de4"]
+[ext_resource type="Texture2D" uid="uid://co87jkfole8mx" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_1_ground.png" id="2_biiov"]
+[ext_resource type="Texture2D" uid="uid://b8plc6lec7lid" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_2_stars.png" id="3_kw7go"]
+[ext_resource type="Texture2D" uid="uid://ck8b7igfj8jeg" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_3_moon.png" id="4_rpe1a"]
+[ext_resource type="Texture2D" uid="uid://buk3h8g4p8fye" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_4_clouds_1.png" id="5_10na3"]
+[ext_resource type="Texture2D" uid="uid://bx2u72g71vyja" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_5_clouds_2.png" id="6_jufl5"]
+[ext_resource type="Texture2D" uid="uid://dtfl8edmy0dof" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_6_far_buildings.png" id="7_uokwh"]
+[ext_resource type="Texture2D" uid="uid://c0r8blit4iyny" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_7_bg_buildings.png" id="8_r13cy"]
+[ext_resource type="Texture2D" uid="uid://bfjds8y7pugmu" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_8_fg_buildings.png" id="9_4ioxg"]
+[ext_resource type="Texture2D" uid="uid://dsfmrtkg152dw" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_9_wall.png" id="10_fy23a"]
+[ext_resource type="PackedScene" uid="uid://cjituhu2smwr2" path="res://Scenes/Stage/checkpoint.tscn" id="11_rpe1a"]
+[ext_resource type="PackedScene" uid="uid://jep2uj8ujo8a" path="res://Scenes/Characters/basic_enemy.tscn" id="12_10na3"]
+[ext_resource type="PackedScene" uid="uid://b107bhknlisaa" path="res://Scenes/Props/food.tscn" id="13_rpe1a"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uokwh"]
+size = Vector2(7236.25, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r13cy"]
+size = Vector2(7236.25, 20)
+
+[node name="Streets" unique_id=402859074 instance=ExtResource("1_g7de4")]
+music = 2
+
+[node name="Backgrounds" parent="." index="0" unique_id=1008490267]
+position = Vector2(0, -232)
+
+[node name="MainBackground" parent="Backgrounds" index="0" unique_id=1369592109]
+visible = false
+scale = Vector2(9.9296875, 9.9296875)
+texture = ExtResource("2_biiov")
+
+[node name="Parallax2D" type="Parallax2D" parent="Backgrounds/MainBackground" index="0" unique_id=439542121]
+scroll_scale = Vector2(0.001, 0.001)
+
+[node name="Sky" type="Parallax2D" parent="Backgrounds" index="1" unique_id=2011142918]
+scale = Vector2(5, 5)
+scroll_scale = Vector2(0.001, 0.001)
+repeat_size = Vector2(723, 0)
+
+[node name="SkySprite" type="Sprite2D" parent="Backgrounds/Sky" index="0" unique_id=557032542]
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("2_biiov")
+centered = false
+
+[node name="Parallax2D6" type="Parallax2D" parent="Backgrounds" index="2" unique_id=2025943016]
+scale = Vector2(5, 5)
+scroll_scale = Vector2(0.001, 0.001)
+repeat_size = Vector2(723, 0)
+
+[node name="Stars" type="Sprite2D" parent="Backgrounds/Parallax2D6" index="0" unique_id=2139641709]
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("3_kw7go")
+centered = false
+
+[node name="Parallax2D4" type="Parallax2D" parent="Backgrounds" index="3" unique_id=1054514764]
+scale = Vector2(5, 5)
+repeat_size = Vector2(723, 0)
+
+[node name="Moon" type="Sprite2D" parent="Backgrounds/Parallax2D4" index="0" unique_id=953953005]
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("4_rpe1a")
+centered = false
+
+[node name="Parallax2D3" type="Parallax2D" parent="Backgrounds" index="4" unique_id=99120144]
+scale = Vector2(5, 5)
+repeat_size = Vector2(723, 0)
+autoscroll = Vector2(10.28, 0)
+
+[node name="Clouds2" type="Sprite2D" parent="Backgrounds/Parallax2D3" index="0" unique_id=1361338186]
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("5_10na3")
+centered = false
+
+[node name="Parallax2D2" type="Parallax2D" parent="Backgrounds" index="5" unique_id=38200040]
+scale = Vector2(5, 5)
+repeat_size = Vector2(723, 0)
+autoscroll = Vector2(8.49, 0)
+
+[node name="Clouds" type="Sprite2D" parent="Backgrounds/Parallax2D2" index="0" unique_id=741236475]
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("6_jufl5")
+centered = false
+
+[node name="Parallax2D" type="Parallax2D" parent="Backgrounds" index="6" unique_id=1056068741]
+scale = Vector2(5, 5)
+scroll_scale = Vector2(0.25, 0.25)
+repeat_size = Vector2(723, 0)
+
+[node name="HousesBackground" type="Sprite2D" parent="Backgrounds/Parallax2D" index="0" unique_id=1328994413]
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("7_uokwh")
+centered = false
+
+[node name="HousesMidground" type="Parallax2D" parent="Backgrounds" index="7" unique_id=917993473]
+scale = Vector2(5, 5)
+scroll_scale = Vector2(0.1, 0.1)
+repeat_size = Vector2(723, 0)
+
+[node name="MainBackground7" type="Sprite2D" parent="Backgrounds/HousesMidground" index="0" unique_id=2114520310]
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("8_r13cy")
+centered = false
+
+[node name="HousesForeground" type="Parallax2D" parent="Backgrounds" index="8" unique_id=1714154221]
+scale = Vector2(5, 5)
+scroll_scale = Vector2(0.12, 0.12)
+repeat_size = Vector2(723, 0)
+
+[node name="MainBackground8" type="Sprite2D" parent="Backgrounds/HousesForeground" index="0" unique_id=520570638]
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("9_4ioxg")
+centered = false
+
+[node name="Wall" type="Parallax2D" parent="Backgrounds" index="9" unique_id=637899255]
+scale = Vector2(5, 5)
+repeat_size = Vector2(723, 0)
+
+[node name="MainBackground9" type="Sprite2D" parent="Backgrounds/Wall" index="0" unique_id=1700786141]
+position = Vector2(0, 0.8)
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("10_fy23a")
+centered = false
+
+[node name="StaticBody2D" parent="WorldColliders" parent_id_path=PackedInt32Array(2107852687) index="0" unique_id=213431888]
+position = Vector2(27, 906)
+
+[node name="CollisionShape2D" parent="WorldColliders/StaticBody2D" index="0" unique_id=835774580]
+position = Vector2(3586.875, 0)
+shape = SubResource("RectangleShape2D_uokwh")
+
+[node name="StaticBody2D2" parent="WorldColliders" parent_id_path=PackedInt32Array(2107852687) index="1" unique_id=431410113]
+position = Vector2(29, 1049)
+
+[node name="CollisionShape2D" parent="WorldColliders/StaticBody2D2" index="0" unique_id=1739475003]
+position = Vector2(3586.875, 0)
+shape = SubResource("RectangleShape2D_r13cy")
+
+[node name="Checkpoint" parent="Checkpoints" parent_id_path=PackedInt32Array(1705422277) index="0" unique_id=1922420126 instance=ExtResource("11_rpe1a")]
+position = Vector2(-471, 0)
+nb_simultaneous_enemies = 4
+
+[node name="BasicEnemy" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="0" unique_id=1966584693 instance=ExtResource("12_10na3")]
+position = Vector2(2281, 963)
+
+[node name="BasicEnemy3" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="1" unique_id=1120400362 instance=ExtResource("12_10na3")]
+position = Vector2(2350, 991)
+
+[node name="BasicEnemy4" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="2" unique_id=1258663848 instance=ExtResource("12_10na3")]
+position = Vector2(2295, 970)
+
+[node name="BasicEnemy5" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="3" unique_id=1102635551 instance=ExtResource("12_10na3")]
+position = Vector2(-74, 1007)
+
+[node name="BasicEnemy6" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="4" unique_id=1664924122 instance=ExtResource("12_10na3")]
+position = Vector2(76, 1025)
+
+[node name="BasicEnemy7" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="5" unique_id=1191201126 instance=ExtResource("12_10na3")]
+position = Vector2(-7, 999)
+
+[node name="BasicEnemy8" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="6" unique_id=1139963241 instance=ExtResource("12_10na3")]
+position = Vector2(-186, 1026)
+
+[node name="CollisionShape2D" parent="Checkpoints/Checkpoint/PlayerDetectionArea" parent_id_path=PackedInt32Array(1922420126, 289896115) index="0" unique_id=1130211026]
+position = Vector2(963, 819)
+
+[node name="CollisionShape2D" parent="Checkpoints/Checkpoint/CheckpointPlayArea" parent_id_path=PackedInt32Array(1922420126, 1777217405) index="0" unique_id=1539741835]
+position = Vector2(941, 839)
+
+[node name="Checkpoint2" parent="Checkpoints" parent_id_path=PackedInt32Array(1705422277) index="1" unique_id=1646409968 instance=ExtResource("11_rpe1a")]
+position = Vector2(1758, 0)
+nb_simultaneous_enemies = 4
+
+[node name="BasicEnemy" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1646409968, 214738812) index="0" unique_id=2127243976 instance=ExtResource("12_10na3")]
+position = Vector2(2003, 977)
+
+[node name="BasicEnemy3" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1646409968, 214738812) index="1" unique_id=109644746 instance=ExtResource("12_10na3")]
+position = Vector2(2183, 980)
+
+[node name="BasicEnemy4" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1646409968, 214738812) index="2" unique_id=1696898099 instance=ExtResource("12_10na3")]
+position = Vector2(2334, 996)
+
+[node name="BasicEnemy5" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1646409968, 214738812) index="3" unique_id=107603668 instance=ExtResource("12_10na3")]
+position = Vector2(-185, 971)
+
+[node name="BasicEnemy6" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1646409968, 214738812) index="4" unique_id=1905638149 instance=ExtResource("12_10na3")]
+position = Vector2(-152, 1005)
+
+[node name="BasicEnemy7" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1646409968, 214738812) index="5" unique_id=1269732089 instance=ExtResource("12_10na3")]
+position = Vector2(-222, 976)
+
+[node name="BasicEnemy8" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1646409968, 214738812) index="6" unique_id=777730159 instance=ExtResource("12_10na3")]
+position = Vector2(-141, 1008)
+
+[node name="CollisionShape2D" parent="Checkpoints/Checkpoint2/PlayerDetectionArea" parent_id_path=PackedInt32Array(1646409968, 289896115) index="0" unique_id=1130211026]
+position = Vector2(963, 819)
+
+[node name="CollisionShape2D" parent="Checkpoints/Checkpoint2/CheckpointPlayArea" parent_id_path=PackedInt32Array(1646409968, 1777217405) index="0" unique_id=1539741835]
+position = Vector2(941, 839)
+
+[node name="Checkpoint3" parent="Checkpoints" parent_id_path=PackedInt32Array(1705422277) index="2" unique_id=1318329992 instance=ExtResource("11_rpe1a")]
+position = Vector2(4038, 0)
+nb_simultaneous_enemies = 4
+
+[node name="BasicEnemy" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(1318329992, 214738812) index="0" unique_id=1211946546 instance=ExtResource("12_10na3")]
+position = Vector2(2054, 771)
+
+[node name="BasicEnemy3" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(1318329992, 214738812) index="1" unique_id=443444264 instance=ExtResource("12_10na3")]
+position = Vector2(2351, 980)
+
+[node name="BasicEnemy4" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(1318329992, 214738812) index="2" unique_id=977215512 instance=ExtResource("12_10na3")]
+position = Vector2(2334, 742)
+
+[node name="BasicEnemy5" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(1318329992, 214738812) index="3" unique_id=111923144 instance=ExtResource("12_10na3")]
+position = Vector2(-331, 734)
+
+[node name="BasicEnemy6" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(1318329992, 214738812) index="4" unique_id=1297154193 instance=ExtResource("12_10na3")]
+position = Vector2(-318, 997)
+
+[node name="BasicEnemy7" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(1318329992, 214738812) index="5" unique_id=320193469 instance=ExtResource("12_10na3")]
+position = Vector2(-498, 834)
+
+[node name="BasicEnemy8" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(1318329992, 214738812) index="6" unique_id=1203100467 instance=ExtResource("12_10na3")]
+position = Vector2(-577, 1026)
+
+[node name="CollisionShape2D" parent="Checkpoints/Checkpoint3/PlayerDetectionArea" parent_id_path=PackedInt32Array(1318329992, 289896115) index="0" unique_id=1130211026]
+position = Vector2(963, 819)
+
+[node name="CollisionShape2D" parent="Checkpoints/Checkpoint3/CheckpointPlayArea" parent_id_path=PackedInt32Array(1318329992, 1777217405) index="0" unique_id=1539741835]
+position = Vector2(941, 839)
+
+[node name="Checkpoint4" parent="Checkpoints" parent_id_path=PackedInt32Array(1705422277) index="3" unique_id=1809565 instance=ExtResource("11_rpe1a")]
+position = Vector2(6211, 0)
+nb_simultaneous_enemies = 4
+
+[node name="BasicEnemy" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1809565, 214738812) index="0" unique_id=1821710526 instance=ExtResource("12_10na3")]
+position = Vector2(2054, 771)
+
+[node name="BasicEnemy3" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1809565, 214738812) index="1" unique_id=84846677 instance=ExtResource("12_10na3")]
+position = Vector2(2351, 980)
+
+[node name="BasicEnemy4" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1809565, 214738812) index="2" unique_id=1913682248 instance=ExtResource("12_10na3")]
+position = Vector2(2334, 742)
+
+[node name="BasicEnemy5" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1809565, 214738812) index="3" unique_id=664897331 instance=ExtResource("12_10na3")]
+position = Vector2(-331, 734)
+
+[node name="BasicEnemy6" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1809565, 214738812) index="4" unique_id=720844720 instance=ExtResource("12_10na3")]
+position = Vector2(-318, 997)
+
+[node name="BasicEnemy7" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1809565, 214738812) index="5" unique_id=1012085789 instance=ExtResource("12_10na3")]
+position = Vector2(-498, 834)
+
+[node name="BasicEnemy8" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1809565, 214738812) index="6" unique_id=1451688560 instance=ExtResource("12_10na3")]
+position = Vector2(-577, 1026)
+
+[node name="CollisionShape2D" parent="Checkpoints/Checkpoint4/PlayerDetectionArea" parent_id_path=PackedInt32Array(1809565, 289896115) index="0" unique_id=1130211026]
+position = Vector2(963, 819)
+
+[node name="CollisionShape2D" parent="Checkpoints/Checkpoint4/CheckpointPlayArea" parent_id_path=PackedInt32Array(1809565, 1777217405) index="0" unique_id=1539741835]
+position = Vector2(941, 839)
+
+[node name="Food" parent="Containers" parent_id_path=PackedInt32Array(2076321560) index="0" unique_id=995031682 instance=ExtResource("13_rpe1a")]
+position = Vector2(1261, 977)
+
+[node name="PlayerSpawnLocation" parent="." index="6" unique_id=686465435]
+position = Vector2(180, 1027)
+
+[editable path="Checkpoints/Checkpoint"]
+[editable path="Checkpoints/Checkpoint2"]
+[editable path="Checkpoints/Checkpoint3"]
+[editable path="Checkpoints/Checkpoint4"]

@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://cjituhu2smwr2"]
+
+[ext_resource type="Script" uid="uid://djemn1g5lmvuo" path="res://Scenes/Stage/checkpoint.gd" id="1_qqqi5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tmchk"]
+size = Vector2(96, 635)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qqqi5"]
+size = Vector2(1906, 608)
+
+[node name="Checkpoint" type="Node2D" unique_id=1922420126]
+script = ExtResource("1_qqqi5")
+nb_simultaneous_enemies = 2
+
+[node name="Enemies" type="Node2D" parent="." unique_id=214738812]
+
+[node name="PlayerDetectionArea" type="Area2D" parent="." unique_id=289896115]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetectionArea" unique_id=1130211026]
+position = Vector2(52, 32)
+shape = SubResource("RectangleShape2D_tmchk")
+
+[node name="CheckpointPlayArea" type="Area2D" parent="." unique_id=1777217405]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CheckpointPlayArea" unique_id=1539741835]
+position = Vector2(50, 32)
+shape = SubResource("RectangleShape2D_qqqi5")
+debug_color = Color(0.4399102, 0.45469445, 1, 0.41960785)

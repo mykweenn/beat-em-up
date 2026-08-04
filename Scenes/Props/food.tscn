@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://b107bhknlisaa"]
+
+[ext_resource type="PackedScene" uid="uid://dush60hj76vcx" path="res://Scenes/Props/collectable.tscn" id="1_dnvjm"]
+[ext_resource type="Texture2D" uid="uid://b42222tlng4fq" path="res://Assets/Art/props/chicken.png" id="2_yh1y7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yh1y7"]
+size = Vector2(88, 41)
+
+[sub_resource type="Animation" id="Animation_yh1y7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollectibleSprite:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_tdw2q"]
+resource_name = "fall"
+length = 0.4
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollectibleSprite:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0.0, 1.5707964, 3.1415927, 4.712389]
+}
+
+[sub_resource type="Animation" id="Animation_wgstp"]
+resource_name = "grounded"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollectibleSprite:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wgstp"]
+_data = {
+&"RESET": SubResource("Animation_yh1y7"),
+&"fall": SubResource("Animation_tdw2q"),
+&"grounded": SubResource("Animation_wgstp")
+}
+
+[node name="Food" unique_id=995031682 instance=ExtResource("1_dnvjm")]
+collision_mask = 2
+knockdown_intensity = 80.0
+type = 2
+
+[node name="CollisionShape2D" parent="." index="0" unique_id=192311108]
+position = Vector2(0, -13.5)
+shape = SubResource("RectangleShape2D_yh1y7")
+
+[node name="CollectibleSprite" parent="." index="1" unique_id=1942615502]
+scale = Vector2(3.851056, 3.851056)
+texture = ExtResource("2_yh1y7")
+centered = false
+offset = Vector2(-8.49, -12.575)
+
+[node name="ShadowSprite" parent="." index="2" unique_id=1736003885]
+visible = false
+
+[node name="AnimationPlayer" parent="." index="3" unique_id=820106158]
+libraries/ = SubResource("AnimationLibrary_wgstp")

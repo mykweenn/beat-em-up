@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="SproutyDialogsCharacterData" format=3 uid="uid://dtjyprcmdg0ni"]
+
+[ext_resource type="Script" uid="uid://kwoapf8il7ee" path="res://addons/sprouty_dialogs/resources/character_data.gd" id="1_8xpkm"]
+[ext_resource type="Script" uid="uid://ygs6blymsjbh" path="res://addons/sprouty_dialogs/resources/portrait_data.gd" id="1_adeou"]
+
+[sub_resource type="Resource" id="Resource_adeou"]
+script = ExtResource("1_adeou")
+portrait_scene_uid = 3432807972742641250
+portrait_scene_path = "res://Scenes/Dialogs/Portraits/Muromec/muromec_portrait.tscn"
+export_overrides = {
+"portrait_image": {
+"type": 4,
+"value": "res://Assets/Art/Dialog assets/Characters/Main characters/Muromec/1.4.3_situations-3-Photoroom.png"
+}
+}
+typing_sound = {}
+
+[sub_resource type="Resource" id="Resource_0vwgo"]
+script = ExtResource("1_adeou")
+typing_sound = {}
+
+[resource]
+script = ExtResource("1_8xpkm")
+key_name = "muromec"
+display_name = {
+"default": "Муромец",
+"en": ""
+}
+description = "Main character of this game's prototype "
+default_portrait = "Angry"
+portraits = {
+"Angry": {
+"data": SubResource("Resource_0vwgo"),
+"index": 1
+},
+"Neutral": {
+"data": SubResource("Resource_adeou"),
+"index": 0
+}
+}

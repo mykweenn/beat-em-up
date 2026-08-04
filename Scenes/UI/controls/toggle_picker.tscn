@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://lr2fn3oy26t6"]
+
+[ext_resource type="PackedScene" uid="uid://bemr5dk07qby2" path="res://Scenes/UI/controls/activable_control.tscn" id="1_uojbk"]
+[ext_resource type="Script" uid="uid://co6fa75mcatgy" path="res://Scenes/UI/controls/toggle_picker.gd" id="2_1ha0m"]
+[ext_resource type="Theme" uid="uid://b2qvp1u1iua2l" path="res://gui_theme.tres" id="2_ftfdr"]
+
+[node name="TogglePicker" unique_id=1317086552 instance=ExtResource("1_uojbk")]
+script = ExtResource("2_1ha0m")
+current_value = 1
+min_value = null
+max_value = 1
+text = null
+
+[node name="ValueLabel" type="Label" parent="." index="1" unique_id=191829928]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme = ExtResource("2_ftfdr")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "On"

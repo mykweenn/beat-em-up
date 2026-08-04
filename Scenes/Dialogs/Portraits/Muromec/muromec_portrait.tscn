@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://bo5430yg776qg"]
+
+[ext_resource type="Script" uid="uid://b8223l27smyou" path="res://Scenes/Dialogs/Portraits/Muromec/muromec_portrait.gd" id="1_vpuhn"]
+[ext_resource type="Texture2D" uid="uid://p6urxec73lk5" path="res://Assets/Art/Dialog assets/Characters/Main characters/Muromec/1.4.3_situations-3-Photoroom.png" id="2_yxqag"]
+
+[node name="MuromecPortrait" type="Node2D" unique_id=2143913443]
+script = ExtResource("1_vpuhn")
+portrait_image = "uid://p6urxec73lk5"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1111928347]
+position = Vector2(0, 592)
+texture = ExtResource("2_yxqag")
+offset = Vector2(0, -460.775)
