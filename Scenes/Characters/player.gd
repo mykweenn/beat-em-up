@@ -33,8 +33,8 @@ func _ready() -> void:
 	GameManager.cutscene_finished.connect(_on_cutscene_finished.bind())
 
 
-func _process(delta: float) -> void:
-	super._process(delta)
+func _physics_process(delta: float) -> void:
+	super._physics_process(delta)
 	procces_time_between_combos()
 	
 	if state == State.DASH or state == State.SPRINT_ATTACK:
@@ -54,6 +54,20 @@ func on_player_revive() -> void:
 
 
 func handle_input() -> void:
+	# === ЛОГИКА БЛОКА ДЛЯ ИГРОКА ===
+	if Input.is_action_pressed("block") and (state == State.BLOCK or can_block()):
+		if state != State.BLOCK:
+			state = State.BLOCK
+			velocity = Vector2.ZERO # Останавливаем игрока только в ПЕРВЫЙ кадр входа в блок
+			block_activated_time = Time.get_ticks_msec() # Фиксируем точное время для парирования
+		return # Прерываем handle_input, блокируя атаки и ходьбу, но сохраняя импульс отброса
+
+	# Если игрок удерживал блок, но отпустил кнопку — возвращаем в IDLE
+	if state == State.BLOCK and Input.is_action_just_released("block"):
+		state = State.IDLE
+	# ===============================
+
+
 	if can_move():
 		var direction := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 		velocity = direction * speed
@@ -87,6 +101,7 @@ func handle_input() -> void:
 		SoundPlayer.play(SoundManager.Sound.SWOOSH)
 	if can_sprint_attack() and Input.is_action_just_pressed("attack"):
 		start_sprint_attack()
+
 
 
 func set_heading() -> void:

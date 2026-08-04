@@ -30,7 +30,7 @@ const GRAVITY := 3800.0
 ## Скорость персонажа во время совершения рывка (даша).
 @export var DASH_SPEED := 1050.0
 ## Длительность рывка в секундах.
-@export var DASH_DURATION := 0.18
+@export var DASH_DURATION := 0.08
 ## Максимальное время (в секундах) между нажатиями клавиш для засчитывания двойного тапа (например, для даша).
 @export var DOUBLE_TAP_TIME := 0.25
 @export var launch_vertical_intensity: float = 1200.0   # Сила подбрасывания вверх
@@ -54,6 +54,15 @@ const GRAVITY := 3800.0
 ## Максимальное количество патронов, которое вмещает один пистолет/автомат.
 @export var max_ammo_per_gun : int
 
+@export_group("Block")
+@export var max_block_health : float = 100.0
+@export var block_regen_rate : float = 20.0
+## Шанс (от 0.0 до 1.0), что враг решит заблокировать удар вместо получения урона
+@export var block_chance : float = 0.4 
+## Как долго враг будет удерживать блок (в секундах) после активации
+@export var block_duration : float = 0.8 
+## Окно времени (в секундах), в течение которого блок считается идеальным парированием.
+@export var parry_window : float = 0.15
 
 @onready var animation_player := $AnimationPlayer
 @onready var character_sprite := $CharacterSprite
@@ -68,7 +77,7 @@ const GRAVITY := 3800.0
 @onready var weapon_position: Node2D = $KnifeSprite/WeaponPosition
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 
-enum State {IDLE, WALK, ATTACK, TAKEOFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUNDED, DEATH, FLY, PREP_ATTACK, THROW, PICKUP, SHOOT, PREP_SHOOT, RECOVER, DROP, WAIT, APPEARING, SPRINT, DASH, SPRINT_ATTACK, CUTSCENE, BLOCK}
+enum State {IDLE, WALK, ATTACK, TAKEOFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUNDED, DEATH, FLY, PREP_ATTACK, THROW, PICKUP, SHOOT, PREP_SHOOT, RECOVER, DROP, WAIT, APPEARING, SPRINT, DASH, SPRINT_ATTACK, CUTSCENE, BLOCK,}
 enum Type {PLAYER, PUNK, GOON, THUG, BOUNCER, HEAVY}
 
 var ammo_left := 0
@@ -98,6 +107,7 @@ var anim_map : Dictionary = {
 	State.DASH: "dash",
 	State.SPRINT_ATTACK: "dash_attack",
 	State.CUTSCENE: "cutscene",
+	State.BLOCK: "block",
 }
 
 var attack_combo_index := 0
@@ -116,6 +126,12 @@ var dash_direction := 0.0
 var last_left_press_time := -1.0
 var last_right_press_time := -1.0
 
+# block
+var block_health : float = 0.0
+var block_broken : bool = false
+var enemy_block_timer : float = 1.0
+# Время в миллисекундах, когда персонаж вошел в состояние блока
+var block_activated_time : float = 0.0
 
 func _ready():
 	damage_emitter.area_entered.connect(on_emit_damage.bind())
@@ -124,15 +140,34 @@ func _ready():
 	collateral_damage_emitter.body_entered.connect(on_wall_hit.bind())
 	set_health(max_health, type == Character.Type.PLAYER)
 	set_sprite_height_position()
+	block_health = max_block_health
 	
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	# Плавно гасим скорость отброса как для блока, так и для оглушения
+	if state == State.BLOCK or state == State.RECOVER:
+		if is_on_floor():
+			# На земле тормозим быстро
+			velocity = velocity.move_toward(Vector2.ZERO, 9000 * delta)
+		else:
+			# В воздухе тормозим гораздо слабее (воздушное сопротивление)
+			velocity = velocity.move_toward(Vector2.ZERO, 300.0 * delta)
+
 	if GameManager.current_state == GameManager.GameState.CUTSCENE:
 		cutscene_state()
 	elif GameManager.current_state == GameManager.GameState.GAMEPLAY:
 		handle_input()
+
+	#block
+	if state != State.BLOCK and block_health < max_block_health:
+		block_health += block_regen_rate * delta
+		if block_health >= max_block_health:
+			block_health = max_block_health
+			block_broken = false # Щит полностью восстановился и снова готов к работе
+
+	#methods
 	handle_double_tap_dash()
-	handle_movement()
+	handle_movement(delta)
 	handle_animations()
 	handle_air_time(delta)
 	handle_prep_attack()
@@ -144,6 +179,8 @@ func _process(delta: float) -> void:
 	flip_sprites()
 	set_sprite_visibility()
 	set_sprite_height_position()
+	if state == State.BLOCK:
+		velocity = velocity.move_toward(Vector2.ZERO, GRAVITY * delta)
 	setup_collisions()
 	move_and_slide()
 
@@ -181,10 +218,13 @@ func setup_collisions() -> void:
 	collateral_damage_emitter.monitoring = state == State.FLY
 
 
-func handle_movement():
+func handle_movement(delta: float): # Добавили delta в аргументы
+# Если персонаж заблокирован физикой — не даем коду ниже занулять скорость
+	if [State.HURT, State.FALL, State.FLY, State.BLOCK, State.RECOVER].has(state):
+		return
 	if state == State.DASH:
 		velocity.x = dash_direction * DASH_SPEED
-		dash_timer -= get_process_delta_time()
+		dash_timer -= delta # Используем правильную физическую дельту!
 		if dash_timer <= 0:
 			state = State.IDLE
 			velocity.x = 0
@@ -195,6 +235,7 @@ func handle_movement():
 			state = State.IDLE
 		else:
 			state = State.WALK
+
 
 
 ## Обрабатывает нахождение персонажа в воздухе.
@@ -280,13 +321,39 @@ func handle_death(delta) -> void:
 ## Анимации синхронно запускаются как в AnimationPlayer,
 ## так и в AnimatedSprite2D.
 func handle_animations() -> void:
+	if state == State.BLOCK:
+		print("Текущая анимация: ", animation_player.current_animation, " | Играет: ", animation_player.is_playing())
+
+		# 1. Специфичная логика для блока
+	if state == State.BLOCK:
+		# Если персонаж только что получил удар и играет анимация дёргания
+		if animation_player.current_animation == "block_damage":
+			return # Просто выходим и даем анимации block_damage доиграть до конца
+			
+		# Если анимация block_damage ЗАВЕРШИЛАСЬ, плавно возвращаем персонажа в обычную стойку
+		if animation_player.assigned_animation == "block_damage" and not animation_player.is_playing():
+			animation_player.play("block")
+			animation_player.seek(0.3, true) # Сразу перематываем на финальный статичный кадр блока
+			return
+			
+		# Если обычная анимация блока завершилась и замерла, удерживаем её на финальной позиции
+		if animation_player.assigned_animation == "block" and not animation_player.is_playing():
+			animation_player.seek(0.3, true)
+		# Иначе, если играет что-то другое (например, вошли из IDLE), запускаем блок
+		elif animation_player.current_animation != "block":
+			animation_player.play("block")
+		return
+
+
+	# 2. Логика обычных атак
 	if state == State.ATTACK:
 		animation_player.play(anim_attacks[attack_combo_index])
-		#animated_sprite_2d.play(anim_attacks[attack_combo_index])
+	# 3. Все остальные стандартные анимации из словаря
 	elif animation_player.has_animation(anim_map[state]) or animated_sprite_2d.sprite_frames.has_animation(anim_map[state]):
 		animation_player.play(anim_map[state])
-		#animated_sprite_2d.play(anim_map[state])
-		 
+
+
+	 
 	#elif animated_sprite_2d.sprite_frames.has_animation(anim_map[state]):
 
 func set_heading() -> void:
@@ -320,10 +387,17 @@ func can_attack() -> bool:
 
 func can_jump() -> bool:
 	return state == State.IDLE or state == State.WALK
+	
+
+func can_block() -> bool:
+	# Блокировать можно из спокойных состояний, если щит не сломан
+	var valid_states = [State.IDLE, State.WALK, State.SPRINT, State.PREP_ATTACK]
+	return valid_states.has(state) and not block_broken
+
 
 
 func can_get_hurt() -> bool:
-	return [State.IDLE, State.WALK, State.TAKEOFF, State.LAND, State.PREP_ATTACK].has(state)
+	return [State.IDLE, State.WALK, State.TAKEOFF, State.LAND, State.PREP_ATTACK, State.BLOCK, State.RECOVER].has(state)
 
 
 func can_dash() -> bool:
@@ -478,42 +552,117 @@ func on_land_complete():
 ## - уменьшает здоровье
 ## - воспроизводит звук попадания
 ## - определяет реакцию на удар (нокаут, полёт, отбрасывание)
-func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver.HitType) -> void:
-	if can_get_hurt():
-		attack_combo_index = 0
-		can_respawn_knives = false
-		if has_knife:
-			has_knife = false
-			EntityManager.spawn_collectible.emit(Collectible.Type.KNIFE, Collectible.State.FALL, global_position, Vector2.ZERO, 0.0, autodestroy_on_drop)
-			time_since_knife_dismiss = Time.get_ticks_msec()
-		if has_gun:
-			has_gun = false
-			EntityManager.spawn_collectible.emit(Collectible.Type.GUN, Collectible.State.FALL, global_position, Vector2.ZERO, 0.0, autodestroy_on_drop)
-		set_health(current_health - amount)
-		if current_health == 0 or hit_type == DamageReceiver.HitType.KNOCKDOWN:
-			state = State.FALL
-			height_speed = knockdown_intensity
-			velocity = direction * knockback_intensity
-			DamageManager.heavy_blow_received.emit()
-			SoundPlayer.play(SoundManager.Sound.HIT1, true)
-		elif hit_type == DamageReceiver.HitType.LAUNCH:
-			state = State.FALL # Или State.FLY, если у вас там настроена гравитация
-			height_speed = launch_vertical_intensity     # Импульс строго вверх
-			velocity = direction * launch_horizontal_intensity # Импульс в сторону удара
-			HitstopManager.freeze(0.1, 0.1) # Короткий хитстоп для сочности удара
-			DamageManager.heavy_blow_received.emit()
-			SoundPlayer.play(SoundManager.Sound.HIT3, true)
-		elif hit_type == DamageReceiver.HitType.POWER:
-			state = State.FLY
-			HitstopManager.freeze(0.3, 0.3)
-			velocity = direction * flight_speed
-			DamageManager.heavy_blow_received.emit()
-			SoundPlayer.play(SoundManager.Sound.HIT1, true)
+func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver.HitType, attacker: Character = null) -> void:
+	if not can_get_hurt():
+		return
+
+	# === ПРОВЕРКА НА УДАР В СПИНУ ===
+	# direction.x указывает, куда летит удар: 1 (вправо) или -1 (влево)
+	# heading.x указывает, куда смотрит персонаж: 1 (вправо) или -1 (влево)
+	# Если знаки совпадают (например, удар летит вправо и персонаж смотрит вправо), значит это удар в спину!
+	var is_hit_from_behind : bool = sign(direction.x) == sign(heading.x)
+	# ===============================
+
+	# === РЕАКЦИЯ ИИ ВРАГА ===
+	# Добавляем условие "not is_hit_from_behind", чтобы враг не мог среагировать на удар со спины
+	if type != Type.PLAYER and state != State.BLOCK and can_block() and not is_hit_from_behind:
+		if randf() < block_chance:
+			state = State.BLOCK
+			enemy_block_timer = block_duration
+			velocity = Vector2.ZERO
+
+	# === ЛОГИКА БЛОКИРОВАНИЯ ===
+	if state == State.BLOCK:
+		if is_hit_from_behind:
+			block_health = 0
+			block_broken = true
+			hit_type = DamageReceiver.HitType.KNOCKDOWN 
 		else:
-			state = State.HURT
-			velocity = direction * knockback_intensity
-			HitstopManager.freeze(0.05, 0.05)
-			SoundPlayer.play(SoundManager.Sound.HIT2, true)
+			# --- ПРОВЕРКА НА ИДЕАЛЬНЫЙ БЛОК (PARRY) ---
+			# Переводим parry_window из секунд в миллисекунды (0.15 сек = 150 мс)
+			var current_time := Time.get_ticks_msec()
+			var is_parry : bool = (current_time - block_activated_time) <= (parry_window * 1000.0)
+			
+			if is_parry:
+				# Успешное парирование!
+				HitstopManager.freeze(0.15, 0.15) 
+				EntityManager.spawn_spark.emit(position) 
+				SoundPlayer.play(SoundManager.Sound.HIT3, true)
+				
+				# === ОТЛАДКА ПАРИРОВАНИЯ ===
+				print("=== СРАБОТАЛО ПАРИРОВАНИЕ ===")
+				print("Защищающийся: ", name, " | Состояние ДО: ", State.keys()[state])
+				if attacker != null:
+					print("Нападающий обнаружен: ", attacker.name, " | Его состояние ДО: ", State.keys()[attacker.state])
+					
+					# Принудительно меняем состояние нападающего
+					attacker.state = State.RECOVER 
+					attacker.enemy_block_timer = 1.5 
+					attacker.velocity = -direction * (launch_horizontal_intensity * 0.3)
+					attacker.attack_combo_index = 0
+					
+					print("Нападающему ЗАДАНО состояние: ", State.keys()[attacker.state])
+					print("Нападающему задана скорость: ", attacker.velocity)
+				else:
+					print("ВНИМАНИЕ: Ссылка на attacker равна NULL!")
+				print("=============================")
+				# ===========================
+				
+				return 
+			# ------------------------------------------
+
+			# Обычный блок (если окно парирования уже закрылось)
+			block_health -= amount
+			if block_health > 0:
+				SoundPlayer.play(SoundManager.Sound.HIT2, true)
+				velocity = direction * (knockback_intensity * 0.3)
+				animation_player.play("block_damage") 
+				return
+			else:
+				block_health = 0
+				block_broken = true
+				hit_type = DamageReceiver.HitType.KNOCKDOWN
+	# ===========================
+
+	# Обычное получение урона (выполняется, если не блокировали или block пробили)
+	attack_combo_index = 0
+	can_respawn_knives = false
+	if has_knife:
+		has_knife = false
+		EntityManager.spawn_collectible.emit(Collectible.Type.KNIFE, Collectible.State.FALL, global_position, Vector2.ZERO, 0.0, autodestroy_on_drop)
+		time_since_knife_dismiss = Time.get_ticks_msec()
+	if has_gun:
+		has_gun = false
+		EntityManager.spawn_collectible.emit(Collectible.Type.GUN, Collectible.State.FALL, global_position, Vector2.ZERO, 0.0, autodestroy_on_drop)
+	
+	set_health(current_health - amount)
+	
+	if current_health == 0 or hit_type == DamageReceiver.HitType.KNOCKDOWN:
+		state = State.FALL
+		height_speed = knockdown_intensity
+		velocity = direction * knockback_intensity
+		DamageManager.heavy_blow_received.emit()
+		SoundPlayer.play(SoundManager.Sound.HIT1, true)
+	elif hit_type == DamageReceiver.HitType.LAUNCH:
+		state = State.FALL 
+		height_speed = launch_vertical_intensity     
+		velocity = direction * launch_horizontal_intensity 
+		HitstopManager.freeze(0.1, 0.1) 
+		DamageManager.heavy_blow_received.emit()
+		SoundPlayer.play(SoundManager.Sound.HIT3, true)
+	elif hit_type == DamageReceiver.HitType.POWER:
+		state = State.FLY
+		HitstopManager.freeze(0.3, 0.3)
+		velocity = direction * flight_speed
+		DamageManager.heavy_blow_received.emit()
+		SoundPlayer.play(SoundManager.Sound.HIT1, true)
+	else:
+		state = State.HURT
+		velocity = direction * knockback_intensity
+		HitstopManager.freeze(0.05, 0.05)
+		SoundPlayer.play(SoundManager.Sound.HIT2, true)
+
+
 
 
 func on_emit_damage(receiver: DamageReceiver):
@@ -528,7 +677,14 @@ func on_emit_damage(receiver: DamageReceiver):
 		current_damage = damage_power
 	if state == State.SPRINT_ATTACK:
 		hit_type = DamageReceiver.HitType.POWER
-	receiver.damage_received.emit(current_damage, direction, hit_type)
+	# === КРИТИЧЕСКИЙ УРОН ПО ОГЛУШЕННОМУ ВРАГУ ===
+	# Получаем ссылку на персонажа-жертву через его компонент получения урона
+	var victim = receiver.get_parent()
+	if victim and victim.state == State.RECOVER:
+		current_damage = int(current_damage * 2.0) # Удваиваем урон! Коэффициент можно настроить (например, 1.5)
+		# Сюда можно добавить спавн особого эффекта критического удара, если захотите
+	# =============================================	
+	receiver.damage_received.emit(current_damage, direction, hit_type, self)
 	is_last_hit_successful = true
 
 

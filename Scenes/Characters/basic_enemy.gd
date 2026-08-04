@@ -41,9 +41,21 @@ func _ready() -> void:
 	anim_attacks = ["punch", "punch_alt",]
 
 
-func _process(delta: float) -> void:
-	super._process(delta)
-	process_appear()
+func _physics_process(delta: float) -> void:
+	super._physics_process(delta)
+	process_appear() 
+	
+	# === ТАЙМЕР БЛОКА ДЛЯ ВРАГОВ ===
+	if state == State.BLOCK:
+		enemy_block_timer -= delta
+		# Если время вышло или щит пробит — возвращаем врага в IDLE
+		if enemy_block_timer <= 0 or block_broken:
+			state = State.IDLE
+	# Если враг оглушен, уменьшаем его таймер блока/оглушения
+	if state == State.RECOVER:
+		enemy_block_timer -= delta
+		if enemy_block_timer <= 0:
+			state = State.IDLE
 
 
 func process_appear() -> void:
@@ -159,13 +171,28 @@ func set_heading() -> void:
 	heading = Vector2.LEFT if position.x > player.position.x else Vector2.RIGHT
 
 
-func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver.HitType) -> void:
-	super.on_receive_damage(amount, direction, hit_type)
+func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver.HitType, attacker: Character = null) -> void:
+	# Вызываем родительский метод (там враг может решить встать в блок)
+	super.on_receive_damage(amount, direction, hit_type, attacker)
+	
+	# === ЕСЛИ ВРАГ УСПЕШНО ЗАБЛОКИРОВАЛ УДАР ===
+	if state == State.BLOCK and block_health > 0:
+		play_hit_shake() # Тряску можно оставить для ощущения тяжести удара
+		# Сюда можно добавить спавн искр вместо крови:
+		# EntityManager.spawn_spark.emit(position)
+		return # Прерываем функцию! Кровь не спавнится, комбо не засчитывается
+	var is_hit_from_behind : bool = sign(direction.x) == sign(heading.x)
+	
+	if state == State.BLOCK and block_health > 0 and not is_hit_from_behind:
+		play_hit_shake()
+		return 
+	# ===========================================
+	
+	# Всё, что идет ниже, сработает ТОЛЬКО при реальном ранении врага
 	ComboManager.register_hit.emit()
 	
 	var blood_node = blood_splatter_scene.instantiate()
 	var puddle = blood_puddle_scene.instantiate()
-	# Небольшой случайный разброс стартовой точки (чтобы тексты не накладывались ровно друг на друга)
 	var spawn_offset := Vector2(randf_range(-30.0, 30.0), randf_range(-15.0, 15.0))
 	blood_node.global_position = position + Vector2(0, -250) + spawn_offset
 	var puddle_offset := Vector2(randf_range(-20.0, 20.0), randf_range(-10.0, 10.0))
@@ -189,6 +216,7 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 	if current_health == 0:
 		player.free_slot(self)
 		EntityManager.death_enemy.emit(self)
+
 
 ## Тряска узла с анимацией персонажа
 func play_hit_shake() -> void:

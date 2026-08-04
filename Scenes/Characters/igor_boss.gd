@@ -17,8 +17,8 @@ var time_last_attack := Time.get_ticks_msec()
 var time_start_vulnurable := Time.get_ticks_msec()
 
 
-func _process(delta: float) -> void:
-	super._process(delta)
+func _physics_process(delta: float) -> void:
+	super._physics_process(delta)
 	knockback_force = knockback_force.move_toward(Vector2.ZERO, delta * GROUND_FRICTION)
 
 
@@ -88,7 +88,7 @@ func is_vulnuruble() -> bool:
 	return state == State.RECOVER
 
 
-func on_receive_damage(amount: int, direction: Vector2, _hit_type: DamageReceiver.HitType) -> void:
+func on_receive_damage(amount: int, direction: Vector2, _hit_type: DamageReceiver.HitType, attacker: Character = null) -> void:
 	if !is_vulnuruble():
 		knockback_force = direction * knockback_intensity
 		var hint = hint_scene.instantiate()
