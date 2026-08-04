@@ -14,7 +14,6 @@ var last_tap_dir := 0
 
 @export var double_tap_time := 0.25
 
-@export var sprint_speed := 900.0
 @export var sprint_duration := 0.35
 
 var sprint_timer := 0.0
@@ -70,7 +69,13 @@ func handle_input() -> void:
 
 	if can_move():
 		var direction := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-		velocity = direction * speed
+		
+		# Если игрок перешёл в спринт, даём ему повышенную скорость
+		if state == State.SPRINT:
+			# Умножаем обычную скорость на 1.6 (или используйте новую переменную sprint_speed)
+			velocity = direction * (speed * 1.6) 
+		else:
+			velocity = direction * speed
 	
 	if can_attack() and Input.is_action_just_pressed("attack"):
 		velocity = Vector2.ZERO
@@ -99,7 +104,7 @@ func handle_input() -> void:
 	if can_jumpkick() and Input.is_action_just_pressed("attack"):
 		state = State.JUMPKICK
 		SoundPlayer.play(SoundManager.Sound.SWOOSH)
-	if can_sprint_attack() and Input.is_action_just_pressed("attack"):
+	if (can_sprint_attack() or state == State.SPRINT) and Input.is_action_just_pressed("attack"):
 		start_sprint_attack()
 
 
@@ -153,15 +158,19 @@ func handle_double_tap_dash():
 	# LEFT
 	if Input.is_action_just_pressed("ui_left"):
 		if current_time - last_left_press_time <= DOUBLE_TAP_TIME:
-			start_dash(Vector2.LEFT)
-
+			if state == State.BLOCK:
+				start_dash(Vector2.LEFT) # В блоке делаем дэш
+			else:
+				state = State.SPRINT # В обычном состоянии включаем бег
 		last_left_press_time = current_time
 
 	# RIGHT
 	if Input.is_action_just_pressed("ui_right"):
 		if current_time - last_right_press_time <= DOUBLE_TAP_TIME:
-			start_dash(Vector2.RIGHT)
-
+			if state == State.BLOCK:
+				start_dash(Vector2.RIGHT) # В блоке делаем дэш
+			else:
+				state = State.SPRINT # В обычном состоянии включаем бег
 		last_right_press_time = current_time
 
 
@@ -171,16 +180,26 @@ func start_dash(direction: Vector2):
 	dash_timer = DASH_DURATION
 	dash_direction = direction.x
 	
+	# === ОБНОВЛЯЕМ НАПРАВЛЕНИЕ ВЗГЛЯДА ===
+	if direction.x != 0:
+		heading.x = sign(direction.x)
+		# Разворачиваем спрайт в сторону рывка (выберите ваш вариант):
+		# Вариант А (если управляете через scale):
+		# character_sprite.scale.x = heading.x 
+		# Вариант Б (если управляете через flip_h):
+		# character_sprite.flip_h = (heading.x == -1)
+	# =====================================
+
 	effect_time = 0.0
-	#print("DASH IS WORKING")
 	velocity = Vector2.ZERO
+
 
 
 func start_sprint_attack() -> void:
 	state = State.SPRINT_ATTACK
-	velocity.x = (dash_direction * 2.5) * DASH_SPEED * 0.6
-	#HitstopManager.freeze(0.3, 0.3)
-	#print("ATTACK SPRINT")
+	# Заменили dash_direction на heading.x, чтобы импульс работал из спринта
+	velocity.x = (heading.x * 2.5) * DASH_SPEED * 0.6
+
 
 
 func _on_cutscene_started():

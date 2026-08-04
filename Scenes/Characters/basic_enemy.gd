@@ -172,25 +172,23 @@ func set_heading() -> void:
 
 
 func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver.HitType, attacker: Character = null) -> void:
-	# Вызываем родительский метод (там враг может решить встать в блок)
+	# === ЗАПОМИНАЕМ, БЫЛ ЛИ ВРАГ ОГЛУШЕН ДО ВЫЗОВА SUPER ===
+	var is_hit_from_behind : bool = sign(direction.x) == sign(heading.x)
+	var was_stunned : bool = (state == State.RECOVER)
+	# ======================================================
+
+	# Вызываем родительский метод
 	super.on_receive_damage(amount, direction, hit_type, attacker)
 	
-	# === ЕСЛИ ВРАГ УСПЕШНО ЗАБЛОКИРОВАЛ УДАР ===
-	if state == State.BLOCK and block_health > 0:
-		play_hit_shake() # Тряску можно оставить для ощущения тяжести удара
-		# Сюда можно добавить спавн искр вместо крови:
-		# EntityManager.spawn_spark.emit(position)
-		return # Прерываем функцию! Кровь не спавнится, комбо не засчитывается
-	var is_hit_from_behind : bool = sign(direction.x) == sign(heading.x)
-	
+	# Если враг успешно заблокировал обычный удар
 	if state == State.BLOCK and block_health > 0 and not is_hit_from_behind:
 		play_hit_shake()
 		return 
-	# ===========================================
 	
-	# Всё, что идет ниже, сработает ТОЛЬКО при реальном ранении врага
+	# Всё, что ниже — реальное ранение
 	ComboManager.register_hit.emit()
 	
+	# Спавним первую (основную) лужу и брызги крови
 	var blood_node = blood_splatter_scene.instantiate()
 	var puddle = blood_puddle_scene.instantiate()
 	var spawn_offset := Vector2(randf_range(-30.0, 30.0), randf_range(-15.0, 15.0))
@@ -201,7 +199,7 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 	if direction.x != 0:
 		var side = -sign(direction.x)
 		blood_node.scale.x = -sign(direction.x)
-		if hit_type == DamageReceiver.HitType.POWER:
+		if hit_type == DamageReceiver.HitType.POWER or was_stunned: # <-- Добавили проверку на стан для масштаба
 			blood_node.scale = Vector2(side * 1.8, 1.8)
 			puddle.scale *= 1.7
 		else:
@@ -209,9 +207,28 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 		
 	get_tree().current_scene.add_child(blood_node)
 	get_tree().current_scene.add_child(puddle)
+	
+	# === ДОПОЛНИТЕЛЬНЫЙ ДВОЙНОЙ УДАР (СПАВН ВТОРОЙ ПАЧКИ КРОВИ) ===
+	if was_stunned:
+		var extra_blood = blood_splatter_scene.instantiate()
+		# Смещаем вторую струю чуть в сторону для хаотичности
+		var extra_offset := Vector2(randf_range(-40.0, 40.0), randf_range(-20.0, 20.0))
+		extra_blood.global_position = position + Vector2(0, -230) + extra_offset
+		
+		if direction.x != 0:
+			var side = -sign(direction.x)
+			# Немного меняем размер второй струи, чтобы они не выглядели одинаково клонированными
+			extra_blood.scale = Vector2(side * randf_range(1.3, 1.6), randf_range(1.3, 1.6))
+			
+		get_tree().current_scene.add_child(extra_blood)
+		
+		# Делаем тряску экрана в два раза мощнее
+		play_hit_shake() 
+	# ==============================================================
+	
 	play_hit_shake()
 	
-	if current_health == 0 or hit_type == DamageReceiver.HitType.POWER:
+	if current_health == 0 or hit_type == DamageReceiver.HitType.POWER or was_stunned:
 		EntityManager.spawn_spark.emit(position)
 	if current_health == 0:
 		player.free_slot(self)

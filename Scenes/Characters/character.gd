@@ -17,6 +17,8 @@ const GRAVITY := 3800.0
 @export_group("Movement")
 ## Скорость обычного перемещения по земле.
 @export var speed : float
+## Скорость спринта
+@export var sprint_speed : float = 650.0 # Сделайте её заметно выше обычной speed
 ## Время (в секундах), которое персонаж проводит на земле (например, перед следующим прыжком или после падения).
 @export var duration_grounded : float
 ## Скорость перемещения в воздухе или в режиме полета.
@@ -103,7 +105,7 @@ var anim_map : Dictionary = {
 	State.DROP: "idle",
 	State.WAIT: "idle",
 	State.APPEARING: "idle",
-	State.SPRINT: "walk",
+	State.SPRINT: "sprint",
 	State.DASH: "dash",
 	State.SPRINT_ATTACK: "dash_attack",
 	State.CUTSCENE: "cutscene",
@@ -224,17 +226,28 @@ func handle_movement(delta: float): # Добавили delta в аргумент
 		return
 	if state == State.DASH:
 		velocity.x = dash_direction * DASH_SPEED
-		dash_timer -= delta # Используем правильную физическую дельту!
+		dash_timer -= delta
 		if dash_timer <= 0:
 			state = State.IDLE
 			velocity.x = 0
+			# === СБРАСЫВАЕМ НАПРАВЛЕНИЕ ДЭША ===
+			dash_direction = 0.0 
+			# ===================================
 		return
 
+	if state == State.SPRINT_ATTACK:
+		# Плавно тормозим персонажа во время удара, чтобы он не улетал за экран
+		velocity.x = move_toward(velocity.x, 0.0, 2000.0 * delta)
+		return
+	
 	if can_move():
 		if velocity.length() == 0:
 			state = State.IDLE
 		else:
-			state = State.WALK
+			# Переключаем в WALK только если мы НЕ находимся в состоянии SPRINT
+			if state != State.SPRINT:
+				state = State.WALK
+
 
 
 
@@ -378,7 +391,7 @@ func flip_sprites():
 
 
 func can_move() -> bool:
-	return state == State.IDLE or state == State.WALK
+	return state == State.IDLE or state == State.WALK or state == State.SPRINT
 
 
 func can_attack() -> bool:
@@ -386,7 +399,7 @@ func can_attack() -> bool:
 
 
 func can_jump() -> bool:
-	return state == State.IDLE or state == State.WALK
+	return state == State.IDLE or state == State.WALK or state == State.SPRINT
 	
 
 func can_block() -> bool:
@@ -401,12 +414,11 @@ func can_get_hurt() -> bool:
 
 
 func can_dash() -> bool:
-	return [State.IDLE, State.WALK].has(state)
+	return [State.IDLE, State.WALK, State.BLOCK].has(state)
 
 
 func can_sprint_attack() -> bool:
-	return state == State.DASH
-
+	return state == State.DASH or state == State.SPRINT
 
 #func can_sprint_attack() -> bool:
 	#return state == State.IDLE or state == State.WALK
