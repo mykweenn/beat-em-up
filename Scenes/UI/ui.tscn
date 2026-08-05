@@ -97,6 +97,7 @@ layout_mode = 2
 
 [node name="EnemyAvatar" type="TextureRect" parent="MarginContainer/UIContainer" unique_id=586672404]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0

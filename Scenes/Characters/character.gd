@@ -594,8 +594,8 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 	# === ЗАЩИТА ИГРОКА ОТ СТАНЛОКА (ВРЕМЕННОЕ ОКНО) ===
 	if type == Type.PLAYER:
 		var current_time := Time.get_ticks_msec()
-		# Переводим секунды окна в миллисекунды (0.6 сек = 600 мс)
-		var max_stunlock_interval := 600.0 
+		# Переводим секунды окна в миллисекунды (0.8 сек = 600 мс)
+		var max_stunlock_interval := 800.0 
 		
 		# Проверяем, сколько времени прошло с прошлого удара
 		if (current_time - last_hurt_time) <= max_stunlock_interval:
@@ -605,6 +605,7 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 			# Если это 3-й удар в рамках временного окна — принудительно спасаем игрока
 			if combo_hurt_count >= 3:
 				hit_type = DamageReceiver.HitType.LAUNCH
+				HitstopManager.freeze(0.2, 0.2) 
 				combo_hurt_count = 0
 		else:
 			# Передышка была долгой — это новый чистый удар, начинаем отсчёт заново
@@ -694,7 +695,17 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 		HitstopManager.freeze(0.1, 0.1) 
 		DamageManager.heavy_blow_received.emit()
 		SoundPlayer.play(SoundManager.Sound.HIT3, true)
-		if type == Type.PLAYER: combo_hurt_count = 0
+		# if type == Type.PLAYER: combo_hurt_count = 0
+		if type == Type.PLAYER:
+			combo_hurt_count = 0
+			
+			# === РАЗГОНЯЕМ ТОЛПУ: ОСТАНОВКА ВСЕХ ВРАГОВ ===
+			# Находим всех врагов на сцене (предполагается, что у них есть группа "enemies")
+			var enemies = get_tree().get_nodes_in_group("enemy")
+			for enemy in enemies:
+				# Переводим каждого врага в режим ожидания на 3.8 секунды
+				enemy.player_down_delay = 3.8
+	
 	elif hit_type == DamageReceiver.HitType.POWER:
 		state = State.FLY
 		HitstopManager.freeze(0.3, 0.3)
