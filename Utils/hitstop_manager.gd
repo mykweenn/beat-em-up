@@ -13,7 +13,7 @@ func freeze(duration := 0.03, scale := 0.0) -> void:
 	active = false
 
 
-# НОВАЯ ФУНКЦИЯ: Кинематографичная смерть босса
+# Кинематографичная смерть босса
 func boss_death_freeze(boss_global_position: Vector2, duration := 1.5) -> void:
 	if active:
 		return

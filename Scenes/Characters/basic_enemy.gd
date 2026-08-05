@@ -36,6 +36,10 @@ var time_since_prep_range_attack := Time.get_ticks_msec()
 var time_since_start_appearing := Time.get_ticks_msec()
 
 
+# Таймер «тупления» ИИ, когда игрок упал
+var player_down_delay : float = 0.0
+
+
 func _ready() -> void:
 	super._ready()
 	anim_attacks = ["punch", "punch_alt",]
@@ -44,7 +48,13 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
 	process_appear() 
-	
+	# === ТАЙМЕР ПЕРЕДЫШКИ ДЛЯ ИГРОКА ===
+	if player_down_delay > 0.0:
+		player_down_delay -= delta
+		velocity = Vector2.ZERO # Заставляем врага стоять на месте
+		state = State.IDLE     # Включаем мирную анимацию ожидания
+		return # Прерываем выполнение ИИ, бот временно не преследует игрока!
+	# ===================================
 	# === ТАЙМЕР БЛОКА ДЛЯ ВРАГОВ ===
 	if state == State.BLOCK:
 		enemy_block_timer -= delta
@@ -69,11 +79,22 @@ func process_appear() -> void:
 			
 			
 func handle_input():
+	# === ТАЙМЕР ПЕРЕДЫШКИ ДЛЯ ИГРОКА ===
+	if player_down_delay > 0.0:
+		# get_physics_process_delta_time() безопасно использовать в методах, 
+		# которые вызываются внутри физического цикла
+		player_down_delay -= get_physics_process_delta_time()
+		velocity = Vector2.ZERO # Полностью останавливаем врага
+		state = State.IDLE     # Переключаем в анимацию ожидания
+		return # Выходим, не давая ИИ бежать к позициям слотов!
+	# ===================================
+
 	if player != null and can_move():
 		if can_respawn_knives or has_knife or has_gun:
 			goto_range_position()
 		else:
 			goto_melee_position()
+
 
 
 func goto_range_position() -> void:
@@ -124,6 +145,13 @@ func assign_door(door: Door) -> void:
 
 
 func goto_melee_position() -> void:
+	# === ЗАЩИТА: Если игрок сбил врагов с толку, они никуда не идут ===
+	if player_down_delay > 0.0:
+		velocity = Vector2.ZERO
+		state = State.IDLE
+		return
+	# ==================================================================
+
 	if can_pickup_collectible():
 		state = State.PICKUP
 		if player_slot != null:
@@ -140,6 +168,7 @@ func goto_melee_position() -> void:
 				time_since_prep_melee_attack = Time.get_ticks_msec()
 		else:
 			velocity = direction * speed
+
 
 
 func handle_prep_attack() -> void:
@@ -237,14 +266,15 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 
 ## Тряска узла с анимацией персонажа
 func play_hit_shake() -> void:
-	var original_pos = character_sprite.position
+	pass
+	# var original_pos = character_sprite.position
 
-	for i in 4:
-		character_sprite.position = original_pos + Vector2(
-			randf_range(-shake_strength, shake_strength),
-			randf_range(-shake_strength, shake_strength)
-		)
+	# for i in 4:
+	# 	character_sprite.position = original_pos + Vector2(
+	# 		randf_range(-shake_strength, shake_strength),
+	# 		randf_range(-shake_strength, shake_strength)
+	# 	)
 
-		await get_tree().create_timer(shake_duration / 4.0).timeout
+	# 	await get_tree().create_timer(shake_duration / 4.0).timeout
 
-	character_sprite.position = original_pos
+	# character_sprite.position = original_pos
