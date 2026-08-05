@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://duxh5ddbycpur" path="res://Scenes/Characters/enemy_slot.tscn" id="4_gy20a"]
 [ext_resource type="Texture2D" uid="uid://bd21ktfrrl02y" path="res://Assets/Art/characters/player_knife.png" id="5_cqrjx"]
 [ext_resource type="Texture2D" uid="uid://dkanc5mw16s48" path="res://Assets/Art/characters/player_gun.png" id="6_khnq4"]
+[ext_resource type="Texture2D" uid="uid://b83vyp0le3nbl" path="res://Assets/Art/MRB/Spirtes/Characters/Player/Player tile/Player 96X96 (1).png" id="8_gdgf0"]
 [ext_resource type="Script" uid="uid://cek88baageybc" path="res://Scenes/Characters/debug_nodes.gd" id="54_4sh5b"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_40svl"]
@@ -95,6 +96,22 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [56, 57, 58]
+}
+
+[sub_resource type="Animation" id="Animation_hy8lp"]
+resource_name = "charge"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [48, 49]
 }
 
 [sub_resource type="Animation" id="Animation_qsr3j"]
@@ -1028,6 +1045,7 @@ _data = {
 &"RESET": SubResource("Animation_al8ar"),
 &"block": SubResource("Animation_d73o7"),
 &"block_damage": SubResource("Animation_f4s7n"),
+&"charge": SubResource("Animation_hy8lp"),
 &"cutscene": SubResource("Animation_qsr3j"),
 &"dash": SubResource("Animation_abht8"),
 &"dash_attack": SubResource("Animation_f2ilu"),
@@ -1181,6 +1199,10 @@ offset_right = 16.0
 offset_bottom = -396.0
 text = "Status: "
 metadata/_edit_use_anchors_ = true
+
+[node name="Player96x96(1)" type="Sprite2D" parent="DebugNodes" index="1" unique_id=1040090500]
+position = Vector2(-642, -132)
+texture = ExtResource("8_gdgf0")
 
 [editable path="DamageEmitter"]
 [editable path="DamageReceiver"]
