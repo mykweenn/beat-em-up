@@ -9,8 +9,8 @@
 [ext_resource type="Script" uid="uid://cek88baageybc" path="res://Scenes/Characters/debug_nodes.gd" id="54_4sh5b"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_40svl"]
-radius = 22.0
-height = 167.99998
+radius = 9.0000105
+height = 136.0
 
 [sub_resource type="Animation" id="Animation_al8ar"]
 length = 0.001
@@ -218,10 +218,10 @@ tracks/0/path = NodePath("CharacterSprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [130, 131]
+"values": [131]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -481,9 +481,9 @@ tracks/3/keys = {
 "values": [8]
 }
 
-[sub_resource type="Animation" id="Animation_gdgf0"]
-resource_name = "land"
-length = 0.05
+[sub_resource type="Animation" id="Animation_jnx77"]
+resource_name = "kick_power"
+length = 0.5
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -492,10 +492,10 @@ tracks/0/path = NodePath("CharacterSprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [50]
+"values": [40, 41, 42, 43, 44, 45, 46, 47, 48, 49]
 }
 tracks/1/type = "method"
 tracks/1/imported = false
@@ -504,7 +504,38 @@ tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.05),
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_action_complete"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_gdgf0"]
+resource_name = "land"
+length = 0.3
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [48, 49, 50, 51]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -1007,6 +1038,7 @@ _data = {
 &"jump": SubResource("Animation_utp2y"),
 &"jumpkick": SubResource("Animation_xo8ps"),
 &"kick": SubResource("Animation_fcmex"),
+&"kick_power": SubResource("Animation_jnx77"),
 &"land": SubResource("Animation_gdgf0"),
 &"pickup": SubResource("Animation_15c3i"),
 &"punch": SubResource("Animation_cqrjx"),
@@ -1089,22 +1121,22 @@ shape = SubResource("RectangleShape2D_al8ar")
 [node name="EnemySlots" type="Node2D" parent="." index="6" unique_id=38196158]
 
 [node name="EnemySlot2" parent="EnemySlots" index="0" unique_id=1466770663 instance=ExtResource("4_gy20a")]
-position = Vector2(204, -41)
+position = Vector2(192, -17)
 
 [node name="EnemySlot6" parent="EnemySlots" index="1" unique_id=553120364 instance=ExtResource("4_gy20a")]
-position = Vector2(204, -9)
+position = Vector2(196, -1)
 
 [node name="EnemySlot" parent="EnemySlots" index="2" unique_id=834514095 instance=ExtResource("4_gy20a")]
-position = Vector2(204, 18)
+position = Vector2(187, 18)
 
 [node name="EnemySlot4" parent="EnemySlots" index="3" unique_id=1776426709 instance=ExtResource("4_gy20a")]
-position = Vector2(-205, -46)
+position = Vector2(-188, -14)
 
 [node name="EnemySlot5" parent="EnemySlots" index="4" unique_id=1093692113 instance=ExtResource("4_gy20a")]
-position = Vector2(-205, -14)
+position = Vector2(-205, 0)
 
 [node name="EnemySlot3" parent="EnemySlots" index="5" unique_id=3448915 instance=ExtResource("4_gy20a")]
-position = Vector2(-205, 18)
+position = Vector2(-194, 19)
 
 [node name="KnifeSprite" parent="." index="8" unique_id=1902630521]
 texture = ExtResource("5_cqrjx")

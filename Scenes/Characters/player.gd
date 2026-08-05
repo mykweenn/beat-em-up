@@ -76,7 +76,7 @@ func handle_input() -> void:
 			velocity = direction * (speed * 1.6) 
 		else:
 			velocity = direction * speed
-	
+
 	if can_attack() and Input.is_action_just_pressed("attack"):
 		velocity = Vector2.ZERO
 		if has_knife:
@@ -106,6 +106,10 @@ func handle_input() -> void:
 		SoundPlayer.play(SoundManager.Sound.SWOOSH)
 	if (can_sprint_attack() or state == State.SPRINT) and Input.is_action_just_pressed("attack"):
 		start_sprint_attack()
+		SoundPlayer.play(SoundManager.Sound.SWOOSH)
+	if can_kick() and Input.is_action_just_pressed("kick"):
+		state = State.KICK
+		SoundPlayer.play(SoundManager.Sound.SWOOSH)	
 
 
 

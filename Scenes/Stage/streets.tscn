@@ -15,13 +15,13 @@
 [ext_resource type="PackedScene" uid="uid://b107bhknlisaa" path="res://Scenes/Props/food.tscn" id="13_rpe1a"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uokwh"]
-size = Vector2(7236.25, 20)
+size = Vector2(7234, 46)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r13cy"]
 size = Vector2(7236.25, 20)
 
 [node name="Streets" unique_id=402859074 instance=ExtResource("1_g7de4")]
-music = 6
+music = 3
 
 [node name="Backgrounds" parent="." index="0" unique_id=1008490267]
 position = Vector2(0, -232)
@@ -127,7 +127,7 @@ centered = false
 position = Vector2(27, 906)
 
 [node name="CollisionShape2D" parent="WorldColliders/StaticBody2D" index="0" unique_id=835774580]
-position = Vector2(3586.875, 0)
+position = Vector2(3588, -4)
 shape = SubResource("RectangleShape2D_uokwh")
 
 [node name="StaticBody2D2" parent="WorldColliders" parent_id_path=PackedInt32Array(2107852687) index="1" unique_id=431410113]
@@ -213,13 +213,13 @@ position = Vector2(2351, 980)
 position = Vector2(2334, 742)
 
 [node name="BasicEnemy5" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(1318329992, 214738812) index="3" unique_id=111923144 instance=ExtResource("12_10na3")]
-position = Vector2(-331, 734)
+position = Vector2(-744, 989)
 
 [node name="BasicEnemy6" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(1318329992, 214738812) index="4" unique_id=1297154193 instance=ExtResource("12_10na3")]
 position = Vector2(-318, 997)
 
 [node name="BasicEnemy7" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(1318329992, 214738812) index="5" unique_id=320193469 instance=ExtResource("12_10na3")]
-position = Vector2(-498, 834)
+position = Vector2(-498, 980)
 
 [node name="BasicEnemy8" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(1318329992, 214738812) index="6" unique_id=1203100467 instance=ExtResource("12_10na3")]
 position = Vector2(-577, 1026)

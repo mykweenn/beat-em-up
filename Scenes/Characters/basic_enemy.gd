@@ -150,7 +150,7 @@ func handle_prep_attack() -> void:
 
 
 func is_player_within_range() -> bool:
-	return (player_slot.global_position - global_position).length() < 5
+	return (player_slot.global_position - global_position).length() < 30.0
 
 
 func can_attack() -> bool:
