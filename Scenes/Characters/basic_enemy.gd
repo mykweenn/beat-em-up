@@ -237,14 +237,14 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 
 ## Тряска узла с анимацией персонажа
 func play_hit_shake() -> void:
-	var original_pos := animated_sprite_2d.position
+	var original_pos = character_sprite.position
 
 	for i in 4:
-		animated_sprite_2d.position = original_pos + Vector2(
+		character_sprite.position = original_pos + Vector2(
 			randf_range(-shake_strength, shake_strength),
 			randf_range(-shake_strength, shake_strength)
 		)
 
 		await get_tree().create_timer(shake_duration / 4.0).timeout
 
-	animated_sprite_2d.position = original_pos
+	character_sprite.position = original_pos

@@ -3,9 +3,6 @@
 [ext_resource type="Script" uid="uid://climht8y76su8" path="res://Scenes/UI/main_menu.gd" id="1_i0i02"]
 [ext_resource type="Shader" uid="uid://b4swt7qpaapnh" path="res://Resources/speed_stripes.gdshader" id="2_gcgm2"]
 [ext_resource type="Theme" uid="uid://c1e3qxdoi1g3v" path="res://Resources/themes/main_menu_theme.tres" id="3_70rqd"]
-[ext_resource type="Texture2D" uid="uid://c2uabi2r6ysib" path="res://Assets/Art/nevsky assets/background/characters/1.2.png" id="4_fdsk3"]
-[ext_resource type="Texture2D" uid="uid://cmvf8a17hcdwo" path="res://Assets/Art/nevsky assets/background/characters/ilya.png" id="5_sfmgl"]
-[ext_resource type="Texture2D" uid="uid://cjjt68xedlm8p" path="res://Assets/Art/nevsky assets/background/characters/1.4.3_situations-3-Photoroom.png" id="6_dord1"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_gcgm2"]
 noise_type = 0
@@ -94,43 +91,6 @@ amount = 62
 lifetime = 10.7
 preprocess = 2.0
 process_material = SubResource("ParticleProcessMaterial_70rqd")
-
-[node name="Characters" type="Control" parent="." unique_id=452047908]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="Char1" type="TextureRect" parent="Characters" unique_id=2013591930]
-layout_mode = 0
-offset_left = 926.0
-offset_top = 52.0
-offset_right = 1775.0
-offset_bottom = 1640.5804
-texture = ExtResource("4_fdsk3")
-expand_mode = 1
-
-[node name="Char2" type="TextureRect" parent="Characters" unique_id=958774392]
-layout_mode = 0
-offset_left = 1335.0
-offset_top = 344.0
-offset_right = 1917.0
-offset_bottom = 1744.5002
-texture = ExtResource("5_sfmgl")
-expand_mode = 1
-
-[node name="Char3" type="TextureRect" parent="Characters" unique_id=1935653706]
-layout_mode = 0
-offset_left = 586.0
-offset_top = 166.0
-offset_right = 1760.0
-offset_bottom = 1094.0
-texture = ExtResource("6_dord1")
-expand_mode = 1
 
 [node name="Panel" type="Panel" parent="." unique_id=1193484903]
 layout_mode = 1
