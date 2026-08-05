@@ -46,11 +46,6 @@ collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CollectibleSensor" unique_id=937581208]
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=468028822]
-scale = Vector2(0.06, 0.06)
-centered = false
-offset = Vector2(-861.96, -999.03)
-
 [editable path="DamageEmitter"]
 [editable path="DamageReceiver"]
 [editable path="CollateralDamageEmitter"]

@@ -77,7 +77,7 @@ const GRAVITY := 3800.0
 @onready var knife_sprite: Sprite2D = $KnifeSprite
 @onready var projectile_aim: RayCast2D = $ProjectileAim
 @onready var weapon_position: Node2D = $KnifeSprite/WeaponPosition
-@onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+
 
 enum State {IDLE, WALK, ATTACK, TAKEOFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUNDED, DEATH, FLY, PREP_ATTACK, THROW, PICKUP, SHOOT, PREP_SHOOT, RECOVER, DROP, WAIT, APPEARING, SPRINT, DASH, SPRINT_ATTACK, CUTSCENE, BLOCK,}
 enum Type {PLAYER, PUNK, GOON, THUG, BOUNCER, HEAVY}
@@ -203,8 +203,7 @@ func set_sprite_height_position() -> void:
 	knife_sprite.position = Vector2.UP * height
 	# knife_sprite.position = weapon_position.global_position
 	gun_sprite.position = Vector2.UP * height
-	animated_sprite_2d.position = Vector2.UP * height
-	# print(knife_sprite.position)
+
 
 ## Настраивает состояние коллизий и зон взаимодействия персонажа.
 ##
@@ -362,12 +361,12 @@ func handle_animations() -> void:
 	if state == State.ATTACK:
 		animation_player.play(anim_attacks[attack_combo_index])
 	# 3. Все остальные стандартные анимации из словаря
-	elif animation_player.has_animation(anim_map[state]) or animated_sprite_2d.sprite_frames.has_animation(anim_map[state]):
+	elif animation_player.has_animation(anim_map[state]):
 		animation_player.play(anim_map[state])
 
 
 	 
-	#elif animated_sprite_2d.sprite_frames.has_animation(anim_map[state]):
+
 
 func set_heading() -> void:
 	pass
@@ -380,14 +379,12 @@ func flip_sprites():
 		gun_sprite.scale.x = 1
 		projectile_aim.scale.x = 1
 		damage_emitter.scale.x = 1
-		animated_sprite_2d.flip_h = false
 	else:
 		character_sprite.flip_h = true
 		knife_sprite.scale.x = -1
 		gun_sprite.scale.x = -1
 		projectile_aim.scale.x = -1
 		damage_emitter.scale.x = -1
-		animated_sprite_2d.flip_h = true
 
 
 func can_move() -> bool:

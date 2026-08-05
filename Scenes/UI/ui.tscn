@@ -61,7 +61,7 @@ shader_parameter/resolution = Vector2(3000, 3000)
 shader_parameter/pixelate = true
 shader_parameter/roll = true
 shader_parameter/roll_speed = 2.22
-shader_parameter/roll_size = 2.6780001272050002
+shader_parameter/roll_size = 2.678000127205
 shader_parameter/roll_variation = 4.45100020816262
 shader_parameter/distort_intensity = 0.0050000002375
 shader_parameter/noise_opacity = 0.0410000019475
@@ -192,16 +192,16 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 1
 
-[node name="Label" type="Label" parent="MarginContainer/UIContainer" unique_id=1120937841]
-visible = false
+[node name="ControlsLabel" type="Label" parent="MarginContainer/UIContainer" unique_id=1120937841]
 layout_mode = 0
-offset_left = 1489.0
-offset_top = 843.0
-offset_right = 1903.0
-offset_bottom = 1060.0
-theme_override_font_sizes/font_size = 78
+offset_left = 11.0
+offset_top = 719.0
+offset_right = 425.0
+offset_bottom = 936.0
+theme_override_font_sizes/font_size = 42
 text = "Z: Атака
-X: Прыжок"
+X: Прыжок
+C: Блок"
 
 [node name="PlayerBoxUI" type="BoxContainer" parent="MarginContainer/UIContainer" unique_id=378222786]
 custom_minimum_size = Vector2(80, 40)
@@ -331,7 +331,7 @@ texture_normal = ExtResource("14_h6tq4")
 shape = SubResource("CircleShape2D_t7te2")
 action = "jump"
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=1204503510]
+[node name="ShaderRect" type="ColorRect" parent="." unique_id=1204503510]
 visible = false
 z_index = 1
 material = SubResource("ShaderMaterial_t7te2")
