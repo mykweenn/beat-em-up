@@ -79,7 +79,7 @@ const GRAVITY := 3800.0
 @onready var weapon_position: Node2D = $KnifeSprite/WeaponPosition
 
 
-enum State {IDLE, WALK, ATTACK, TAKEOFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUNDED, DEATH, FLY, PREP_ATTACK, THROW, PICKUP, SHOOT, PREP_SHOOT, RECOVER, DROP, WAIT, APPEARING, SPRINT, DASH, SPRINT_ATTACK, CUTSCENE, BLOCK,}
+enum State {IDLE, WALK, ATTACK, TAKEOFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUNDED, DEATH, FLY, PREP_ATTACK, THROW, PICKUP, SHOOT, PREP_SHOOT, RECOVER, DROP, WAIT, APPEARING, SPRINT, DASH, SPRINT_ATTACK, CUTSCENE, BLOCK, KICK}
 enum Type {PLAYER, PUNK, GOON, THUG, BOUNCER, HEAVY}
 
 var ammo_left := 0
@@ -110,6 +110,7 @@ var anim_map : Dictionary = {
 	State.SPRINT_ATTACK: "dash_attack",
 	State.CUTSCENE: "cutscene",
 	State.BLOCK: "block",
+	State.KICK: "kick_power",
 }
 
 var attack_combo_index := 0
@@ -134,6 +135,13 @@ var block_broken : bool = false
 var enemy_block_timer : float = 1.0
 # Время в миллисекундах, когда персонаж вошел в состояние блока
 var block_activated_time : float = 0.0
+
+# stunlock exit
+# Счетчик ударов для защиты игрока от станлока
+var combo_hurt_count := 0
+# Время в миллисекундах, когда персонаж в последний раз получал урон
+var last_hurt_time : float = 0.0
+
 
 func _ready():
 	damage_emitter.area_entered.connect(on_emit_damage.bind())
@@ -417,12 +425,15 @@ func can_dash() -> bool:
 func can_sprint_attack() -> bool:
 	return state == State.DASH or state == State.SPRINT
 
+func can_kick() -> bool:
+	return state == State.IDLE or state == State.WALK
+
 #func can_sprint_attack() -> bool:
 	#return state == State.IDLE or state == State.WALK
 
-
+### Если атакует, возвращаем список состояний боевых
 func is_attacking() -> bool:
-	return [State.ATTACK, State.JUMPKICK, State.SPRINT_ATTACK].has(state)
+	return [State.ATTACK, State.JUMPKICK, State.SPRINT_ATTACK, State.KICK].has(state)
 
 
 func is_carrying_weapon() -> bool:
@@ -564,7 +575,7 @@ func on_land_complete():
 func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver.HitType, attacker: Character = null) -> void:
 	if not can_get_hurt():
 		return
-
+	
 	# === ПРОВЕРКА НА УДАР В СПИНУ ===
 	# direction.x указывает, куда летит удар: 1 (вправо) или -1 (влево)
 	# heading.x указывает, куда смотрит персонаж: 1 (вправо) или -1 (влево)
@@ -579,6 +590,29 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 			state = State.BLOCK
 			enemy_block_timer = block_duration
 			velocity = Vector2.ZERO
+
+	# === ЗАЩИТА ИГРОКА ОТ СТАНЛОКА (ВРЕМЕННОЕ ОКНО) ===
+	if type == Type.PLAYER:
+		var current_time := Time.get_ticks_msec()
+		# Переводим секунды окна в миллисекунды (0.6 сек = 600 мс)
+		var max_stunlock_interval := 600.0 
+		
+		# Проверяем, сколько времени прошло с прошлого удара
+		if (current_time - last_hurt_time) <= max_stunlock_interval:
+			# Удары сыплются слишком быстро — увеличиваем счётчик
+			combo_hurt_count += 1
+			
+			# Если это 3-й удар в рамках временного окна — принудительно спасаем игрока
+			if combo_hurt_count >= 3:
+				hit_type = DamageReceiver.HitType.LAUNCH
+				combo_hurt_count = 0
+		else:
+			# Передышка была долгой — это новый чистый удар, начинаем отсчёт заново
+			combo_hurt_count = 1
+			
+		# Запоминаем время текущего удара для следующей проверки
+		last_hurt_time = current_time
+	# ==================================================
 
 	# === ЛОГИКА БЛОКИРОВАНИЯ ===
 	if state == State.BLOCK:
@@ -652,6 +686,7 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 		velocity = direction * knockback_intensity
 		DamageManager.heavy_blow_received.emit()
 		SoundPlayer.play(SoundManager.Sound.HIT1, true)
+		if type == Type.PLAYER: combo_hurt_count = 0
 	elif hit_type == DamageReceiver.HitType.LAUNCH:
 		state = State.FALL 
 		height_speed = launch_vertical_intensity     
@@ -659,6 +694,7 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 		HitstopManager.freeze(0.1, 0.1) 
 		DamageManager.heavy_blow_received.emit()
 		SoundPlayer.play(SoundManager.Sound.HIT3, true)
+		if type == Type.PLAYER: combo_hurt_count = 0
 	elif hit_type == DamageReceiver.HitType.POWER:
 		state = State.FLY
 		HitstopManager.freeze(0.3, 0.3)
@@ -673,7 +709,9 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 
 
 
-
+## Функция обрабатывает момент нанесения удара текущим персонажем.
+## Рассчитывает направление атаки, тип повреждения (обычный, подброс, тяжелый), 
+## учитывает состояние жертвы (критический урон по оглушенным) и отправляет сигнал урона.
 func on_emit_damage(receiver: DamageReceiver):
 	# increase score
 	var hit_type := DamageReceiver.HitType.NORMAL
@@ -686,13 +724,15 @@ func on_emit_damage(receiver: DamageReceiver):
 		current_damage = damage_power
 	if state == State.SPRINT_ATTACK:
 		hit_type = DamageReceiver.HitType.POWER
+	if state == State.KICK:
+		hit_type = DamageReceiver.HitType.LAUNCH	
 	# === КРИТИЧЕСКИЙ УРОН ПО ОГЛУШЕННОМУ ВРАГУ ===
 	# Получаем ссылку на персонажа-жертву через его компонент получения урона
 	var victim = receiver.get_parent()
 	if victim and victim.state == State.RECOVER:
 		current_damage = int(current_damage * 2.0)
 		hit_type = DamageReceiver.HitType.LAUNCH # Удваиваем урон! Коэффициент можно настроить (например, 1.5)
-		# Сюда можно добавить спавн особого эффекта критического удара, если захотите
+		
 	# =============================================	
 	receiver.damage_received.emit(current_damage, direction, hit_type, self)
 	is_last_hit_successful = true
