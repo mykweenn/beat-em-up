@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://f4rj00eaikur" path="res://Scenes/UI/flickering_texture_rect.tscn" id="7_jfwrg"]
 [ext_resource type="Texture2D" uid="uid://cpxwfe56jws3" path="res://Assets/Art/ui/go-go-go.png" id="8_mbl0m"]
 [ext_resource type="PackedScene" uid="uid://cw8wiix1eq4oc" path="res://Scenes/UI/stage_transition.tscn" id="9_mbl0m"]
-[ext_resource type="Texture2D" uid="uid://bu8ispj1apa2" path="res://Assets/Art/MRB/Spirtes/Characters/Player/Player/Player (1)68.png" id="10_56q1t"]
+[ext_resource type="Texture2D" uid="uid://d2boolrosy73g" path="res://Assets/Art/MRB/Spirtes/Characters/Player/Player 96X96 Red.png" id="10_56q1t"]
 [ext_resource type="FontFile" uid="uid://wj0yqrdr35o7" path="res://Assets/Fonts/Gagalin-Regular.ttf" id="12_vy225"]
 [ext_resource type="Theme" uid="uid://b2qvp1u1iua2l" path="res://gui_theme.tres" id="13_fy0us"]
 [ext_resource type="Texture2D" uid="uid://cy3tw8lp7prhf" path="res://Assets/UI/MobileControls/Icons/Default/icon_button_a.png" id="14_h6tq4"]
