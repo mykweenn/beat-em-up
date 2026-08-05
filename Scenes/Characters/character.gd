@@ -594,7 +594,7 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 			
 			if is_parry:
 				# Успешное парирование!
-				HitstopManager.freeze(0.15, 0.15) 
+				HitstopManager.freeze(0.25, 0.25) 
 				EntityManager.spawn_spark.emit(position) 
 				SoundPlayer.play(SoundManager.Sound.HIT3, true)
 				
@@ -690,7 +690,8 @@ func on_emit_damage(receiver: DamageReceiver):
 	# Получаем ссылку на персонажа-жертву через его компонент получения урона
 	var victim = receiver.get_parent()
 	if victim and victim.state == State.RECOVER:
-		current_damage = int(current_damage * 2.0) # Удваиваем урон! Коэффициент можно настроить (например, 1.5)
+		current_damage = int(current_damage * 2.0)
+		hit_type = DamageReceiver.HitType.LAUNCH # Удваиваем урон! Коэффициент можно настроить (например, 1.5)
 		# Сюда можно добавить спавн особого эффекта критического удара, если захотите
 	# =============================================	
 	receiver.damage_received.emit(current_damage, direction, hit_type, self)
