@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://cpxwfe56jws3" path="res://Assets/Art/ui/go-go-go.png" id="8_mbl0m"]
 [ext_resource type="PackedScene" uid="uid://cw8wiix1eq4oc" path="res://Scenes/UI/stage_transition.tscn" id="9_mbl0m"]
 [ext_resource type="Texture2D" uid="uid://d2boolrosy73g" path="res://Assets/Art/MRB/Spirtes/Characters/Player/Player 96X96 Red.png" id="10_56q1t"]
-[ext_resource type="FontFile" uid="uid://wj0yqrdr35o7" path="res://Assets/Fonts/Gagalin-Regular.ttf" id="12_vy225"]
+[ext_resource type="FontFile" uid="uid://b6aadqwj6cp4g" path="res://Assets/Fonts/Tektur/Tektur-VariableFont_wdth,wght.ttf" id="10_fevae"]
 [ext_resource type="Theme" uid="uid://b2qvp1u1iua2l" path="res://gui_theme.tres" id="13_fy0us"]
 [ext_resource type="Texture2D" uid="uid://cy3tw8lp7prhf" path="res://Assets/UI/MobileControls/Icons/Default/icon_button_a.png" id="14_h6tq4"]
 [ext_resource type="Texture2D" uid="uid://bs6spmedmtjf1" path="res://Assets/UI/MobileControls/Icons/Default/icon_sword.png" id="14_t7te2"]
@@ -54,10 +54,10 @@ radius = 55.26
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t7te2"]
 shader = ExtResource("16_56q1t")
 shader_parameter/overlay = false
-shader_parameter/scanlines_opacity = 0.0890000042275
-shader_parameter/scanlines_width = 0.06800000323
-shader_parameter/grille_opacity = 0.130000006175
-shader_parameter/resolution = Vector2(3000, 3000)
+shader_parameter/scanlines_opacity = 0.4
+shader_parameter/scanlines_width = 0.25
+shader_parameter/grille_opacity = 0.094000004465
+shader_parameter/resolution = Vector2(640, 480)
 shader_parameter/pixelate = true
 shader_parameter/roll = true
 shader_parameter/roll_speed = 2.22
@@ -199,6 +199,7 @@ offset_left = 11.0
 offset_top = 719.0
 offset_right = 425.0
 offset_bottom = 936.0
+theme_override_fonts/font = ExtResource("10_fevae")
 theme_override_font_sizes/font_size = 42
 text = "Z: Атака
 X: Прыжок
@@ -244,13 +245,14 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 5
 theme_override_constants/shadow_offset_y = 3
 theme_override_constants/shadow_outline_size = 3
-theme_override_fonts/font = ExtResource("12_vy225")
+theme_override_fonts/font = ExtResource("10_fevae")
 theme_override_font_sizes/font_size = 42
 text = "Иван"
 
 [node name="ScoreIndicator" parent="MarginContainer/UIContainer/PlayerBoxUI/HBoxContainer/HealthBarPointsVBoxContainer/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1372940377 instance=ExtResource("6_1c2ca")]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_fonts/font = ExtResource("10_fevae")
 theme_override_font_sizes/font_size = 55
 text = "10w"
 

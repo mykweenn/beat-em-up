@@ -79,7 +79,8 @@ const GRAVITY := 3800.0
 @onready var weapon_position: Node2D = $KnifeSprite/WeaponPosition
 
 
-enum State {IDLE, WALK, ATTACK, TAKEOFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUNDED, DEATH, FLY, PREP_ATTACK, THROW, PICKUP, SHOOT, PREP_SHOOT, RECOVER, DROP, WAIT, APPEARING, SPRINT, DASH, SPRINT_ATTACK, CUTSCENE, BLOCK, KICK}
+enum State {IDLE, WALK, ATTACK, TAKEOFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUNDED, DEATH, FLY, PREP_ATTACK, 
+THROW, PICKUP, SHOOT, PREP_SHOOT, RECOVER, DROP, WAIT, APPEARING, SPRINT, DASH, SPRINT_ATTACK, CUTSCENE, BLOCK, KICK, HEAVY_ATTACK}
 enum Type {PLAYER, PUNK, GOON, THUG, BOUNCER, HEAVY}
 
 var ammo_left := 0
@@ -111,6 +112,7 @@ var anim_map : Dictionary = {
 	State.CUTSCENE: "cutscene",
 	State.BLOCK: "block",
 	State.KICK: "kick_power",
+	State.HEAVY_ATTACK: "heavy_attack",
 }
 
 var attack_combo_index := 0
