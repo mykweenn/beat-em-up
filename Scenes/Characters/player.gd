@@ -53,18 +53,88 @@ func on_player_revive() -> void:
 
 
 func handle_input() -> void:
+	# === СНАЧАЛА ОБРАБАТЫВАЕМ ТЕКУЩИЕ ТЯЖЕЛЫЕ СОСТОЯНИЯ ===
+	# Если мы уже бьем тяжелым ударом — отключаем весь остальной ввод
+	if state == State.HEAVY_ATTACK:
+		return
+
+	# === 2. НАКОПЛЕНИЕ СИЛЫ ВО ВРЕМЯ СТЭЙТА ЗАРЯДКИ ===
+	if state == State.PREPARE_HEAVY_ATTACK:
+		charge_timer += get_physics_process_delta_time()
+
+		# === ИСПРАВЛЕНИЕ: Тряска включается только если зажали кнопку дольше чем на 0.3 сек ===
+		var cam = get_viewport().get_camera_2d()
+		if cam and cam.has_method("set_charging_shake"):
+			if charge_timer > 0.3:
+				cam.set_charging_shake(true)
+			else:
+				cam.set_charging_shake(false)
+		# ===================================================================================
+		
+		if charge_timer >= charge_required_time and not is_fully_charged:
+			is_fully_charged = true
+			print("УДАР ЗАРЯЖЕН!") 
+
+		# === 3. ОТПУСКАНИЕ КНОПКИ (РАЗРЯДКА ИЛИ СБРОС) ===
+		if Input.is_action_just_released("attack"):
+			# Выключаем тряску камеры при любом исходе отпускания кнопки
+			if cam and cam.has_method("set_charging_shake"):
+				cam.set_charging_shake(false)
+			
+			# Возвращаем спрайт на место после тряски
+			character_sprite.position = Vector2.ZERO
+			
+			if is_fully_charged:
+				state = State.HEAVY_ATTACK
+				SoundPlayer.play(SoundManager.Sound.SWOOSH)
+			else:
+				# Если отпустили слишком рано и не дозарядили — 
+				# принудительно запускаем вашу старую стандартную цепочку атак!
+				trigger_normal_attack()
+				
+			charge_timer = 0.0
+			is_fully_charged = false
+		return # Пока мы в режиме зарядки, код ниже (ходьба, прыжки) не выполняется!
+
+
 	# === ЛОГИКА БЛОКА ДЛЯ ИГРОКА ===
 	if Input.is_action_pressed("block") and (state == State.BLOCK or can_block()):
 		if state != State.BLOCK:
 			state = State.BLOCK
-			velocity = Vector2.ZERO # Останавливаем игрока только в ПЕРВЫЙ кадр входа в блок
-			block_activated_time = Time.get_ticks_msec() # Фиксируем точное время для парирования
-		return # Прерываем handle_input, блокируя атаки и ходьбу, но сохраняя импульс отброса
+			velocity = Vector2.ZERO 
+			block_activated_time = Time.get_ticks_msec() 
+		return 
 
-	# Если игрок удерживал блок, но отпустил кнопку — возвращаем в IDLE
 	if state == State.BLOCK and Input.is_action_just_released("block"):
 		state = State.IDLE
-	# ===============================
+
+	# === ОБЫЧНОЕ ДВИЖЕНИЕ ===
+	if can_move():
+		var direction := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+		if state == State.SPRINT:
+			velocity = direction * (speed * 1.6) 
+		else:
+			velocity = direction * speed
+	
+	# === СТАРТ ОБЫЧНОЙ АТАКЫ ИЛИ НАЧАЛО ЗАРЯДКИ ===
+	if can_attack() and Input.is_action_just_pressed("attack"):
+		# При первом нажатии мы переходим в режим подготовки тяжелого удара.
+		# Если игрок сразу отпустит кнопку — сработает блок выше (trigger_normal_attack) и произойдет обычный удар.
+		# Если зажмет — персонаж начнет копить силу.
+		state = State.PREPARE_HEAVY_ATTACK
+		charge_timer = 0.0
+		is_fully_charged = false
+		velocity = Vector2.ZERO # Останавливаем ходьбу для замаха
+		return
+
+	# === ОСТАЛЬНЫЕ МЕХАНИКИ ===
+	if can_jump() and Input.is_action_just_pressed("jump"):
+		state = State.TAKEOFF
+	if can_jumpkick() and Input.is_action_just_pressed("attack"):
+		state = State.JUMPKICK
+		SoundPlayer.play(SoundManager.Sound.SWOOSH)
+	if (can_sprint_attack() or state == State.SPRINT) and Input.is_action_just_pressed("attack"):
+		start_sprint_attack()
 
 
 	if can_move():
@@ -110,6 +180,29 @@ func handle_input() -> void:
 	if can_kick() and Input.is_action_just_pressed("kick"):
 		state = State.KICK
 		SoundPlayer.play(SoundManager.Sound.SWOOSH)	
+
+
+func trigger_normal_attack() -> void:
+	if has_knife:
+		state = State.THROW
+	elif has_gun:
+		if ammo_left > 0:
+			shot_gun()
+			ammo_left -= 1
+		else:
+			state = State.THROW
+	else:
+		if can_pickup_collectible():
+			state = State.PICKUP
+		else:
+			state = State.ATTACK
+			SoundPlayer.play(SoundManager.Sound.SWOOSH)
+			if is_last_hit_successful:
+				time_since_last_successfull_attack = Time.get_ticks_msec()
+				attack_combo_index = (attack_combo_index + 1) % anim_attacks.size()
+				is_last_hit_successful = false
+			else:
+				attack_combo_index = 0
 
 
 

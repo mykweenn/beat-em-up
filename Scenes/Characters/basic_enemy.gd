@@ -209,10 +209,14 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 	# Вызываем родительский метод
 	super.on_receive_damage(amount, direction, hit_type, attacker)
 	
-	# Если враг успешно заблокировал обычный удар
-	if state == State.BLOCK and block_health > 0 and not is_hit_from_behind:
+		# === ЕСЛИ ВРАГ УСПЕШНО ЗАБЛОКИРОВАЛ УДАР ===
+	# Учитываем, что от тяжелого удара блок ломается, и прерывать функцию НЕ нужно
+	var is_hit_by_heavy : bool = (attacker != null and attacker.state == State.HEAVY_ATTACK)
+	
+	if state == State.BLOCK and block_health > 0 and not is_hit_from_behind and not is_hit_by_heavy:
 		play_hit_shake()
 		return 
+
 	
 	# Всё, что ниже — реальное ранение
 	ComboManager.register_hit.emit()
