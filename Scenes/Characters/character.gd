@@ -632,25 +632,29 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 		last_hurt_time = current_time
 	# ==================================================
 
-	# === ЛОГИКА БЛОКИРОВАНИЯ ===
 		# === ЛОГИКА БЛОКИРОВАНИЯ ===
 	if state == State.BLOCK:
 		# Проверяем, не прилетел ли в нас заряженный удар от нападающего
 		var is_hit_by_heavy : bool = (attacker != null and attacker.state == State.HEAVY_ATTACK)
 		
-		# Если бьют в спину ИЛИ бьют тяжелым заряженным ударом — блок пробивается!
+		# Если бьют в спину ИЛИ бьют тяжелым заряженным ударом — блок брутально пробивается!
 		if is_hit_from_behind or is_hit_by_heavy:
 			block_health = 0
 			block_broken = true
-			hit_type = DamageReceiver.HitType.KNOCKDOWN # Гарантированно отправляем в нокдаун
+			block_activated_time = 0.0 # Обязательно сбрасываем тайминг, чтобы не залипал!
+			hit_type = DamageReceiver.HitType.KNOCKDOWN # Отправляем персонажа в нокдаун
 			
-			# Эстетика Kane & Lynch 2: если блок брутально пробит тяжелым ударом, 
-			# можно включить мощный хитстоп (заморозку экрана)
+			# Эстетика Kane & Lynch 2: тяжелый хитстоп при пробитии колена/щита
 			if is_hit_by_heavy:
 				HitstopManager.freeze(0.2, 0.2)
-				SoundPlayer.play(SoundManager.Sound.HIT1, true) # Тяжелый сокрушительный звук
+				SoundPlayer.play(SoundManager.Sound.HIT1, true) 
+				
+			# ВАЖНО: Мы НЕ пишем здесь return. Мы позволяем коду пойти НИЖЕ, 
+			# чтобы сработал ваш стандартный блок падения (state = State.FALL, отлет и т.д.)
+			
 		else:
 			# --- ПРОВЕРКА НА ИДЕАЛЬНЫЙ БЛОК (PARRY) ---
+			# Этот блок выполнится ТОЛЬКО если атака пришла спереди и она НЕ тяжелая
 			var current_time := Time.get_ticks_msec()
 			var is_parry : bool = (current_time - block_activated_time) <= (parry_window * 1000.0)
 			
@@ -662,24 +666,27 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 				
 				if attacker != null:
 					attacker.state = State.RECOVER 
-					attacker.velocity = -direction * launch_horizontal_intensity * 2
+					attacker.velocity = -direction * launch_horizontal_intensity * 0.1
 					attacker.attack_combo_index = 0
-				return 
+				return # При успешном парировании урон полностью обнуляется, выходим!
 			# ------------------------------------------
 
-			# Обычный блок (если окно парирования уже закрылось)
+			# Обычный успешный блок (если окно парирования уже закрылось)
 			block_health -= amount
 			if block_health > 0:
 				SoundPlayer.play(SoundManager.Sound.HIT2, true)
 				velocity = direction * (knockback_intensity * 0.3)
 				animation_player.play("block_damage") 
-				return
+				return # Урон впитан щитом, выходим!
 			else:
+				# Обычный щит сломался от нехватки здоровья (block_health <= 0)
 				block_health = 0
 				block_broken = true
+				block_activated_time = 0.0
 				hit_type = DamageReceiver.HitType.KNOCKDOWN
+				# Позволяем коду пойти ниже, чтобы персонаж упал на землю
+	# ==========================================
 
-	# ===========================
 
 	# Обычное получение урона (выполняется, если не блокировали или block пробили)
 	attack_combo_index = 0

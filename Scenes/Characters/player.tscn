@@ -63,6 +63,18 @@ tracks/3/keys = {
 "update": 1,
 "values": [8]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CharacterSprite:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_d73o7"]
 resource_name = "block"
@@ -267,7 +279,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_fepmq"]
 resource_name = "heavy_attack"
-length = 0.39999999999999997
+length = 0.4
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -685,7 +697,7 @@ tracks/3/keys = {
 [sub_resource type="Animation" id="Animation_uxymp"]
 resource_name = "prepare_heavy_attack"
 length = 0.1
-step = 0.1
+step = 0.02
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -697,6 +709,18 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [24]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CharacterSprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.020000003, 0.04, 0.06, 0.08, 0.1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(2.5, 0), Vector2(-2.5, 0), Vector2(2.5, 0), Vector2(-2.5, 0), Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_cqrjx"]
