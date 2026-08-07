@@ -37,6 +37,8 @@ const GRAVITY := 3800.0
 @export var DOUBLE_TAP_TIME := 0.25
 @export var launch_vertical_intensity: float = 1200.0   # Сила подбрасывания вверх
 @export var launch_horizontal_intensity: float = 650.0 # Сила отлета в сторону
+## Сколько секунд нужно удерживать кнопку для полной зарядки удара
+@export var charge_required_time : float = 0.80
 
 @export_group("Weapons")
 ## Если true, выброшенное или выпавшее оружие автоматически уничтожается.
@@ -80,7 +82,8 @@ const GRAVITY := 3800.0
 
 
 enum State {IDLE, WALK, ATTACK, TAKEOFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUNDED, DEATH, FLY, PREP_ATTACK, 
-THROW, PICKUP, SHOOT, PREP_SHOOT, RECOVER, DROP, WAIT, APPEARING, SPRINT, DASH, SPRINT_ATTACK, CUTSCENE, BLOCK, KICK, HEAVY_ATTACK}
+THROW, PICKUP, SHOOT, PREP_SHOOT, RECOVER, DROP, WAIT, APPEARING, SPRINT, DASH, SPRINT_ATTACK, CUTSCENE, BLOCK, 
+KICK, PREPARE_HEAVY_ATTACK, HEAVY_ATTACK}
 enum Type {PLAYER, PUNK, GOON, THUG, BOUNCER, HEAVY}
 
 var ammo_left := 0
@@ -112,6 +115,7 @@ var anim_map : Dictionary = {
 	State.CUTSCENE: "cutscene",
 	State.BLOCK: "block",
 	State.KICK: "kick_power",
+	State.PREPARE_HEAVY_ATTACK: "prepare_heavy_attack",
 	State.HEAVY_ATTACK: "heavy_attack",
 }
 
@@ -143,6 +147,11 @@ var block_activated_time : float = 0.0
 var combo_hurt_count := 0
 # Время в миллисекундах, когда персонаж в последний раз получал урон
 var last_hurt_time : float = 0.0
+
+# Внутренний таймер удержания кнопки
+var charge_timer : float = 0.0
+# Флаг, что удар полностью зарядился
+var is_fully_charged : bool = false
 
 
 func _ready():
@@ -231,7 +240,7 @@ func setup_collisions() -> void:
 
 func handle_movement(delta: float): # Добавили delta в аргументы
 # Если персонаж заблокирован физикой — не даем коду ниже занулять скорость
-	if [State.HURT, State.FALL, State.FLY, State.BLOCK, State.RECOVER].has(state):
+	if [State.HURT, State.FALL, State.FLY, State.BLOCK, State.RECOVER, State.PREPARE_HEAVY_ATTACK, State.HEAVY_ATTACK].has(state):
 		return
 	if state == State.DASH:
 		velocity.x = dash_direction * DASH_SPEED
@@ -417,7 +426,7 @@ func can_block() -> bool:
 
 
 func can_get_hurt() -> bool:
-	return [State.IDLE, State.WALK, State.TAKEOFF, State.LAND, State.PREP_ATTACK, State.BLOCK, State.RECOVER].has(state)
+	return [State.IDLE, State.WALK, State.TAKEOFF, State.LAND, State.PREP_ATTACK, State.BLOCK, State.RECOVER, State.PREPARE_HEAVY_ATTACK].has(state)
 
 
 func can_dash() -> bool:
@@ -435,7 +444,7 @@ func can_kick() -> bool:
 
 ### Если атакует, возвращаем список состояний боевых
 func is_attacking() -> bool:
-	return [State.ATTACK, State.JUMPKICK, State.SPRINT_ATTACK, State.KICK].has(state)
+	return [State.ATTACK, State.JUMPKICK, State.SPRINT_ATTACK, State.KICK, State.HEAVY_ATTACK].has(state)
 
 
 func is_carrying_weapon() -> bool:
@@ -577,7 +586,13 @@ func on_land_complete():
 func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver.HitType, attacker: Character = null) -> void:
 	if not can_get_hurt():
 		return
-	
+		
+	if state == State.PREPARE_HEAVY_ATTACK:
+		var cam = get_viewport().get_camera_2d()
+		if cam and cam.has_method("set_charging_shake"):
+			cam.set_charging_shake(false) # Гарантированно выключаем глитч при получении урона
+
+
 	# === ПРОВЕРКА НА УДАР В СПИНУ ===
 	# direction.x указывает, куда летит удар: 1 (вправо) или -1 (влево)
 	# heading.x указывает, куда смотрит персонаж: 1 (вправо) или -1 (влево)
@@ -618,42 +633,37 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 	# ==================================================
 
 	# === ЛОГИКА БЛОКИРОВАНИЯ ===
+		# === ЛОГИКА БЛОКИРОВАНИЯ ===
 	if state == State.BLOCK:
-		if is_hit_from_behind:
+		# Проверяем, не прилетел ли в нас заряженный удар от нападающего
+		var is_hit_by_heavy : bool = (attacker != null and attacker.state == State.HEAVY_ATTACK)
+		
+		# Если бьют в спину ИЛИ бьют тяжелым заряженным ударом — блок пробивается!
+		if is_hit_from_behind or is_hit_by_heavy:
 			block_health = 0
 			block_broken = true
-			hit_type = DamageReceiver.HitType.KNOCKDOWN 
+			hit_type = DamageReceiver.HitType.KNOCKDOWN # Гарантированно отправляем в нокдаун
+			
+			# Эстетика Kane & Lynch 2: если блок брутально пробит тяжелым ударом, 
+			# можно включить мощный хитстоп (заморозку экрана)
+			if is_hit_by_heavy:
+				HitstopManager.freeze(0.2, 0.2)
+				SoundPlayer.play(SoundManager.Sound.HIT1, true) # Тяжелый сокрушительный звук
 		else:
 			# --- ПРОВЕРКА НА ИДЕАЛЬНЫЙ БЛОК (PARRY) ---
-			# Переводим parry_window из секунд в миллисекунды (0.15 сек = 150 мс)
 			var current_time := Time.get_ticks_msec()
 			var is_parry : bool = (current_time - block_activated_time) <= (parry_window * 1000.0)
 			
 			if is_parry:
-				# Успешное парирование!
-				HitstopManager.freeze(0.25, 0.25) 
+				# Успешное парирование обычного удара
+				HitstopManager.freeze(0.15, 0.15) 
 				EntityManager.spawn_spark.emit(position) 
 				SoundPlayer.play(SoundManager.Sound.HIT3, true)
 				
-				# === ОТЛАДКА ПАРИРОВАНИЯ ===
-				print("=== СРАБОТАЛО ПАРИРОВАНИЕ ===")
-				print("Защищающийся: ", name, " | Состояние ДО: ", State.keys()[state])
 				if attacker != null:
-					print("Нападающий обнаружен: ", attacker.name, " | Его состояние ДО: ", State.keys()[attacker.state])
-					
-					# Принудительно меняем состояние нападающего
 					attacker.state = State.RECOVER 
-					attacker.enemy_block_timer = 1.5 
-					attacker.velocity = -direction * (launch_horizontal_intensity * 0.3)
+					attacker.velocity = -direction * launch_horizontal_intensity * 2
 					attacker.attack_combo_index = 0
-					
-					print("Нападающему ЗАДАНО состояние: ", State.keys()[attacker.state])
-					print("Нападающему задана скорость: ", attacker.velocity)
-				else:
-					print("ВНИМАНИЕ: Ссылка на attacker равна NULL!")
-				print("=============================")
-				# ===========================
-				
 				return 
 			# ------------------------------------------
 
@@ -668,6 +678,7 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 				block_health = 0
 				block_broken = true
 				hit_type = DamageReceiver.HitType.KNOCKDOWN
+
 	# ===========================
 
 	# Обычное получение урона (выполняется, если не блокировали или block пробили)
@@ -738,7 +749,9 @@ func on_emit_damage(receiver: DamageReceiver):
 	if state == State.SPRINT_ATTACK:
 		hit_type = DamageReceiver.HitType.POWER
 	if state == State.KICK:
-		hit_type = DamageReceiver.HitType.LAUNCH	
+		hit_type = DamageReceiver.HitType.LAUNCH
+	if state == State.HEAVY_ATTACK:
+		hit_type = DamageReceiver.HitType.POWER
 	# === КРИТИЧЕСКИЙ УРОН ПО ОГЛУШЕННОМУ ВРАГУ ===
 	# Получаем ссылку на персонажа-жертву через его компонент получения урона
 	var victim = receiver.get_parent()
