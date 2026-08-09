@@ -10,8 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://f4rj00eaikur" path="res://Scenes/UI/flickering_texture_rect.tscn" id="7_jfwrg"]
 [ext_resource type="Texture2D" uid="uid://cpxwfe56jws3" path="res://Assets/Art/ui/go-go-go.png" id="8_mbl0m"]
 [ext_resource type="PackedScene" uid="uid://cw8wiix1eq4oc" path="res://Scenes/UI/stage_transition.tscn" id="9_mbl0m"]
-[ext_resource type="Texture2D" uid="uid://d2boolrosy73g" path="res://Assets/Art/MRB/Spirtes/Characters/Player/Player 96X96 Red.png" id="10_56q1t"]
 [ext_resource type="FontFile" uid="uid://b6aadqwj6cp4g" path="res://Assets/Fonts/Tektur/Tektur-VariableFont_wdth,wght.ttf" id="10_fevae"]
+[ext_resource type="Texture2D" uid="uid://bwkk7dr3jmlss" path="res://Assets/Art/MRB/Spirtes/Characters/Player/Player 96X96 (1).png" id="11_56q1t"]
 [ext_resource type="Theme" uid="uid://b2qvp1u1iua2l" path="res://gui_theme.tres" id="13_fy0us"]
 [ext_resource type="Texture2D" uid="uid://cy3tw8lp7prhf" path="res://Assets/UI/MobileControls/Icons/Default/icon_button_a.png" id="14_h6tq4"]
 [ext_resource type="Texture2D" uid="uid://bs6spmedmtjf1" path="res://Assets/UI/MobileControls/Icons/Default/icon_sword.png" id="14_t7te2"]
@@ -22,7 +22,7 @@ atlas = ExtResource("4_t7te2")
 region = Rect2(43.40471, 50.879204, 15.310287, 12.634705)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_t7te2"]
-atlas = ExtResource("10_56q1t")
+atlas = ExtResource("11_56q1t")
 region = Rect2(43.208717, 49.228073, 13.434307, 14.599541)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h6tq4"]
@@ -335,6 +335,7 @@ shape = SubResource("CircleShape2D_t7te2")
 action = "jump"
 
 [node name="ShaderRect" type="ColorRect" parent="." unique_id=1204503510]
+visible = false
 z_index = 1
 material = SubResource("ShaderMaterial_t7te2")
 anchors_preset = 15

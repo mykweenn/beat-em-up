@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://cjituhu2smwr2" path="res://Scenes/Stage/checkpoint.tscn" id="11_rpe1a"]
 [ext_resource type="PackedScene" uid="uid://jep2uj8ujo8a" path="res://Scenes/Characters/basic_enemy.tscn" id="12_10na3"]
 [ext_resource type="PackedScene" uid="uid://b107bhknlisaa" path="res://Scenes/Props/food.tscn" id="13_rpe1a"]
+[ext_resource type="PackedScene" uid="uid://mkd8b1ouke27" path="res://Scenes/Props/barrel.tscn" id="14_10na3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uokwh"]
 size = Vector2(7234, 46)
@@ -142,7 +143,7 @@ position = Vector2(-471, 0)
 nb_simultaneous_enemies = 4
 
 [node name="BasicEnemy" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="0" unique_id=1966584693 instance=ExtResource("12_10na3")]
-position = Vector2(2281, 963)
+position = Vector2(1519, 252)
 
 [node name="BasicEnemy3" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="1" unique_id=1120400362 instance=ExtResource("12_10na3")]
 position = Vector2(2350, 991)
@@ -263,6 +264,9 @@ position = Vector2(941, 839)
 
 [node name="Food" parent="Containers" parent_id_path=PackedInt32Array(2076321560) index="0" unique_id=995031682 instance=ExtResource("13_rpe1a")]
 position = Vector2(1261, 977)
+
+[node name="Barrel" parent="Containers" parent_id_path=PackedInt32Array(2076321560) index="1" unique_id=478529645 instance=ExtResource("14_10na3")]
+position = Vector2(700, 1005)
 
 [node name="PlayerSpawnLocation" parent="." index="6" unique_id=686465435]
 position = Vector2(180, 1027)
