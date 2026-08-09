@@ -51,9 +51,8 @@ func _physics_process(delta: float) -> void:
 	# === ТАЙМЕР ПЕРЕДЫШКИ ДЛЯ ИГРОКА ===
 	if player_down_delay > 0.0:
 		player_down_delay -= delta
-		velocity = Vector2.ZERO # Заставляем врага стоять на месте
-		state = State.IDLE     # Включаем мирную анимацию ожидания
-		return # Прерываем выполнение ИИ, бот временно не преследует игрока!
+		velocity = Vector2.ZERO 
+		return 
 	# ===================================
 	# === ТАЙМЕР БЛОКА ДЛЯ ВРАГОВ ===
 	if state == State.BLOCK:

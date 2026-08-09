@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://xo1jdh1pooij"]
 
 [ext_resource type="Script" uid="uid://g5iy66plokvf" path="res://Scenes/VFX/blood_splatter.gd" id="1_5w506"]
+[ext_resource type="Texture2D" uid="uid://cwg7qi138tysq" path="res://Assets/Art/MRB/Spirtes/VFX/blood.png" id="1_appib"]
 
 [sub_resource type="Curve" id="Curve_s1fef"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -9,6 +10,7 @@ point_count = 2
 [node name="BloodSplatter" type="CPUParticles2D" unique_id=1070589978]
 emitting = false
 amount = 30
+texture = ExtResource("1_appib")
 lifetime = 0.4
 one_shot = true
 explosiveness = 1.0
