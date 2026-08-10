@@ -59,7 +59,7 @@ const GRAVITY := 3800.0
 @export var max_ammo_per_gun : int
 
 @export_group("Block")
-@export var max_block_health : float = 100.0
+@export var max_block_health : float = 10.0
 @export var block_regen_rate : float = 20.0
 ## Шанс (от 0.0 до 1.0), что враг решит заблокировать удар вместо получения урона
 @export var block_chance : float = 0.4 
@@ -240,7 +240,7 @@ func setup_collisions() -> void:
 
 func handle_movement(delta: float): # Добавили delta в аргументы
 # Если персонаж заблокирован физикой — не даем коду ниже занулять скорость
-	if [State.HURT, State.FALL, State.FLY, State.BLOCK, State.RECOVER, State.PREPARE_HEAVY_ATTACK, State.HEAVY_ATTACK].has(state):
+	if [State.HURT, State.FALL, State.FLY, State.BLOCK, State.PREPARE_HEAVY_ATTACK, State.HEAVY_ATTACK].has(state):
 		return
 	if state == State.DASH:
 		velocity.x = dash_direction * DASH_SPEED
@@ -352,9 +352,9 @@ func handle_death(delta) -> void:
 ## Анимации синхронно запускаются как в AnimationPlayer,
 ## так и в AnimatedSprite2D.
 func handle_animations() -> void:
-	if state == State.BLOCK:
-		print("Текущая анимация: ", animation_player.current_animation, " | Играет: ", animation_player.is_playing())
-
+	# if state == State.BLOCK:
+	# 	# print("Текущая анимация: ", animation_player.current_animation, " | Играет: ", animation_player.is_playing())
+	# 	pass
 		# 1. Специфичная логика для блока
 	if state == State.BLOCK:
 		# Если персонаж только что получил удар и играет анимация дёргания
@@ -599,14 +599,10 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 	# Если знаки совпадают (например, удар летит вправо и персонаж смотрит вправо), значит это удар в спину!
 	var is_hit_from_behind : bool = sign(direction.x) == sign(heading.x)
 	# ===============================
-
-	# === РЕАКЦИЯ ИИ ВРАГА ===
-	# Добавляем условие "not is_hit_from_behind", чтобы враг не мог среагировать на удар со спины
-	if type != Type.PLAYER and state != State.BLOCK and can_block() and not is_hit_from_behind:
-		if randf() < block_chance:
-			state = State.BLOCK
-			enemy_block_timer = block_duration
-			velocity = Vector2.ZERO
+	if type == Type.PLAYER and state == State.BLOCK and not block_broken:
+		# 1. Поворачиваем игрока лицом к атаке со всех сторон
+		heading.x = -sign(direction.x)
+	
 
 	# === ЗАЩИТА ИГРОКА ОТ СТАНЛОКА (ВРЕМЕННОЕ ОКНО) ===
 	if type == Type.PLAYER:
@@ -663,27 +659,28 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 				HitstopManager.freeze(0.15, 0.15) 
 				EntityManager.spawn_spark.emit(position) 
 				SoundPlayer.play(SoundManager.Sound.HIT3, true)
-				
+				print("Успешное парирование обычного удара")
 				if attacker != null:
 					attacker.state = State.RECOVER 
+					print("Атакующий ", attacker.name, " входит в стейт: RECOVER")
 					attacker.velocity = -direction * launch_horizontal_intensity * 0.1
 					attacker.attack_combo_index = 0
 				return # При успешном парировании урон полностью обнуляется, выходим!
 			# ------------------------------------------
 
 			# Обычный успешный блок (если окно парирования уже закрылось)
-			block_health -= amount
-			if block_health > 0:
-				SoundPlayer.play(SoundManager.Sound.HIT2, true)
-				velocity = direction * (knockback_intensity * 0.3)
-				animation_player.play("block_damage") 
-				return # Урон впитан щитом, выходим!
-			else:
-				# Обычный щит сломался от нехватки здоровья (block_health <= 0)
-				block_health = 0
-				block_broken = true
-				block_activated_time = 0.0
-				hit_type = DamageReceiver.HitType.KNOCKDOWN
+		block_health -= amount
+		if block_health > 0:
+			SoundPlayer.play(SoundManager.Sound.HIT2, true)
+			velocity = direction * (knockback_intensity * 0.3)
+			animation_player.play("block_damage") 
+			return # Урон впитан щитом, выходим!
+		else:
+			# Обычный щит сломался от нехватки здоровья (block_health <= 0)
+			block_health = 0
+			block_broken = true
+			block_activated_time = 0.0
+			hit_type = DamageReceiver.HitType.KNOCKDOWN
 				# Позволяем коду пойти ниже, чтобы персонаж упал на землю
 	# ==========================================
 

@@ -1,11 +1,15 @@
 extends Control
 
 
-# Called when the node enters the scene tree for the first time.
+@onready var block_bar: ProgressBar = $BlockBar
+@onready var hpbar: ProgressBar = $HPBar
+
 func _ready():
-	pass # Replace with function body.
+	block_bar.max_value = get_parent().max_block_health
+	hpbar.max_value = get_parent().max_health
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+func _process(_delta):
+	block_bar.value = get_parent().block_health
+	hpbar.value = get_parent().current_health

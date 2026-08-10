@@ -143,25 +143,7 @@ position = Vector2(-471, 0)
 nb_simultaneous_enemies = 4
 
 [node name="BasicEnemy" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="0" unique_id=1966584693 instance=ExtResource("12_10na3")]
-position = Vector2(1519, 252)
-
-[node name="BasicEnemy3" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="1" unique_id=1120400362 instance=ExtResource("12_10na3")]
-position = Vector2(2350, 991)
-
-[node name="BasicEnemy4" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="2" unique_id=1258663848 instance=ExtResource("12_10na3")]
-position = Vector2(2295, 970)
-
-[node name="BasicEnemy5" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="3" unique_id=1102635551 instance=ExtResource("12_10na3")]
-position = Vector2(-74, 1007)
-
-[node name="BasicEnemy6" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="4" unique_id=1664924122 instance=ExtResource("12_10na3")]
-position = Vector2(76, 1025)
-
-[node name="BasicEnemy7" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="5" unique_id=1191201126 instance=ExtResource("12_10na3")]
-position = Vector2(-7, 999)
-
-[node name="BasicEnemy8" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="6" unique_id=1139963241 instance=ExtResource("12_10na3")]
-position = Vector2(-186, 1026)
+position = Vector2(349, 938)
 
 [node name="CollisionShape2D" parent="Checkpoints/Checkpoint/PlayerDetectionArea" parent_id_path=PackedInt32Array(1922420126, 289896115) index="0" unique_id=1130211026]
 position = Vector2(963, 819)
@@ -267,6 +249,9 @@ position = Vector2(1261, 977)
 
 [node name="Barrel" parent="Containers" parent_id_path=PackedInt32Array(2076321560) index="1" unique_id=478529645 instance=ExtResource("14_10na3")]
 position = Vector2(700, 1005)
+
+[node name="Barrel2" parent="Containers" parent_id_path=PackedInt32Array(2076321560) index="2" unique_id=1169848281 instance=ExtResource("14_10na3")]
+position = Vector2(1119, 1045)
 
 [node name="PlayerSpawnLocation" parent="." index="6" unique_id=686465435]
 position = Vector2(180, 1027)
