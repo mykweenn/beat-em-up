@@ -83,8 +83,7 @@ func handle_input():
 		# get_physics_process_delta_time() безопасно использовать в методах, 
 		# которые вызываются внутри физического цикла
 		player_down_delay -= get_physics_process_delta_time()
-		velocity = Vector2.ZERO # Полностью останавливаем врага
-		state = State.IDLE     # Переключаем в анимацию ожидания
+		velocity = Vector2.ZERO # Полностью останавливаем врага 
 		return # Выходим, не давая ИИ бежать к позициям слотов!
 	# ===================================
 
@@ -205,6 +204,14 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 	var was_stunned : bool = (state == State.RECOVER)
 	# ======================================================
 
+	# === РЕАКЦИЯ ИИ ВРАГА ===
+	# Добавляем условие "not is_hit_from_behind", чтобы враг не мог среагировать на удар со спины
+	if type != Type.PLAYER and state != State.BLOCK and can_block() and not is_hit_from_behind:
+		if randf() < block_chance:
+			state = State.BLOCK
+			enemy_block_timer = block_duration
+			velocity = Vector2.ZERO
+
 	# Вызываем родительский метод
 	super.on_receive_damage(amount, direction, hit_type, attacker)
 	
@@ -231,7 +238,7 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 	if direction.x != 0:
 		var side = -sign(direction.x)
 		blood_node.scale.x = -sign(direction.x)
-		if hit_type == DamageReceiver.HitType.POWER or was_stunned: # <-- Добавили проверку на стан для масштаба
+		if hit_type == DamageReceiver.HitType.POWER: # <-- Добавили проверку на стан для масштаба
 			blood_node.scale = Vector2(side * 1.8, 1.8)
 			puddle.scale *= 1.7
 		else:
