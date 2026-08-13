@@ -14,12 +14,36 @@
 [ext_resource type="PackedScene" uid="uid://jep2uj8ujo8a" path="res://Scenes/Characters/basic_enemy.tscn" id="12_10na3"]
 [ext_resource type="PackedScene" uid="uid://b107bhknlisaa" path="res://Scenes/Props/food.tscn" id="13_rpe1a"]
 [ext_resource type="PackedScene" uid="uid://mkd8b1ouke27" path="res://Scenes/Props/barrel.tscn" id="14_10na3"]
+[ext_resource type="PackedScene" uid="uid://djvul6iecvnh6" path="res://Scenes/Stage/cutscene_trigger.tscn" id="15_jufl5"]
+[ext_resource type="Script" uid="uid://bwcjwfooh88cm" path="res://Scenes/Stage/cutscene_manager.gd" id="16_uokwh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uokwh"]
 size = Vector2(7234, 46)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r13cy"]
 size = Vector2(7236.25, 20)
+
+[sub_resource type="Animation" id="Animation_jufl5"]
+resource_name = "intro"
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.03333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["Ivan", "Надо пробиться через этих мудоебов."],
+"method": &"say_phrase"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uokwh"]
+_data = {
+&"intro": SubResource("Animation_jufl5")
+}
 
 [node name="Streets" unique_id=402859074 instance=ExtResource("1_g7de4")]
 music = 6
@@ -255,6 +279,16 @@ position = Vector2(1119, 1045)
 
 [node name="PlayerSpawnLocation" parent="." index="6" unique_id=686465435]
 position = Vector2(180, 1027)
+
+[node name="CutsceneTrigger" parent="CutsceneTriggers" parent_id_path=PackedInt32Array(1815187507) index="0" unique_id=10997799 node_paths=PackedStringArray("animation_player") instance=ExtResource("15_jufl5")]
+position = Vector2(303, 768)
+animation_player = NodePath("../../CutsceneManager/AnimationPlayer")
+
+[node name="CutsceneManager" parent="." index="8" unique_id=1126901294]
+script = ExtResource("16_uokwh")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CutsceneManager" index="0" unique_id=389663154]
+libraries/ = SubResource("AnimationLibrary_uokwh")
 
 [editable path="Checkpoints/Checkpoint"]
 [editable path="Checkpoints/Checkpoint2"]

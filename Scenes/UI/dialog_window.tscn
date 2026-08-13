@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://byu2lrkjq5lmt"]
+
+[ext_resource type="Script" uid="uid://bi3c7merknlap" path="res://Utils/dialog_window.gd" id="1_2x8eu"]
+[ext_resource type="Texture2D" uid="uid://bq7i34wgwtq1s" path="res://Assets/Art/ui/black_square.png" id="2_byhen"]
+[ext_resource type="FontFile" uid="uid://lf1vqrjadl2v" path="res://Assets/Fonts/Tektur/static/Tektur-Medium.ttf" id="2_ol62q"]
+
+[node name="DialogWindow" type="Control" unique_id=540702005]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2x8eu")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=282436531]
+modulate = Color(1, 1, 1, 0.79607844)
+layout_mode = 0
+offset_right = 183.0
+offset_bottom = 107.0
+texture = ExtResource("2_byhen")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="NinePatchRect" unique_id=605580695]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("2_ol62q")
+text = "Am I tripping right now? "
+
+[node name="TextureRect" type="TextureRect" parent="NinePatchRect" unique_id=1243730379]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0

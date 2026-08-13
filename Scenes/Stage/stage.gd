@@ -6,6 +6,8 @@ extends Node2D
 @onready var checkpoints : Node2D = $Checkpoints
 @onready var player_spawn_location : Node2D = $PlayerSpawnLocation
 
+const DIALOGUE_BOX_SCENE = preload("res://Scenes/UI/dialog_window.tscn")
+
 @export var music : MusicManager.Music
 
 

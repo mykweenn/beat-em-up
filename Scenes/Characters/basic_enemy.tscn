@@ -9,7 +9,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mgs2v"]
 shader = ExtResource("3_mgs2v")
-shader_parameter/gold_chance = 0.3
+shader_parameter/gold_chance = 1.0
 shader_parameter/gold_color = Color(0.85, 0.65, 0.13, 1)
 shader_parameter/enemy_seed = 1.0
 
