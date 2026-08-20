@@ -135,6 +135,7 @@ scale = Vector2(-10, 1)
 layout_direction = 3
 
 [node name="EnemyAvatar2" type="TextureRect" parent="MarginContainer/UIContainer" unique_id=1302043990]
+visible = false
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0

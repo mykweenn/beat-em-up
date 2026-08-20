@@ -12,6 +12,7 @@
 [ext_resource type="AudioStream" uid="uid://w2twjs856b8v" path="res://Assets/SFX/knife-hit.wav" id="9_t6xiq"]
 [ext_resource type="AudioStream" uid="uid://dx7l0ddiiny5v" path="res://Assets/SFX/zsx/sfx/swing.wav" id="10_ubgt2"]
 [ext_resource type="AudioStream" uid="uid://cge3fwyrubt45" path="res://Assets/SFX/zsx/sfx/block.wav" id="12_maidh"]
+[ext_resource type="AudioStream" uid="uid://d3r3pux563vob" path="res://Assets/SFX/battle_charge_sfx.wav" id="13_ubgt2"]
 
 [node name="SoundPlayer" type="Node" unique_id=1618086448]
 script = ExtResource("1_rdd4i")
@@ -53,4 +54,8 @@ volume_db = -9.0
 
 [node name="SFXParry" type="AudioStreamPlayer" parent="." unique_id=649581489]
 stream = ExtResource("12_maidh")
+volume_db = -9.0
+
+[node name="SFXChargeAttack" type="AudioStreamPlayer" parent="." unique_id=2144411290]
+stream = ExtResource("13_ubgt2")
 volume_db = -9.0

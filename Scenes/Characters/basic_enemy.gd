@@ -27,6 +27,18 @@ const EDGE_SCREEN_BUFFER := 10
 
 @export var player : Player
 
+@export_category("Player down reaction")
+## Радиус «кольца» вокруг лежащего игрока: ближники держат дистанцию, а не занимают слоты.
+@export var down_ring_radius := 110.0
+## Множитель скорости при отходе / кружении вокруг лежащего игрока.
+@export var down_ring_speed_scale := 0.55
+## Краткий шок сразу после лонча/нокдауна игрока.
+@export var launch_shock_min := 0.15
+@export var launch_shock_max := 0.45
+## Персональная задержка перед повторным заходом после подъёма игрока.
+@export var getup_stagger_min := 0.3
+@export var getup_stagger_max := 0.8
+
 var assigned_door_index := -1
 var player_slot : EnemySlot = null
 var time_since_last_melee_attack := Time.get_ticks_msec()
@@ -35,25 +47,23 @@ var time_since_last_range_attack := Time.get_ticks_msec()
 var time_since_prep_range_attack := Time.get_ticks_msec()
 var time_since_start_appearing := Time.get_ticks_msec()
 
-
-# Таймер «тупления» ИИ, когда игрок упал
+# Шок после лонча / stagger после подъёма. Не полный стоп ИИ.
 var player_down_delay : float = 0.0
+var _was_player_down := false
+var _ring_side := 1.0
 
 
 func _ready() -> void:
 	super._ready()
 	anim_attacks = ["punch", "punch_alt",]
+	_ring_side = 1.0 if randf() < 0.5 else -1.0
 
 
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
-	process_appear() 
-	# === ТАЙМЕР ПЕРЕДЫШКИ ДЛЯ ИГРОКА ===
+	process_appear()
 	if player_down_delay > 0.0:
 		player_down_delay -= delta
-		velocity = Vector2.ZERO 
-		return 
-	# ===================================
 	# === ТАЙМЕР БЛОКА ДЛЯ ВРАГОВ ===
 	if state == State.BLOCK:
 		enemy_block_timer -= delta
@@ -63,7 +73,8 @@ func _physics_process(delta: float) -> void:
 	# Если враг оглушен, уменьшаем его таймер блока/оглушения
 	if state == State.RECOVER:
 		enemy_block_timer -= delta
-		if enemy_block_timer <= 0:
+		if enemy_block_timer <= 0.0:
+			enemy_block_timer = 0.0
 			state = State.IDLE
 
 
@@ -78,24 +89,74 @@ func process_appear() -> void:
 			
 			
 func handle_input():
-	# === ТАЙМЕР ПЕРЕДЫШКИ ДЛЯ ИГРОКА ===
-	if player_down_delay > 0.0:
-		# get_physics_process_delta_time() безопасно использовать в методах, 
-		# которые вызываются внутри физического цикла
-		player_down_delay -= get_physics_process_delta_time()
-		velocity = Vector2.ZERO # Полностью останавливаем врага 
-		return # Выходим, не давая ИИ бежать к позициям слотов!
-	# ===================================
-
 	if player != null and can_move():
+		if _should_give_player_space():
+			if can_respawn_knives or has_knife or has_gun:
+				goto_range_position()
+			else:
+				_hold_back_from_player()
+			return
 		if can_respawn_knives or has_knife or has_gun:
 			goto_range_position()
 		else:
 			goto_melee_position()
 
 
+func on_player_knocked_down() -> void:
+	player_down_delay = randf_range(launch_shock_min, launch_shock_max)
+	_was_player_down = true
+	_release_player_slot()
+
+
+func _is_player_down() -> bool:
+	return player != null and (player.state == State.FALL or player.state == State.GROUNDED)
+
+
+func _should_give_player_space() -> bool:
+	if _is_player_down():
+		_was_player_down = true
+		return true
+	if _was_player_down:
+		_was_player_down = false
+		if player_down_delay <= 0.0:
+			player_down_delay = randf_range(getup_stagger_min, getup_stagger_max)
+	return player_down_delay > 0.0
+
+
+func _release_player_slot() -> void:
+	if player_slot != null and player != null:
+		player.free_slot(self)
+		player_slot = null
+
+
+func _hold_back_from_player() -> void:
+	_release_player_slot()
+	if player_down_delay > 0.0:
+		velocity = Vector2.ZERO
+		return
+
+	var to_player := player.global_position - global_position
+	var dist := to_player.length()
+	if dist < 1.0:
+		velocity = Vector2.LEFT * _ring_side * speed * down_ring_speed_scale
+		return
+
+	var away := -to_player / dist
+	if dist < down_ring_radius:
+		velocity = away * speed * down_ring_speed_scale
+	elif dist > down_ring_radius + 24.0:
+		velocity = (to_player / dist) * speed * down_ring_speed_scale
+	else:
+		var tangent := Vector2(-away.y, away.x) * _ring_side
+		velocity = tangent * speed * down_ring_speed_scale * 0.45
+
+
 
 func goto_range_position() -> void:
+	if player_down_delay > 0.0:
+		velocity = Vector2.ZERO
+		return
+
 	var camera := get_viewport().get_camera_2d()
 	var screen_width := get_viewport_rect().size.x
 	var screen_left_edge := camera.position.x - screen_width / 2
@@ -113,6 +174,10 @@ func goto_range_position() -> void:
 		velocity = Vector2.ZERO
 	else:
 		velocity = (closest_destination - position).normalized() * speed
+
+	# Пока игрок лежит — занимаем край экрана, без выстрела/броска.
+	if _is_player_down():
+		return
 	
 	if can_range_attack() and has_knife and projectile_aim.is_colliding():
 		state = State.THROW
@@ -143,13 +208,6 @@ func assign_door(door: Door) -> void:
 
 
 func goto_melee_position() -> void:
-	# === ЗАЩИТА: Если игрок сбил врагов с толку, они никуда не идут ===
-	if player_down_delay > 0.0:
-		velocity = Vector2.ZERO
-		state = State.IDLE
-		return
-	# ==================================================================
-
 	if can_pickup_collectible():
 		state = State.PICKUP
 		if player_slot != null:

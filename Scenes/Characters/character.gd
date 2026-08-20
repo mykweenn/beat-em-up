@@ -67,6 +67,8 @@ const GRAVITY := 3800.0
 @export var block_duration : float = 0.8 
 ## Окно времени (в секундах), в течение которого блок считается идеальным парированием.
 @export var parry_window : float = 0.15
+## Сколько секунд атакующий стоит в RECOVER после успешного парирования.
+@export var parry_stun_duration : float = 1.2
 
 @onready var animation_player := $AnimationPlayer
 @onready var character_sprite := $CharacterSprite
@@ -661,10 +663,8 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 				SoundPlayer.play(SoundManager.Sound.HIT3, true)
 				print("Успешное парирование обычного удара")
 				if attacker != null:
-					attacker.state = State.RECOVER 
+					attacker.apply_parry_stun(-direction * launch_horizontal_intensity * 0.1)
 					print("Атакующий ", attacker.name, " входит в стейт: RECOVER")
-					attacker.velocity = -direction * launch_horizontal_intensity * 0.1
-					attacker.attack_combo_index = 0
 				return # При успешном парировании урон полностью обнуляется, выходим!
 			# ------------------------------------------
 
@@ -704,7 +704,9 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 		velocity = direction * knockback_intensity
 		DamageManager.heavy_blow_received.emit()
 		SoundPlayer.play(SoundManager.Sound.HIT1, true)
-		if type == Type.PLAYER: combo_hurt_count = 0
+		if type == Type.PLAYER:
+			combo_hurt_count = 0
+			_notify_enemies_player_down()
 	elif hit_type == DamageReceiver.HitType.LAUNCH:
 		state = State.FALL 
 		height_speed = launch_vertical_intensity     
@@ -712,16 +714,9 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 		HitstopManager.freeze(0.1, 0.1) 
 		DamageManager.heavy_blow_received.emit()
 		SoundPlayer.play(SoundManager.Sound.HIT3, true)
-		# if type == Type.PLAYER: combo_hurt_count = 0
 		if type == Type.PLAYER:
 			combo_hurt_count = 0
-			
-			# === РАЗГОНЯЕМ ТОЛПУ: ОСТАНОВКА ВСЕХ ВРАГОВ ===
-			# Находим всех врагов на сцене (предполагается, что у них есть группа "enemies")
-			var enemies = get_tree().get_nodes_in_group("enemy")
-			for enemy in enemies:
-				# Переводим каждого врага в режим ожидания на 3.8 секунды
-				enemy.player_down_delay = 3.8
+			_notify_enemies_player_down()
 	
 	elif hit_type == DamageReceiver.HitType.POWER:
 		state = State.FLY
@@ -735,6 +730,20 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 		HitstopManager.freeze(0.05, 0.05)
 		SoundPlayer.play(SoundManager.Sound.HIT2, true)
 
+
+func apply_parry_stun(knockback: Vector2 = Vector2.ZERO) -> void:
+	state = State.RECOVER
+	# Тот же таймер, которым BasicEnemy выходит из RECOVER. Без этого
+	# остаток от прошлого блока часто уже <= 0, и стан сбрасывается в том же кадре.
+	enemy_block_timer = parry_stun_duration
+	attack_combo_index = 0
+	velocity = knockback
+
+
+func _notify_enemies_player_down() -> void:
+	for enemy in get_tree().get_nodes_in_group("enemy"):
+		if enemy.has_method("on_player_knocked_down"):
+			enemy.on_player_knocked_down()
 
 
 ## Функция обрабатывает момент нанесения удара текущим персонажем.

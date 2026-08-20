@@ -29,7 +29,8 @@ func on_player_enter(_player: Player) -> void:
 			var marker = _player.get_node("DialogPoint")
 			
 			# 3. Передаем текст напрямую в окно диалога игрока
-			dialog_window.start_dialogue(["Надо пробиться через этих мудоебов."], marker)
+			dialog_window.start_dialogue(["Я тестирую диалоговое окно я тестирую диалоговое окно."], marker)
+
 		else:
 			print("Ошибка: У игрока не найден узел DialogWindow или DialogPoint!")
 
