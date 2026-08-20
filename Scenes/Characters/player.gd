@@ -87,6 +87,7 @@ func handle_input() -> void:
 			if is_fully_charged:
 				state = State.HEAVY_ATTACK
 				SoundPlayer.play(SoundManager.Sound.SWOOSH)
+				SoundPlayer.play(SoundManager.Sound.CHARGE_ATTACK)
 			else:
 				# Если отпустили слишком рано и не дозарядили — 
 				# принудительно запускаем вашу старую стандартную цепочку атак!

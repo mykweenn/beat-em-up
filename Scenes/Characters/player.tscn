@@ -1343,6 +1343,7 @@ texture = ExtResource("8_gdgf0")
 position = Vector2(78, -302)
 
 [node name="DialogWindow" parent="." index="14" unique_id=540702005 instance=ExtResource("9_xo8ps")]
+visible = false
 offset_left = 78.0
 offset_top = -302.0
 offset_right = 78.0
