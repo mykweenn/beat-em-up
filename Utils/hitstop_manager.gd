@@ -20,7 +20,8 @@ func boss_death_freeze(boss_global_position: Vector2, duration := 1.5) -> void:
 	active = true
 	
 	# Ищем камеру в сцене (убедитесь, что у вашей Camera2D задано имя "Camera2D" или нужная группа)
-	if not camera:
+	# is_instance_valid защищает от протухшей ссылки после смены сцены
+	if not is_instance_valid(camera):
 		camera = get_tree().current_scene.find_child("Camera", true, false) as Camera2D
 
 	# 1. Замедляем время, но не до нуля (чтобы камера могла двигаться)
@@ -42,7 +43,7 @@ func boss_death_freeze(boss_global_position: Vector2, duration := 1.5) -> void:
 	await get_tree().create_timer(duration, true, false, true).timeout
 	
 	# 3. Возвращаем всё назад
-	if camera:
+	if is_instance_valid(camera):
 		var tween_back = create_tween().set_parallel(true).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 		tween_back.tween_property(camera, "zoom", Vector2(1.0, 1.0), 0.4)
 		

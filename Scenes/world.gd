@@ -25,7 +25,6 @@ func _ready() -> void:
 	StageManager.checkpoint_complete.connect(on_checkpoint_complete.bind())
 	StageManager.stage_interim.connect(load_next_stage.bind())
 	load_next_stage()
-	print("camera: ", camera.position)
 
 
 func _process(_delta):

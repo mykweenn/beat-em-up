@@ -58,24 +58,22 @@ func handle_input() -> void:
 	if state == State.HEAVY_ATTACK:
 		return
 
-	# === 2. НАКОПЛЕНИЕ СИЛЫ ВО ВРЕМЯ СТЭЙТА ЗАРЯДКИ ===
+	# === НАКОПЛЕНИЕ СИЛЫ ВО ВРЕМЯ СТЭЙТА ЗАРЯДКИ ===
 	if state == State.PREPARE_HEAVY_ATTACK:
 		charge_timer += get_physics_process_delta_time()
 
-		# === ИСПРАВЛЕНИЕ: Тряска включается только если зажали кнопку дольше чем на 0.3 сек ===
+		# Тряска включается только если зажали кнопку дольше чем на 0.3 сек
 		var cam = get_viewport().get_camera_2d()
 		if cam and cam.has_method("set_charging_shake"):
 			if charge_timer > 0.3:
 				cam.set_charging_shake(true)
 			else:
 				cam.set_charging_shake(false)
-		# ===================================================================================
 		
 		if charge_timer >= charge_required_time and not is_fully_charged:
 			is_fully_charged = true
-			print("УДАР ЗАРЯЖЕН!") 
 
-		# === 3. ОТПУСКАНИЕ КНОПКИ (РАЗРЯДКА ИЛИ СБРОС) ===
+		# === ОТПУСКАНИЕ КНОПКИ (РАЗРЯДКА ИЛИ СБРОС) ===
 		if Input.is_action_just_released("attack"):
 			# Выключаем тряску камеры при любом исходе отпускания кнопки
 			if cam and cam.has_method("set_charging_shake"):
@@ -90,7 +88,7 @@ func handle_input() -> void:
 				SoundPlayer.play(SoundManager.Sound.CHARGE_ATTACK)
 			else:
 				# Если отпустили слишком рано и не дозарядили — 
-				# принудительно запускаем вашу старую стандартную цепочку атак!
+				# запускаем стандартную цепочку атак
 				trigger_normal_attack()
 				
 			charge_timer = 0.0
@@ -113,14 +111,23 @@ func handle_input() -> void:
 	if can_move():
 		var direction := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 		if state == State.SPRINT:
-			velocity = direction * (speed * 1.6) 
+			velocity = direction * (speed * 1.6)
 		else:
 			velocity = direction * speed
-	
-	# === СТАРТ ОБЫЧНОЙ АТАКЫ ИЛИ НАЧАЛО ЗАРЯДКИ ===
+
+	# === СТАРТ ОБЫЧНОЙ АТАКИ ИЛИ НАЧАЛО ЗАРЯДКИ ===
 	if can_attack() and Input.is_action_just_pressed("attack"):
+		# === ДОБИВАНИЕ (КОНТЕКСТНАЯ АТАКА) ===
+		# Рядом с оглушённым (RECOVER) или лежащим (GROUNDED) врагом тап атаки
+		# превращается в добивание. С оружием в руках поведение не меняется —
+		# как обычно бросок/выстрел через trigger_normal_attack.
+		if not is_carrying_weapon():
+			var target := find_finisher_target()
+			if target != null:
+				start_finisher(target)
+				return
 		# При первом нажатии мы переходим в режим подготовки тяжелого удара.
-		# Если игрок сразу отпустит кнопку — сработает блок выше (trigger_normal_attack) и произойдет обычный удар.
+		# Если игрок сразу отпустит кнопку — сработает trigger_normal_attack и произойдет обычный удар.
 		# Если зажмет — персонаж начнет копить силу.
 		state = State.PREPARE_HEAVY_ATTACK
 		charge_timer = 0.0
@@ -128,59 +135,17 @@ func handle_input() -> void:
 		velocity = Vector2.ZERO # Останавливаем ходьбу для замаха
 		return
 
-	# === ОСТАЛЬНЫЕ МЕХАНИКИ ===
+	# === ПРЫЖОК / УДАР В ПРЫЖКЕ / АТАКА С РАЗБЕГА / ПИНЬК ===
 	if can_jump() and Input.is_action_just_pressed("jump"):
 		state = State.TAKEOFF
 	if can_jumpkick() and Input.is_action_just_pressed("attack"):
 		state = State.JUMPKICK
 		SoundPlayer.play(SoundManager.Sound.SWOOSH)
-	if (can_sprint_attack() or state == State.SPRINT) and Input.is_action_just_pressed("attack"):
+	if can_sprint_attack() and Input.is_action_just_pressed("attack"):
 		start_sprint_attack()
-
-
-	if can_move():
-		var direction := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-		
-		# Если игрок перешёл в спринт, даём ему повышенную скорость
-		if state == State.SPRINT:
-			# Умножаем обычную скорость на 1.6 (или используйте новую переменную sprint_speed)
-			velocity = direction * (speed * 1.6) 
-		else:
-			velocity = direction * speed
-
-	if can_attack() and Input.is_action_just_pressed("attack"):
-		velocity = Vector2.ZERO
-		if has_knife:
-			state = State.THROW
-		elif has_gun:
-			if ammo_left > 0:
-				shot_gun()
-				ammo_left -= 1
-			else:
-				state = State.THROW
-		else:
-			if can_pickup_collectible():
-				state = State.PICKUP
-			else:
-				state = State.ATTACK
-				SoundPlayer.play(SoundManager.Sound.SWOOSH)
-				if is_last_hit_successful:
-					time_since_last_successfull_attack = Time.get_ticks_msec()
-					attack_combo_index = (attack_combo_index + 1) % anim_attacks.size()
-					is_last_hit_successful = false
-				else:
-					attack_combo_index = 0
-	if can_jump() and Input.is_action_just_pressed("jump"):
-		state = State.TAKEOFF
-	if can_jumpkick() and Input.is_action_just_pressed("attack"):
-		state = State.JUMPKICK
-		SoundPlayer.play(SoundManager.Sound.SWOOSH)
-	if (can_sprint_attack() or state == State.SPRINT) and Input.is_action_just_pressed("attack"):
-		start_sprint_attack()
-		SoundPlayer.play(SoundManager.Sound.SWOOSH)
 	if can_kick() and Input.is_action_just_pressed("kick"):
 		state = State.KICK
-		SoundPlayer.play(SoundManager.Sound.SWOOSH)	
+		SoundPlayer.play(SoundManager.Sound.SWOOSH)
 
 
 func trigger_normal_attack() -> void:
@@ -246,7 +211,6 @@ func free_slot(enemy: BasicEnemy) -> void:
 
 
 
-
 func handle_double_tap_dash():
 	if not can_dash():
 		return
@@ -281,11 +245,6 @@ func start_dash(direction: Vector2):
 	# === ОБНОВЛЯЕМ НАПРАВЛЕНИЕ ВЗГЛЯДА ===
 	if direction.x != 0:
 		heading.x = sign(direction.x)
-		# Разворачиваем спрайт в сторону рывка (выберите ваш вариант):
-		# Вариант А (если управляете через scale):
-		# character_sprite.scale.x = heading.x 
-		# Вариант Б (если управляете через flip_h):
-		# character_sprite.flip_h = (heading.x == -1)
 	# =====================================
 
 	effect_time = 0.0
@@ -334,7 +293,6 @@ func ghost_dash():
 	t.set_ease(Tween.EASE_OUT)
 	t.tween_property(effect, "modulate", Color(1, 1, 1, 0), 0.2)
 	t.chain().tween_callback(effect.queue_free)
-	# print("ghost_dash effect is working")
 
 
 func cutscene_state() -> void:

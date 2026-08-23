@@ -33,8 +33,6 @@ func end_cutscene():
 
 # Эта функция сработает автоматически, когда закончится финальный диалог последнего чекпоинта
 func _on_stage_complete() -> void:
-	print("GameManager: Уровень успешно завершен!")
-
 	current_state = GameState.CUTSCENE
 	var next_scene_path = "res://Scenes/UI/main_menu.tscn"
 	

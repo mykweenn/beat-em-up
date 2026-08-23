@@ -6,8 +6,6 @@ extends Node2D
 @onready var checkpoints : Node2D = $Checkpoints
 @onready var player_spawn_location : Node2D = $PlayerSpawnLocation
 
-const DIALOGUE_BOX_SCENE = preload("res://Scenes/UI/dialog_window.tscn")
-
 @export var music : MusicManager.Music
 
 
@@ -41,4 +39,3 @@ func get_player_spawn_location() -> Vector2:
 func on_checkpoint_complete(checkpoint: Checkpoint) -> void:
 	if checkpoints.get_child(-1) == checkpoint:
 		StageManager.stage_complete.emit()
-		print("Stage manager said: stage complete!")

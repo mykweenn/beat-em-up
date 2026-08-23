@@ -14,6 +14,6 @@ func say_phrase(speaker_group: String, text: String):
 			dialog_window.show()
 			dialog_window.start_dialogue([text], marker)
 		else:
-			print("Ошибка: У узла ", speaker.name, " нет DialogPoint или DialogWindow!")
+			push_warning("У узла %s нет DialogPoint или DialogWindow!" % speaker.name)
 	else:
-		print("Ошибка: Персонаж из группы ", speaker_group, " не найден на уровне!")
+		push_warning("Персонаж из группы %s не найден на уровне!" % speaker_group)
