@@ -200,6 +200,7 @@ launch_shock_min = 0.15
 launch_shock_max = 0.45
 getup_stagger_min = 0.3
 getup_stagger_max = 0.8
+max_health = 50
 
 [node name="CollisionShape2D" parent="Checkpoints/Checkpoint/PlayerDetectionArea" parent_id_path=PackedInt32Array(1922420126, 289896115) index="0" unique_id=1130211026]
 position = Vector2(963, 819)
