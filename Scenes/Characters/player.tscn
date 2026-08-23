@@ -280,6 +280,68 @@ tracks/1/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_v8iml1"]
+resource_name = "finisher_1"
+length = 0.5
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.10000001, 0.2, 0.29999998, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [144, 145, 146, 147, 148, 149]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_action_complete"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_v8iml2"]
+resource_name = "finisher_2"
+length = 0.5
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999964, 0.19999999, 0.29999995, 0.39999998, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [150, 151, 152, 153, 154, 155]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_action_complete"
+}]
+}
+
 [sub_resource type="Animation" id="Animation_ddhxa"]
 resource_name = "get_up"
 length = 0.7
@@ -1213,6 +1275,8 @@ _data = {
 &"dash_attack": SubResource("Animation_f2ilu"),
 &"fall": SubResource("Animation_xccyk"),
 &"finisher": SubResource("Animation_v8iml"),
+&"finisher_1": SubResource("Animation_v8iml1"),
+&"finisher_2": SubResource("Animation_v8iml2"),
 &"get_up": SubResource("Animation_ddhxa"),
 &"grounded": SubResource("Animation_h1n2f"),
 &"heavy_attack": SubResource("Animation_fepmq"),
@@ -1265,6 +1329,7 @@ autodestroy_on_drop = true
 damage_gun_shot = 8
 damage_power = 6
 max_ammo_per_gun = 3
+finisher_damage_multiplier = 1.0
 
 [node name="ShadowSprite" parent="." index="0" unique_id=1441173628]
 visible = true

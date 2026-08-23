@@ -14,7 +14,7 @@
 [ext_resource type="AudioStream" uid="uid://cge3fwyrubt45" path="res://Assets/SFX/zsx/sfx/block.wav" id="12_maidh"]
 [ext_resource type="AudioStream" uid="uid://d3r3pux563vob" path="res://Assets/SFX/battle_charge_sfx.wav" id="13_ubgt2"]
 [ext_resource type="AudioStream" uid="uid://cq6qpehnxs7as" path="res://Assets/SFX/DoorHit.wav" id="14_2yie3"]
-[ext_resource type="AudioStream" uid="uid://dvtbtg1ud133j" path="res://Assets/SFX/Finisher.wav" id="14_7cl7s"]
+[ext_resource type="AudioStream" uid="uid://b4j4env6drdbr" path="res://Assets/SFX/Hit3.wav" id="14_7cl7s"]
 
 [node name="SoundPlayer" type="Node" unique_id=1618086448]
 script = ExtResource("1_rdd4i")

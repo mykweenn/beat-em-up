@@ -179,6 +179,8 @@ var finisher_target : Character = null
 var finisher_hit_timer : float = 0.0
 # Сколько секунд уже длится текущее добивание (страховка на случай анимации без callback-трека)
 var finisher_elapsed := 0.0
+# Индекс чередующейся анимации добивания (0 -> "finisher_1", 1 -> "finisher_2")
+var finisher_anim_index := 0
 
 # Кэш последней проигранной анимации: не дергаем AnimationPlayer без необходимости
 var _current_animation := ""
@@ -435,9 +437,22 @@ func handle_animations() -> void:
 	# 2. Логика обычных атак
 	if state == State.ATTACK:
 		play_animation(anim_attacks[attack_combo_index])
-	# 3. Все остальные стандартные анимации из словаря
+	# 3. Добивание: чередуем finisher_1 / finisher_2
+	elif state == State.FINISHER:
+		play_finisher_animation()
+	# 4. Все остальные стандартные анимации из словаря
 	elif animation_player.has_animation(anim_map[state]):
 		play_animation(anim_map[state])
+
+
+## Проигрывает анимацию добивания, чередуя finisher_1 и finisher_2 по finisher_anim_index.
+## Если вариантной анимации нет в библиотеке — откатывается на старую "finisher".
+func play_finisher_animation() -> void:
+	var finisher_anim := "finisher_" + str(finisher_anim_index + 1)
+	if not animation_player.has_animation(finisher_anim):
+		finisher_anim = anim_map[State.FINISHER]
+	if animation_player.has_animation(finisher_anim):
+		play_animation(finisher_anim)
 
 
 ## Проигрывает анимацию только если она сменилась или завершилась.
@@ -609,11 +624,12 @@ func find_finisher_target() -> Character:
 
 
 ## Запускает добивание по выбранной цели: переводит персонажа в состояние FINISHER,
-## разворачивает его лицом к жертве и запускает таймер удара.
+## разворачивает его лицом к жертве, чередует анимацию добивания и запускает таймер удара.
 func start_finisher(target: Character) -> void:
 	finisher_target = target
 	finisher_hit_timer = finisher_hit_delay
 	finisher_elapsed = 0.0
+	finisher_anim_index = (finisher_anim_index + 1) % 2
 	state = State.FINISHER
 	velocity = Vector2.ZERO
 	height = 0.0
@@ -661,6 +677,7 @@ func _apply_finisher_damage() -> void:
 	var amount := int(damage_power * finisher_damage_multiplier)
 	HitstopManager.freeze(0.12, 0.12)
 	SoundPlayer.play(SoundManager.Sound.FINISHER)
+
 	# spawn_finisher_text(target)
 	target.on_receive_damage(amount, direction, DamageReceiver.HitType.KNOCKDOWN, self)
 	# Добивание со смертельным исходом — усиленный хитстоп
