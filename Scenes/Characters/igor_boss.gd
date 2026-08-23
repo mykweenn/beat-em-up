@@ -15,6 +15,8 @@ var assigned_door_index := -1
 var knockback_force := Vector2.ZERO
 var time_last_attack := Time.get_ticks_msec()
 var time_start_vulnurable := Time.get_ticks_msec()
+# Активное окно подсказки, чтобы не спавнить новое на каждый удар
+var active_hint : Node = null
 
 
 func _physics_process(delta: float) -> void:
@@ -91,10 +93,11 @@ func is_vulnuruble() -> bool:
 func on_receive_damage(amount: int, direction: Vector2, _hit_type: DamageReceiver.HitType, attacker: Character = null) -> void:
 	if !is_vulnuruble():
 		knockback_force = direction * knockback_intensity
-		var hint = hint_scene.instantiate()
-		get_parent().add_child(hint)
-		hint.show_hint("Бей его сзади!")
-		# HitstopManager.freeze(0.1, 0.1)
+		# Показываем подсказку только если предыдущая уже исчезла
+		if active_hint == null or not is_instance_valid(active_hint):
+			active_hint = hint_scene.instantiate()
+			get_parent().add_child(active_hint)
+			active_hint.show_hint("Бей его сзади!")
 		return
 	ComboManager.register_hit.emit()
 	current_health = clamp(current_health - amount, 0, max_health)

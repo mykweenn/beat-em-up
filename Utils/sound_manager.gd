@@ -1,9 +1,9 @@
 class_name SoundManager
 extends Node
 
-@onready var sounds : Array[AudioStreamPlayer] = [$SFXClick, $SFXFood, $SFXGogogo, $SFXGrunt, $SFXGunshot, $SFXHit, $SFXHit2, $SFXHit3, $SFXKnife, $SFXSwoosh, $SFXParry, $SFXChargeAttack]
+@onready var sounds : Array[AudioStreamPlayer] = [$SFXClick, $SFXFood, $SFXGogogo, $SFXGrunt, $SFXGunshot, $SFXHit, $SFXHit2, $SFXHit3, $SFXKnife, $SFXSwoosh, $SFXParry, $SFXChargeAttack, $SFXCollisionHit, $SFXFinisher,]
 
-enum Sound {CLICK, FOOD, GOGOGO, GRUNT, GUNSHOT, HIT1, HIT2, HIT3, KNIFE, SWOOSH, PARRY, CHARGE_ATTACK}
+enum Sound {CLICK, FOOD, GOGOGO, GRUNT, GUNSHOT, HIT1, HIT2, HIT3, KNIFE, SWOOSH, PARRY, CHARGE_ATTACK, COLLISION_HIT, FINISHER,}
 
 
 func play(sfx: Sound, tweak_pitch: bool = false) -> void:

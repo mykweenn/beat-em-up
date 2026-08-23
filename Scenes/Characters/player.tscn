@@ -249,6 +249,37 @@ tracks/2/keys = {
 "values": [8]
 }
 
+[sub_resource type="Animation" id="Animation_v8iml"]
+resource_name = "finisher"
+length = 1.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.10000001, 0.2, 0.29999998, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_action_complete"
+}]
+}
+
 [sub_resource type="Animation" id="Animation_ddhxa"]
 resource_name = "get_up"
 length = 0.7
@@ -1181,6 +1212,7 @@ _data = {
 &"dash": SubResource("Animation_abht8"),
 &"dash_attack": SubResource("Animation_f2ilu"),
 &"fall": SubResource("Animation_xccyk"),
+&"finisher": SubResource("Animation_v8iml"),
 &"get_up": SubResource("Animation_ddhxa"),
 &"grounded": SubResource("Animation_h1n2f"),
 &"heavy_attack": SubResource("Animation_fepmq"),
@@ -1245,7 +1277,7 @@ texture = ExtResource("3_gdgf0")
 centered = false
 offset = Vector2(-48.49, -92.425)
 hframes = 8
-vframes = 18
+vframes = 20
 
 [node name="CollisionShape2D" parent="." index="2" unique_id=1248216289]
 position = Vector2(0, -9)

@@ -7,8 +7,6 @@ extends Control
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 func show_hint(new_text: String, display_time: float = 3.0) -> void:
-	print("ПОДСКАЗКА ЗАПУЩЕНА:", new_text)
-	
 	# Ждём, пока узел полностью загрузится в дерево сцены и сработают все @onready переменные
 	if not is_node_ready():
 		await ready

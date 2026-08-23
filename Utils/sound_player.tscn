@@ -13,6 +13,8 @@
 [ext_resource type="AudioStream" uid="uid://dx7l0ddiiny5v" path="res://Assets/SFX/zsx/sfx/swing.wav" id="10_ubgt2"]
 [ext_resource type="AudioStream" uid="uid://cge3fwyrubt45" path="res://Assets/SFX/zsx/sfx/block.wav" id="12_maidh"]
 [ext_resource type="AudioStream" uid="uid://d3r3pux563vob" path="res://Assets/SFX/battle_charge_sfx.wav" id="13_ubgt2"]
+[ext_resource type="AudioStream" uid="uid://cq6qpehnxs7as" path="res://Assets/SFX/DoorHit.wav" id="14_2yie3"]
+[ext_resource type="AudioStream" uid="uid://dvtbtg1ud133j" path="res://Assets/SFX/Finisher.wav" id="14_7cl7s"]
 
 [node name="SoundPlayer" type="Node" unique_id=1618086448]
 script = ExtResource("1_rdd4i")
@@ -58,4 +60,12 @@ volume_db = -9.0
 
 [node name="SFXChargeAttack" type="AudioStreamPlayer" parent="." unique_id=2144411290]
 stream = ExtResource("13_ubgt2")
+volume_db = -9.0
+
+[node name="SFXCollisionHit" type="AudioStreamPlayer" parent="." unique_id=1865234023]
+stream = ExtResource("14_2yie3")
+volume_db = -9.0
+
+[node name="SFXFinisher" type="AudioStreamPlayer" parent="." unique_id=1828733016]
+stream = ExtResource("14_7cl7s")
 volume_db = -9.0

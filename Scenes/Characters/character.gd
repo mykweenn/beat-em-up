@@ -3,6 +3,9 @@ extends CharacterBody2D
 
 const GRAVITY := 3800.0
 
+## Префаб всплывающего текста («БАМ!» и т.п.) для эффектных ударов
+const FLOATING_TEXT_PREFAB := preload("res://Scenes/VFX/floating_text.tscn")
+
 #new dash
 
 ## Настройки возрождения. Если true, враг/персонаж может ожить после смерти.
@@ -70,6 +73,19 @@ const GRAVITY := 3800.0
 ## Сколько секунд атакующий стоит в RECOVER после успешного парирования.
 @export var parry_stun_duration : float = 1.2
 
+@export_group("Finisher")
+## Множитель урона добивания (от damage_power).
+@export var finisher_damage_multiplier : float = 2.0
+## Задержка (в секундах) от начала добивания до момента удара — подбирается под кадр удара анимации "finisher".
+@export var finisher_hit_delay : float = 0.25
+## Страховочная длительность добивания: если анимация не вызвала on_action_complete,
+## состояние принудительно завершится по истечении этого времени.
+@export var finisher_max_duration : float = 1.0
+## Дальность поиска цели для добивания по горизонтали (пиксели).
+const FINISHER_RANGE_X := 120.0
+## Допуск по глубине (ось Y) при поиске цели для добивания (пиксели).
+const FINISHER_RANGE_Y := 60.0
+
 @onready var animation_player := $AnimationPlayer
 @onready var character_sprite := $CharacterSprite
 @onready var collateral_damage_emitter: Area2D = $CollateralDamageEmitter
@@ -85,7 +101,7 @@ const GRAVITY := 3800.0
 
 enum State {IDLE, WALK, ATTACK, TAKEOFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUNDED, DEATH, FLY, PREP_ATTACK, 
 THROW, PICKUP, SHOOT, PREP_SHOOT, RECOVER, DROP, WAIT, APPEARING, SPRINT, DASH, SPRINT_ATTACK, CUTSCENE, BLOCK, 
-KICK, PREPARE_HEAVY_ATTACK, HEAVY_ATTACK}
+KICK, PREPARE_HEAVY_ATTACK, HEAVY_ATTACK, FINISHER}
 enum Type {PLAYER, PUNK, GOON, THUG, BOUNCER, HEAVY}
 
 var ammo_left := 0
@@ -119,6 +135,7 @@ var anim_map : Dictionary = {
 	State.KICK: "kick_power",
 	State.PREPARE_HEAVY_ATTACK: "prepare_heavy_attack",
 	State.HEAVY_ATTACK: "heavy_attack",
+	State.FINISHER: "finisher",
 }
 
 var attack_combo_index := 0
@@ -155,6 +172,24 @@ var charge_timer : float = 0.0
 # Флаг, что удар полностью зарядился
 var is_fully_charged : bool = false
 
+# finisher
+# Цель добивания, выбранная в момент нажатия атаки
+var finisher_target : Character = null
+# Таймер до момента удара (подгоняется под кадр удара анимации)
+var finisher_hit_timer : float = 0.0
+# Сколько секунд уже длится текущее добивание (страховка на случай анимации без callback-трека)
+var finisher_elapsed := 0.0
+
+# Кэш последней проигранной анимации: не дергаем AnimationPlayer без необходимости
+var _current_animation := ""
+# Кэш физических флагов: присваиваем только при изменении (дешевле для физического движка)
+var _cached_collision_disabled := false
+var _cached_damage_emitter_monitoring := false
+var _cached_receiver_monitorable := false
+var _cached_collateral_monitoring := false
+# Направление взгляда после последнего обновления спрайтов
+var _facing_right := true
+
 
 func _ready():
 	damage_emitter.area_entered.connect(on_emit_damage.bind())
@@ -164,7 +199,11 @@ func _ready():
 	set_health(max_health, type == Character.Type.PLAYER)
 	set_sprite_height_position()
 	block_health = max_block_health
-	
+	_cached_collision_disabled = collision_shape.disabled
+	_cached_damage_emitter_monitoring = damage_emitter.monitoring
+	_cached_receiver_monitorable = damage_receiver.monitorable
+	_cached_collateral_monitoring = collateral_damage_emitter.monitoring
+
 
 func _physics_process(delta: float) -> void:
 	# Плавно гасим скорость отброса как для блока, так и для оглушения
@@ -191,6 +230,7 @@ func _physics_process(delta: float) -> void:
 	#methods
 	handle_double_tap_dash()
 	handle_movement(delta)
+	handle_finisher(delta)
 	handle_animations()
 	handle_air_time(delta)
 	handle_prep_attack()
@@ -234,16 +274,29 @@ func set_sprite_height_position() -> void:
 ## - разрешает получение урона
 ## - активирует зону побочного урона в полёте
 func setup_collisions() -> void:
-	collision_shape.disabled = is_collision_disabled() 
-	damage_emitter.monitoring = is_attacking()
-	damage_receiver.monitorable = can_get_hurt()
-	collateral_damage_emitter.monitoring = state == State.FLY
+	var value := is_collision_disabled()
+	if value != _cached_collision_disabled:
+		_cached_collision_disabled = value
+		collision_shape.disabled = value
+	value = is_attacking()
+	if value != _cached_damage_emitter_monitoring:
+		_cached_damage_emitter_monitoring = value
+		damage_emitter.monitoring = value
+	value = can_get_hurt() and state != State.GROUNDED
+	if value != _cached_receiver_monitorable:
+		_cached_receiver_monitorable = value
+		damage_receiver.monitorable = value
+	value = state == State.FLY
+	if value != _cached_collateral_monitoring:
+		_cached_collateral_monitoring = value
+		collateral_damage_emitter.monitoring = value
 
 
 func handle_movement(delta: float): # Добавили delta в аргументы
 # Если персонаж заблокирован физикой — не даем коду ниже занулять скорость
-	if [State.HURT, State.FALL, State.FLY, State.BLOCK, State.PREPARE_HEAVY_ATTACK, State.HEAVY_ATTACK].has(state):
-		return
+	match state:
+		State.HURT, State.FALL, State.FLY, State.BLOCK, State.PREPARE_HEAVY_ATTACK, State.HEAVY_ATTACK, State.FINISHER:
+			return
 	if state == State.DASH:
 		velocity.x = dash_direction * DASH_SPEED
 		dash_timer -= delta
@@ -283,18 +336,19 @@ func handle_movement(delta: float): # Добавили delta в аргумент
 ## - FALL -> переход в состояние GROUNDED
 ## - остальные воздушные состояния -> LAND
 func handle_air_time(delta: float) -> void:
-	if [State.JUMP, State.JUMPKICK, State.FALL, State.DROP].has(state):
-		height += height_speed * delta
-		if height < 0:
-			height = 0
-			if state == State.FALL:
-				state = State.GROUNDED
-				time_since_grounded = Time.get_ticks_msec()
+	match state:
+		State.JUMP, State.JUMPKICK, State.FALL, State.DROP:
+			height += height_speed * delta
+			if height < 0:
+				height = 0
+				if state == State.FALL:
+					state = State.GROUNDED
+					time_since_grounded = Time.get_ticks_msec()
+				else:
+					state = State.LAND
+				velocity = Vector2.ZERO
 			else:
-				state = State.LAND 
-			velocity = Vector2.ZERO
-		else:
-			height_speed -= GRAVITY * delta
+				height_speed -= GRAVITY * delta
 
 
 
@@ -365,7 +419,7 @@ func handle_animations() -> void:
 			
 		# Если анимация block_damage ЗАВЕРШИЛАСЬ, плавно возвращаем персонажа в обычную стойку
 		if animation_player.assigned_animation == "block_damage" and not animation_player.is_playing():
-			animation_player.play("block")
+			play_animation("block")
 			animation_player.seek(0.3, true) # Сразу перематываем на финальный статичный кадр блока
 			return
 			
@@ -374,16 +428,24 @@ func handle_animations() -> void:
 			animation_player.seek(0.3, true)
 		# Иначе, если играет что-то другое (например, вошли из IDLE), запускаем блок
 		elif animation_player.current_animation != "block":
-			animation_player.play("block")
+			play_animation("block")
 		return
 
 
 	# 2. Логика обычных атак
 	if state == State.ATTACK:
-		animation_player.play(anim_attacks[attack_combo_index])
+		play_animation(anim_attacks[attack_combo_index])
 	# 3. Все остальные стандартные анимации из словаря
 	elif animation_player.has_animation(anim_map[state]):
-		animation_player.play(anim_map[state])
+		play_animation(anim_map[state])
+
+
+## Проигрывает анимацию только если она сменилась или завершилась.
+## Вызов animation_player.play() каждый кадр — лишняя работа для горячего пути.
+func play_animation(anim_name: String) -> void:
+	if _current_animation != anim_name or not animation_player.is_playing():
+		_current_animation = anim_name
+		animation_player.play(anim_name)
 
 
 	 
@@ -394,18 +456,16 @@ func set_heading() -> void:
 
 
 func flip_sprites():
-	if heading == Vector2.RIGHT:
-		character_sprite.flip_h = false
-		knife_sprite.scale.x = 1
-		gun_sprite.scale.x = 1
-		projectile_aim.scale.x = 1
-		damage_emitter.scale.x = 1
-	else:
-		character_sprite.flip_h = true
-		knife_sprite.scale.x = -1
-		gun_sprite.scale.x = -1
-		projectile_aim.scale.x = -1
-		damage_emitter.scale.x = -1
+	var faces_right := heading == Vector2.RIGHT
+	if faces_right == _facing_right:
+		return
+	_facing_right = faces_right
+	character_sprite.flip_h = not faces_right
+	var side := 1.0 if faces_right else -1.0
+	knife_sprite.scale.x = side
+	gun_sprite.scale.x = side
+	projectile_aim.scale.x = side
+	damage_emitter.scale.x = side
 
 
 func can_move() -> bool:
@@ -422,17 +482,35 @@ func can_jump() -> bool:
 
 func can_block() -> bool:
 	# Блокировать можно из спокойных состояний, если щит не сломан
-	var valid_states = [State.IDLE, State.WALK, State.SPRINT, State.PREP_ATTACK]
-	return valid_states.has(state) and not block_broken
+	match state:
+		State.IDLE, State.WALK, State.SPRINT, State.PREP_ATTACK:
+			return not block_broken
+		_:
+			return false
 
 
 
 func can_get_hurt() -> bool:
-	return [State.IDLE, State.WALK, State.TAKEOFF, State.LAND, State.PREP_ATTACK, State.BLOCK, State.RECOVER, State.PREPARE_HEAVY_ATTACK].has(state)
+	match state:
+		State.IDLE, State.WALK, State.TAKEOFF, State.LAND, State.PREP_ATTACK, State.BLOCK, State.RECOVER, State.PREPARE_HEAVY_ATTACK:
+			return true
+		_:
+			pass
+	# Лежачий враг (GROUNDED) уязвим только для добивания: прямой вызов
+	# on_receive_damage проходит, а обычные атаки его не достают — в
+	# setup_collisions() receiver остаётся monitorable = false.
+	# Игрок исключён: лежащий игрок неуязвим для прямых выстрелов врагов (как и раньше).
+	if state == State.GROUNDED and type != Type.PLAYER:
+		return true
+	return false
 
 
 func can_dash() -> bool:
-	return [State.IDLE, State.WALK, State.BLOCK].has(state)
+	match state:
+		State.IDLE, State.WALK, State.BLOCK:
+			return true
+		_:
+			return false
 
 
 func can_sprint_attack() -> bool:
@@ -446,7 +524,11 @@ func can_kick() -> bool:
 
 ### Если атакует, возвращаем список состояний боевых
 func is_attacking() -> bool:
-	return [State.ATTACK, State.JUMPKICK, State.SPRINT_ATTACK, State.KICK, State.HEAVY_ATTACK].has(state)
+	match state:
+		State.ATTACK, State.JUMPKICK, State.SPRINT_ATTACK, State.KICK, State.HEAVY_ATTACK:
+			return true
+		_:
+			return false
 
 
 func is_carrying_weapon() -> bool:
@@ -496,6 +578,104 @@ func shot_gun() -> void:
 	EntityManager.spawn_shot.emit(weapon_root_position, distance, weapon_height)
 
 
+## Ищет ближайшую цель для добивания.
+##
+## Подходят только обычные враги (группа "enemy"), которые:
+## - живы (current_health > 0)
+## - оглушены после парирования (RECOVER) или лежат на земле (GROUNDED)
+## - находятся в пределах FINISHER_RANGE_X / FINISHER_RANGE_Y от персонажа
+## Босс (BOUNCER) исключён — он не должен добиваться.
+func find_finisher_target() -> Character:
+	var best_target : Character = null
+	var best_distance := INF
+	for node in get_tree().get_nodes_in_group("enemy"):
+		var candidate := node as Character
+		if candidate == null:
+			continue
+		if candidate.type == Type.BOUNCER:
+			continue
+		if candidate.current_health <= 0:
+			continue
+		if candidate.state != State.RECOVER and candidate.state != State.GROUNDED:
+			continue
+		var offset := candidate.global_position - global_position
+		if absf(offset.x) > FINISHER_RANGE_X or absf(offset.y) > FINISHER_RANGE_Y:
+			continue
+		var distance := absf(offset.x)
+		if distance < best_distance:
+			best_distance = distance
+			best_target = candidate
+	return best_target
+
+
+## Запускает добивание по выбранной цели: переводит персонажа в состояние FINISHER,
+## разворачивает его лицом к жертве и запускает таймер удара.
+func start_finisher(target: Character) -> void:
+	finisher_target = target
+	finisher_hit_timer = finisher_hit_delay
+	finisher_elapsed = 0.0
+	state = State.FINISHER
+	velocity = Vector2.ZERO
+	height = 0.0
+	heading = Vector2.LEFT if target.global_position.x < global_position.x else Vector2.RIGHT
+
+
+## Обрабатывает активное добивание (вызывается из _physics_process).
+##
+## Логика:
+## - удерживает персонажа на месте
+## - отменяет добивание, если цель исчезла из мира
+## - наносит урон, когда истёк таймер удара
+## - принудительно завершает состояние по страховочному таймеру,
+##   если анимация "finisher" не вызвала on_action_complete
+func handle_finisher(delta: float) -> void:
+	if state != State.FINISHER:
+		return
+	velocity = Vector2.ZERO
+	finisher_elapsed += delta
+	if finisher_target == null or not is_instance_valid(finisher_target):
+		on_action_complete()
+		return
+	finisher_hit_timer -= delta
+	if finisher_hit_timer <= 0.0:
+		_apply_finisher_damage()
+	if finisher_elapsed >= finisher_max_duration and state == State.FINISHER:
+		on_action_complete()
+
+
+## Наносит урон цели добивания в момент удара.
+##
+## Урон отправляется прямым вызовом on_receive_damage (как при выстреле),
+## поэтому кровь, очки, комбо и смерть обрабатываются логикой жертвы автоматически.
+func _apply_finisher_damage() -> void:
+	if state != State.FINISHER:
+		return
+	var target := finisher_target
+	finisher_hit_timer = INF # удар наносится один раз за добивание
+	if not is_instance_valid(target):
+		return
+	# Цель могла умереть или сменить состояние за время замаха — тогда промах
+	if target.current_health <= 0 or (target.state != State.RECOVER and target.state != State.GROUNDED):
+		return
+	var direction := Vector2.LEFT if target.global_position.x < global_position.x else Vector2.RIGHT
+	var amount := int(damage_power * finisher_damage_multiplier)
+	HitstopManager.freeze(0.12, 0.12)
+	SoundPlayer.play(SoundManager.Sound.FINISHER)
+	# spawn_finisher_text(target)
+	target.on_receive_damage(amount, direction, DamageReceiver.HitType.KNOCKDOWN, self)
+	# Добивание со смертельным исходом — усиленный хитстоп
+	if is_instance_valid(target) and target.current_health <= 0:
+		HitstopManager.freeze(0.55, 0.55)
+
+
+## Спавнит всплывающий текст («БАМ!») над жертвой добивания.
+func spawn_finisher_text(target: Node2D) -> void:
+	var text_instance := FLOATING_TEXT_PREFAB.instantiate()
+	text_instance.text_to_display = "БАМ!"
+	text_instance.position = target.global_position + Vector2(0, -250)
+	get_tree().current_scene.add_child(text_instance)
+
+
 ## Подбирает ближайший доступный collectible-объект.
 ##
 ## В зависимости от типа предмета персонаж может:
@@ -522,7 +702,11 @@ func pickup_collectible() -> void:
 
 
 func is_collision_disabled() -> bool:
-	return [State.GROUNDED, State.DEATH, State.FLY].has(state)
+	match state:
+		State.GROUNDED, State.DEATH, State.FLY:
+			return true
+		_:
+			return false
 
 
 func can_jumpkick() -> bool:
@@ -556,8 +740,6 @@ func on_throw_complete() -> void:
 	var collectible_height := 0.0
 	
 	EntityManager.spawn_collectible.emit(collectible_type, Collectible.State.FLY, collectible_global_position, heading, collectible_height, false)
-
-	print("knife spawned")
 
 	
 	
@@ -661,10 +843,8 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 				HitstopManager.freeze(0.15, 0.15) 
 				EntityManager.spawn_spark.emit(position) 
 				SoundPlayer.play(SoundManager.Sound.HIT3, true)
-				print("Успешное парирование обычного удара")
 				if attacker != null:
 					attacker.apply_parry_stun(-direction * launch_horizontal_intensity * 0.1)
-					print("Атакующий ", attacker.name, " входит в стейт: RECOVER")
 				return # При успешном парировании урон полностью обнуляется, выходим!
 			# ------------------------------------------
 
@@ -782,11 +962,13 @@ func on_emit_collateral_damage(receiver: DamageReceiver) -> void:
 		var direction := Vector2.LEFT if receiver.global_position.x < global_position.x else Vector2.RIGHT
 		receiver.damage_received.emit(0, direction, DamageReceiver.HitType.KNOCKDOWN)
 		
+		
 
 func on_wall_hit(_wall: AnimatableBody2D) -> void:
 	state = State.FALL
 	height_speed = knockdown_intensity
 	velocity = -velocity / 2.0
+	SoundPlayer.play(SoundManager.Sound.COLLISION_HIT)
 
 
 func set_health(health: int, is_emitting_signal: bool = true) -> void:

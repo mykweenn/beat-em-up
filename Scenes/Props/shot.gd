@@ -13,7 +13,7 @@ func initialize(distance: float, gun_height: float) -> void:
 	shot_distance = distance
 	add_point(Vector2(0, -height), 0) # 0 первая точка (начальная
 	add_point(Vector2(distance, -height), 1) # 1 вторая точка (конечная)
-	duration_shot = abs(shot_distance) * duration_shot_across_screen / get_viewport_rect().size.x
+	duration_shot = maxf(abs(shot_distance) * duration_shot_across_screen / get_viewport_rect().size.x, 0.001)
 	
 
 func _process(_delta: float) -> void:
