@@ -47,7 +47,7 @@ _data = {
 }
 
 [node name="Streets" unique_id=402859074 instance=ExtResource("1_g7de4")]
-music = 6
+music = 2
 
 [node name="Backgrounds" parent="." index="0" unique_id=1008490267]
 position = Vector2(0, -232)

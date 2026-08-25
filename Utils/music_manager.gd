@@ -10,7 +10,7 @@ var autoplayer_music : AudioStream = null
 const MUSIC_MAP : Dictionary = {
 	Music.INTRO: preload("res://Assets/Music/03.mp3"),
 	Music.MENU: preload("res://Assets/Music/menu.mp3"),
-	Music.STAGE1: preload("res://Assets/Music/Scam.ogg"),
+	Music.STAGE1: preload("res://Assets/Music/02 Dust (Carpenter Brut Remix).mp3"),
 	Music.STAGE2: preload("res://Assets/Music/Kaito_Shoma_Claymore_Phonk_Metal_Группа_Ls_Beats.mp3"),
 	Music.STAGE1_ALT: preload("res://Assets/Music/03.mp3"),
 	Music.ARENA: preload("res://Assets/Music/03.mp3"),

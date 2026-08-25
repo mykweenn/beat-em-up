@@ -62,6 +62,7 @@ func handle_input() -> void:
 			add_child(options_screen)
 			get_tree().paused = true
 			SoundPlayer.play(SoundManager.Sound.PAUSE)
+			SoundPlayer.play_static_menu()
 		else:
 			unpause()
 			SoundPlayer.play(SoundManager.Sound.UNPAUSE)
@@ -70,6 +71,7 @@ func handle_input() -> void:
 func unpause() -> void:
 	options_screen.queue_free()
 	get_tree().paused = false
+	SoundPlayer.stop_static_menu()
 	
 
 

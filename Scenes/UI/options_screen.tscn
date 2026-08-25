@@ -9,10 +9,27 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_idmpt"]
 shader = ExtResource("2_15tsi")
-shader_parameter/wiggle = 0.17999999597664
-shader_parameter/wiggle_speed = 25.0
-shader_parameter/smear = 1.0
-shader_parameter/blur_samples = 15
+shader_parameter/overlay = false
+shader_parameter/resolution = Vector2(640, 480)
+shader_parameter/brightness = 1.4
+shader_parameter/scanlines_opacity = 0.23200001102
+shader_parameter/scanlines_width = 0.25
+shader_parameter/grille_opacity = 0.3
+shader_parameter/roll = true
+shader_parameter/roll_speed = 1.865
+shader_parameter/roll_size = 13.0350006191625
+shader_parameter/roll_variation = 2.6390001220926202
+shader_parameter/distort_intensity = 0.13200000627
+shader_parameter/aberration = 0.03
+shader_parameter/noise_opacity = 0.4
+shader_parameter/noise_speed = 5.0
+shader_parameter/static_noise_intensity = 0.346000016435
+shader_parameter/pixelate = true
+shader_parameter/discolor = true
+shader_parameter/warp_amount = 0.0
+shader_parameter/clip_warp = false
+shader_parameter/vignette_intensity = 0.4
+shader_parameter/vignette_opacity = 0.0830000039425
 
 [node name="OptionsScreen" type="Control" unique_id=2117613525]
 z_index = 1
