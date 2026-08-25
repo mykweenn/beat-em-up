@@ -61,13 +61,16 @@ func handle_input() -> void:
 			options_screen.exit.connect(unpause)
 			add_child(options_screen)
 			get_tree().paused = true
+			SoundPlayer.play(SoundManager.Sound.PAUSE)
 		else:
 			unpause()
+			SoundPlayer.play(SoundManager.Sound.UNPAUSE)
 
 
 func unpause() -> void:
 	options_screen.queue_free()
 	get_tree().paused = false
+	
 
 
 func on_combo_reset(points: int) -> void:

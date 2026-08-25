@@ -22,6 +22,7 @@ func _ready() -> void:
 	return_button.press.connect(on_return_press.bind())
 	refresh()
 
+
 func refresh() -> void:
 	for i in range(0, activables.size()):
 		activables[i].set_active(current_selection_index == i)

@@ -58,6 +58,16 @@ func handle_input() -> void:
 	if state == State.HEAVY_ATTACK:
 		return
 
+	# === УПРАВЛЕНИЕ В ПОСАДКЕ НА ВРАГА ===
+	# Тап атаки — удар в седле (чередование finisher_1/finisher_2),
+	# тап прыжка — спрыгнуть с жертвы. Остальной ввод игнорируется.
+	if state == State.MOUNT:
+		if Input.is_action_just_pressed("attack") and not is_carrying_weapon():
+			start_mount_punch()
+		elif Input.is_action_just_pressed("jump"):
+			exit_mount_jump()
+		return
+
 	# === НАКОПЛЕНИЕ СИЛЫ ВО ВРЕМЯ СТЭЙТА ЗАРЯДКИ ===
 	if state == State.PREPARE_HEAVY_ATTACK:
 		charge_timer += get_physics_process_delta_time()
@@ -117,14 +127,15 @@ func handle_input() -> void:
 
 	# === СТАРТ ОБЫЧНОЙ АТАКИ ИЛИ НАЧАЛО ЗАРЯДКИ ===
 	if can_attack() and Input.is_action_just_pressed("attack"):
-		# === ДОБИВАНИЕ (КОНТЕКСТНАЯ АТАКА) ===
+		# === ПОСАДКА НА ВРАГА (КОНТЕКСТНАЯ АТАКА, КАК В MOTHER RUSSIA BLEEDS) ===
 		# Рядом с оглушённым (RECOVER) или лежащим (GROUNDED) врагом тап атаки
-		# превращается в добивание. С оружием в руках поведение не меняется —
-		# как обычно бросок/выстрел через trigger_normal_attack.
+		# сажает игрока верхом на жертву. Дальше: атаки — удары в седле,
+		# прыжок — спрыгнуть, долгое сидение — враг сбросит игрока.
+		# С оружием в руках поведение не меняется — как обычно бросок/выстрел.
 		if not is_carrying_weapon():
 			var target := find_finisher_target()
 			if target != null:
-				start_finisher(target)
+				start_mount(target)
 				return
 		# При первом нажатии мы переходим в режим подготовки тяжелого удара.
 		# Если игрок сразу отпустит кнопку — сработает trigger_normal_attack и произойдет обычный удар.

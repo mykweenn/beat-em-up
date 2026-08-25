@@ -7,4 +7,5 @@
 script = ExtResource("2_4qgnu")
 
 [node name="Label" parent="." index="0" unique_id=1356389855]
+theme_override_font_sizes/font_size = 94
 horizontal_alignment = 1
