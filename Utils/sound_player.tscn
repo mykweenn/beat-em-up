@@ -10,11 +10,21 @@
 [ext_resource type="AudioStream" uid="uid://b4tu6g6sd06bm" path="res://Assets/SFX/zsx/sfx/hit2.wav" id="8_maidh"]
 [ext_resource type="AudioStream" uid="uid://ct8hxnjuuf0i6" path="res://Assets/SFX/zsx/sfx/hit3.wav" id="9_ec4e4"]
 [ext_resource type="AudioStream" uid="uid://w2twjs856b8v" path="res://Assets/SFX/knife-hit.wav" id="9_t6xiq"]
-[ext_resource type="AudioStream" uid="uid://dx7l0ddiiny5v" path="res://Assets/SFX/zsx/sfx/swing.wav" id="10_ubgt2"]
+[ext_resource type="AudioStream" uid="uid://3u68u0tyws27" path="res://Assets/SFX/Swing1.wav" id="11_apeuc"]
+[ext_resource type="AudioStream" uid="uid://d1i47i5oca8rf" path="res://Assets/SFX/Swing2.wav" id="12_jstji"]
 [ext_resource type="AudioStream" uid="uid://cge3fwyrubt45" path="res://Assets/SFX/zsx/sfx/block.wav" id="12_maidh"]
 [ext_resource type="AudioStream" uid="uid://d3r3pux563vob" path="res://Assets/SFX/battle_charge_sfx.wav" id="13_ubgt2"]
 [ext_resource type="AudioStream" uid="uid://cq6qpehnxs7as" path="res://Assets/SFX/DoorHit.wav" id="14_2yie3"]
 [ext_resource type="AudioStream" uid="uid://b4j4env6drdbr" path="res://Assets/SFX/Hit3.wav" id="14_7cl7s"]
+[ext_resource type="AudioStream" uid="uid://0e0mwasgbcfl" path="res://Assets/SFX/Pause.wav" id="17_jstji"]
+[ext_resource type="AudioStream" uid="uid://cesor0slmcoox" path="res://Assets/SFX/UnPause.wav" id="18_jldu6"]
+[ext_resource type="AudioStream" uid="uid://cf0wcb4kjkdft" path="res://Assets/SFX/StaticVHS.wav" id="18_t6xiq"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_2yie3"]
+random_pitch = 1.0170096
+streams_count = 2
+stream_0/stream = ExtResource("11_apeuc")
+stream_1/stream = ExtResource("12_jstji")
 
 [node name="SoundPlayer" type="Node" unique_id=1618086448]
 script = ExtResource("1_rdd4i")
@@ -51,7 +61,7 @@ volume_db = -9.0
 stream = ExtResource("9_t6xiq")
 
 [node name="SFXSwoosh" type="AudioStreamPlayer" parent="." unique_id=490135100]
-stream = ExtResource("10_ubgt2")
+stream = SubResource("AudioStreamRandomizer_2yie3")
 volume_db = -9.0
 
 [node name="SFXParry" type="AudioStreamPlayer" parent="." unique_id=649581489]
@@ -68,4 +78,16 @@ volume_db = -9.0
 
 [node name="SFXFinisher" type="AudioStreamPlayer" parent="." unique_id=1828733016]
 stream = ExtResource("14_7cl7s")
+volume_db = -9.0
+
+[node name="SFXPause" type="AudioStreamPlayer" parent="." unique_id=1970943024]
+stream = ExtResource("17_jstji")
+volume_db = -9.0
+
+[node name="SFXUnpause" type="AudioStreamPlayer" parent="." unique_id=1989770338]
+stream = ExtResource("18_jldu6")
+volume_db = -9.0
+
+[node name="SFXStaticMenu" type="AudioStreamPlayer" parent="." unique_id=556653651]
+stream = ExtResource("18_t6xiq")
 volume_db = -9.0

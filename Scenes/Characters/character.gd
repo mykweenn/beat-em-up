@@ -81,6 +81,12 @@ const FLOATING_TEXT_PREFAB := preload("res://Scenes/VFX/floating_text.tscn")
 ## Страховочная длительность добивания: если анимация не вызвала on_action_complete,
 ## состояние принудительно завершится по истечении этого времени.
 @export var finisher_max_duration : float = 1.0
+## Множитель урона одного удара в посадке на врага (от damage_power).
+@export var mount_punch_damage_multiplier : float = 0.6
+## Сколько секунд можно сидеть на враге без ударов, прежде чем он сбросит игрока.
+@export var mount_throw_delay : float = 4.0
+## Высота (в пикселях), на которую поднимается спрайт игрока при посадке на врага.
+@export var mount_height : float = 55.0
 ## Дальность поиска цели для добивания по горизонтали (пиксели).
 const FINISHER_RANGE_X := 120.0
 ## Допуск по глубине (ось Y) при поиске цели для добивания (пиксели).
@@ -101,7 +107,7 @@ const FINISHER_RANGE_Y := 60.0
 
 enum State {IDLE, WALK, ATTACK, TAKEOFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUNDED, DEATH, FLY, PREP_ATTACK, 
 THROW, PICKUP, SHOOT, PREP_SHOOT, RECOVER, DROP, WAIT, APPEARING, SPRINT, DASH, SPRINT_ATTACK, CUTSCENE, BLOCK, 
-KICK, PREPARE_HEAVY_ATTACK, HEAVY_ATTACK, FINISHER}
+KICK, PREPARE_HEAVY_ATTACK, HEAVY_ATTACK, FINISHER, MOUNT}
 enum Type {PLAYER, PUNK, GOON, THUG, BOUNCER, HEAVY}
 
 var ammo_left := 0
@@ -136,6 +142,7 @@ var anim_map : Dictionary = {
 	State.PREPARE_HEAVY_ATTACK: "prepare_heavy_attack",
 	State.HEAVY_ATTACK: "heavy_attack",
 	State.FINISHER: "finisher",
+	State.MOUNT: "mount",
 }
 
 var attack_combo_index := 0
@@ -181,6 +188,12 @@ var finisher_hit_timer : float = 0.0
 var finisher_elapsed := 0.0
 # Индекс чередующейся анимации добивания (0 -> "finisher_1", 1 -> "finisher_2")
 var finisher_anim_index := 0
+# Имя анимации, выбранное для текущего удара в седле
+var finisher_anim_current := ""
+# Флаг активной посадки на врага: удары в седле и возврат в MOUNT вместо IDLE
+var is_mounting := false
+# Сколько секунд игрок уже сидит на враге без ударов (до сброса врагом)
+var mount_idle_timer := 0.0
 
 # Кэш последней проигранной анимации: не дергаем AnimationPlayer без необходимости
 var _current_animation := ""
@@ -233,6 +246,7 @@ func _physics_process(delta: float) -> void:
 	handle_double_tap_dash()
 	handle_movement(delta)
 	handle_finisher(delta)
+	handle_mount(delta)
 	handle_animations()
 	handle_air_time(delta)
 	handle_prep_attack()
@@ -445,14 +459,15 @@ func handle_animations() -> void:
 		play_animation(anim_map[state])
 
 
-## Проигрывает анимацию добивания, чередуя finisher_1 и finisher_2 по finisher_anim_index.
-## Если вариантной анимации нет в библиотеке — откатывается на старую "finisher".
+## Проигрывает анимацию удара в седле, выбранную заранее в start_mount_punch
+## (чередование finisher_1 / finisher_2). Если вариантной анимации нет в
+## библиотеке — откатывается на старую "finisher".
 func play_finisher_animation() -> void:
-	var finisher_anim := "finisher_" + str(finisher_anim_index + 1)
-	if not animation_player.has_animation(finisher_anim):
-		finisher_anim = anim_map[State.FINISHER]
-	if animation_player.has_animation(finisher_anim):
-		play_animation(finisher_anim)
+	var anim_name := finisher_anim_current
+	if not animation_player.has_animation(anim_name):
+		anim_name = anim_map[State.FINISHER]
+	if animation_player.has_animation(anim_name):
+		play_animation(anim_name)
 
 
 ## Проигрывает анимацию только если она сменилась или завершилась.
@@ -623,23 +638,41 @@ func find_finisher_target() -> Character:
 	return best_target
 
 
-## Запускает добивание по выбранной цели: переводит персонажа в состояние FINISHER,
-## разворачивает его лицом к жертве, чередует анимацию добивания и запускает таймер удара.
-func start_finisher(target: Character) -> void:
+## Сажает персонажа верхом на лежачую/оглушённую жертву.
+##
+## Персонаж прилипает к позиции жертвы, поднимается на mount_height
+## и переходит в состояние MOUNT. Удары в седле запускаются отдельно
+## через start_mount_punch().
+func start_mount(target: Character) -> void:
 	finisher_target = target
+	finisher_hit_timer = INF
+	finisher_elapsed = 0.0
+	mount_idle_timer = 0.0
+	is_mounting = true
+	state = State.MOUNT
+	velocity = Vector2.ZERO
+	height = mount_height
+	heading = Vector2.LEFT if target.global_position.x < global_position.x else Vector2.RIGHT
+
+
+## Запускает один удар в посадке: работает как добивание (State.FINISHER),
+## но после анимации on_action_complete вернёт в MOUNT, а не в IDLE.
+func start_mount_punch() -> void:
+	if state != State.MOUNT or finisher_target == null or not is_instance_valid(finisher_target):
+		return
 	finisher_hit_timer = finisher_hit_delay
 	finisher_elapsed = 0.0
+	mount_idle_timer = 0.0
+	# Выбираем анимацию текущего удара, затем чередуем индекс на следующий
+	finisher_anim_current = "finisher_" + str(finisher_anim_index + 1)
 	finisher_anim_index = (finisher_anim_index + 1) % 2
 	state = State.FINISHER
-	velocity = Vector2.ZERO
-	height = 0.0
-	heading = Vector2.LEFT if target.global_position.x < global_position.x else Vector2.RIGHT
 
 
 ## Обрабатывает активное добивание (вызывается из _physics_process).
 ##
 ## Логика:
-## - удерживает персонажа на месте
+## - во время посадки удерживает персонажа на жертве
 ## - отменяет добивание, если цель исчезла из мира
 ## - наносит урон, когда истёк таймер удара
 ## - принудительно завершает состояние по страховочному таймеру,
@@ -647,16 +680,85 @@ func start_finisher(target: Character) -> void:
 func handle_finisher(delta: float) -> void:
 	if state != State.FINISHER:
 		return
+	if is_mounting and finisher_target != null and is_instance_valid(finisher_target):
+		global_position.x = finisher_target.global_position.x
+		global_position.y = finisher_target.global_position.y
+		height = mount_height
 	velocity = Vector2.ZERO
 	finisher_elapsed += delta
 	if finisher_target == null or not is_instance_valid(finisher_target):
-		on_action_complete()
+		if is_mounting:
+			dismount_calmly()
+		else:
+			on_action_complete()
 		return
 	finisher_hit_timer -= delta
 	if finisher_hit_timer <= 0.0:
 		_apply_finisher_damage()
 	if finisher_elapsed >= finisher_max_duration and state == State.FINISHER:
 		on_action_complete()
+
+
+## Обрабатывает посадку на врага (вызывается из _physics_process).
+##
+## Логика:
+## - страховочно разбирает маунт, если состояние сбито извне (катсцена и т.п.)
+## - каждый кадр прилипает к жертве и пиннит её таймеры подъёма,
+##   чтобы она не встала, пока на ней сидят
+## - по истечении mount_throw_delay без ударов жертва сбрасывает игрока
+func handle_mount(delta: float) -> void:
+	# Страховка: внешнее воздействие сменило состояние — тихо освобождаем маунт
+	if is_mounting and state != State.MOUNT and state != State.FINISHER:
+		is_mounting = false
+		finisher_target = null
+		return
+	if state != State.MOUNT:
+		return
+	var target := finisher_target
+	if target == null or not is_instance_valid(target) or target.current_health <= 0:
+		dismount_calmly()
+		return
+	global_position.x = target.global_position.x
+	global_position.y = target.global_position.y
+	velocity = Vector2.ZERO
+	height = mount_height
+	target.time_since_grounded = Time.get_ticks_msec()
+	target.enemy_block_timer = maxf(target.enemy_block_timer, 1.0)
+	mount_idle_timer += delta
+	if mount_idle_timer >= mount_throw_delay:
+		throw_player_off()
+
+
+## Жертва сбрасывает игрока: подбрасывает его в полёт назад без урона.
+func throw_player_off() -> void:
+	is_mounting = false
+	finisher_target = null
+	state = State.FALL
+	height_speed = launch_vertical_intensity * 0.5
+	velocity = -heading * launch_horizontal_intensity * 0.6
+	HitstopManager.freeze(0.15, 0.15)
+	SoundPlayer.play(SoundManager.Sound.HIT1, true)
+	combo_hurt_count = 0
+	_notify_enemies_player_down()
+
+
+## Игрок спрыгивает с жертвы по кнопке прыжка: обычная цепочка TAKEOFF -> JUMP -> LAND.
+func exit_mount_jump() -> void:
+	is_mounting = false
+	finisher_target = null
+	state = State.TAKEOFF
+	velocity = -heading * speed * 0.5
+	SoundPlayer.play(SoundManager.Sound.SWOOSH)
+
+
+## Мягкое завершение посадки (жертва умерла или исчезла): игрок спокойно слезает рядом.
+func dismount_calmly() -> void:
+	is_mounting = false
+	finisher_target = null
+	height = 0.0
+	velocity = Vector2.ZERO
+	global_position.x += heading.x * 40.0
+	state = State.IDLE
 
 
 ## Наносит урон цели добивания в момент удара.
@@ -674,7 +776,9 @@ func _apply_finisher_damage() -> void:
 	if target.current_health <= 0 or (target.state != State.RECOVER and target.state != State.GROUNDED):
 		return
 	var direction := Vector2.LEFT if target.global_position.x < global_position.x else Vector2.RIGHT
-	var amount := int(damage_power * finisher_damage_multiplier)
+	var multiplier := mount_punch_damage_multiplier if is_mounting else finisher_damage_multiplier
+	var amount := int(damage_power * multiplier)
+	mount_idle_timer = 0.0 # попадание продлевает время сидения
 	HitstopManager.freeze(0.12, 0.12)
 	SoundPlayer.play(SoundManager.Sound.FINISHER)
 
@@ -720,7 +824,7 @@ func pickup_collectible() -> void:
 
 func is_collision_disabled() -> bool:
 	match state:
-		State.GROUNDED, State.DEATH, State.FLY:
+		State.GROUNDED, State.DEATH, State.FLY, State.MOUNT:
 			return true
 		_:
 			return false
@@ -731,6 +835,10 @@ func can_jumpkick() -> bool:
 
 
 func on_action_complete():
+	# Во время посадки завершившийся удар возвращает в седло, а не в стойку
+	if is_mounting:
+		state = State.MOUNT
+		return
 	state = State.IDLE
 
 

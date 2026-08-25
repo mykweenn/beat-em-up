@@ -303,7 +303,7 @@ tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.5),
+"times": PackedFloat32Array(0.3),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -334,7 +334,7 @@ tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.5),
+"times": PackedFloat32Array(0.3),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -760,6 +760,23 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_m0unt"]
+resource_name = "mount"
+length = 0.4
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [144]
 }
 
 [sub_resource type="Animation" id="Animation_15c3i"]
@@ -1287,6 +1304,7 @@ _data = {
 &"kick": SubResource("Animation_fcmex"),
 &"kick_power": SubResource("Animation_jnx77"),
 &"land": SubResource("Animation_gdgf0"),
+&"mount": SubResource("Animation_m0unt"),
 &"pickup": SubResource("Animation_15c3i"),
 &"prepare_heavy_attack": SubResource("Animation_uxymp"),
 &"punch": SubResource("Animation_cqrjx"),
@@ -1330,6 +1348,7 @@ damage_gun_shot = 8
 damage_power = 6
 max_ammo_per_gun = 3
 finisher_damage_multiplier = 1.0
+mount_height = 10.0
 
 [node name="ShadowSprite" parent="." index="0" unique_id=1441173628]
 visible = true

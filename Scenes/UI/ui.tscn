@@ -195,6 +195,7 @@ visible = false
 layout_mode = 1
 
 [node name="ControlsLabel" type="Label" parent="MarginContainer/UIContainer" unique_id=1120937841]
+visible = false
 layout_mode = 0
 offset_left = 11.0
 offset_top = 719.0
@@ -248,7 +249,7 @@ theme_override_constants/shadow_offset_y = 3
 theme_override_constants/shadow_outline_size = 3
 theme_override_fonts/font = ExtResource("10_fevae")
 theme_override_font_sizes/font_size = 42
-text = "Иван"
+text = "Ivan"
 
 [node name="ScoreIndicator" parent="MarginContainer/UIContainer/PlayerBoxUI/HBoxContainer/HealthBarPointsVBoxContainer/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1372940377 instance=ExtResource("6_1c2ca")]
 unique_name_in_owner = true

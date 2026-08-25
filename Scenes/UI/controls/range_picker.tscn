@@ -11,6 +11,9 @@ script = ExtResource("2_inqss")
 current_value = 5
 max_value = 10
 
+[node name="Label" parent="." index="0" unique_id=1356389855]
+theme_override_font_sizes/font_size = 99
+
 [node name="TicksContainer" type="HBoxContainer" parent="." index="1" unique_id=1240127519]
 layout_mode = 2
 theme_override_constants/separation = 0
