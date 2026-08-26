@@ -216,6 +216,12 @@ func set_heading() -> void:
 			heading = Vector2.RIGHT
 		elif velocity.x < 0:
 			heading = Vector2.LEFT
+	elif state == State.BLOCK:
+		var direction := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+		if direction.x > 0:
+			heading = Vector2.RIGHT
+		elif direction.x < 0:
+			heading = Vector2.LEFT
 
 func reserve_slot(enemy: BasicEnemy) -> EnemySlot:
 	var available_slots := enemy_slots.filter(
