@@ -669,6 +669,8 @@ func start_mount(target: Character) -> void:
 	velocity = Vector2.ZERO
 	height = mount_height
 	heading = Vector2.LEFT if target.global_position.x < global_position.x else Vector2.RIGHT
+	# Враг поворачивается лицом к игроку
+	target.heading.x = -heading.x
 
 
 ## Запускает один удар в посадке: работает как добивание (State.FINISHER),
@@ -738,6 +740,8 @@ func handle_mount(delta: float) -> void:
 	global_position.y = target.global_position.y
 	velocity = Vector2.ZERO
 	height = mount_height
+	# Поворачиваем врага лицом к игроку (они смотрят друг на друга)
+	target.heading.x = -heading.x
 	target.time_since_grounded = Time.get_ticks_msec()
 	target.enemy_block_timer = maxf(target.enemy_block_timer, 1.0)
 	mount_idle_timer += delta

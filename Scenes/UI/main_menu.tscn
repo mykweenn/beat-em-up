@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://climht8y76su8" path="res://Scenes/UI/main_menu.gd" id="1_i0i02"]
 [ext_resource type="Shader" uid="uid://b4swt7qpaapnh" path="res://Resources/speed_stripes.gdshader" id="2_gcgm2"]
-[ext_resource type="Theme" uid="uid://c1e3qxdoi1g3v" path="res://Resources/themes/main_menu_theme.tres" id="3_70rqd"]
+[ext_resource type="PackedScene" uid="uid://dqb3osi07wuby" path="res://Scenes/UI/options_screen.tscn" id="3_opts"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_gcgm2"]
 noise_type = 0
@@ -58,14 +58,23 @@ turbulence_enabled = true
 turbulence_noise_speed = Vector3(1.69, 1.88, 0)
 turbulence_noise_speed_random = 2.2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_70rqd"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0, 0, 0, 0.6)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.089684196, 0.8775626, 0.8046434, 0.5)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="Environment" id="Environment_70rqd"]
 background_mode = 3
 glow_enabled = true
 
-[node name="MainMenu" type="Control" unique_id=336705458]
+[node name="MainMenu" type="Control" unique_id=668634017]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -74,7 +83,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_i0i02")
 
-[node name="ColorRect" type="Panel" parent="." unique_id=346576556]
+[node name="Background" type="Panel" parent="." unique_id=1944679585]
 material = SubResource("ShaderMaterial_fdsk3")
 layout_mode = 1
 anchors_preset = 15
@@ -84,7 +93,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_fdsk3")
 
-[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=1061185806]
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=409450613]
 visible = false
 position = Vector2(950, 540)
 amount = 62
@@ -92,108 +101,175 @@ lifetime = 10.7
 preprocess = 2.0
 process_material = SubResource("ParticleProcessMaterial_70rqd")
 
-[node name="Panel" type="Panel" parent="." unique_id=1193484903]
+[node name="TitleLabel" type="Label" parent="." unique_id=633878912]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -400.0
+offset_top = 80.0
+offset_right = 400.0
+offset_bottom = 140.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.089684196, 0.8775626, 0.8046434, 1)
+theme_override_colors/font_shadow_color = Color(0.79638255, 0.4514708, 0.7691373, 1)
+theme_override_constants/shadow_outline_size = 1
+theme_override_font_sizes/font_size = 64
+text = "STREETS OF BLOOD"
+horizontal_alignment = 1
+
+[node name="MenuLayer" type="Control" parent="." unique_id=1823217998]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MenuContainer" type="VBoxContainer" parent="MenuLayer" unique_id=1197247606]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -893.0
-offset_top = -265.5
-offset_right = -300.0
-offset_bottom = 265.5
+offset_left = -200.0
+offset_top = -80.0
+offset_right = 200.0
+offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_70rqd")
+theme_override_constants/separation = 12
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=1109289180]
+[node name="NewGame" type="Label" parent="MenuLayer/MenuContainer" unique_id=1345518984]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 36
+text = "NEW GAME"
+horizontal_alignment = 1
+
+[node name="Continue" type="Label" parent="MenuLayer/MenuContainer" unique_id=2114905621]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.45, 0.45, 1)
+theme_override_font_sizes/font_size = 36
+text = "CONTINUE"
+horizontal_alignment = 1
+
+[node name="SelectLevel" type="Label" parent="MenuLayer/MenuContainer" unique_id=205016437]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.45, 0.45, 1)
+theme_override_font_sizes/font_size = 36
+text = "SELECT LEVEL"
+horizontal_alignment = 1
+
+[node name="Options" type="Label" parent="MenuLayer/MenuContainer" unique_id=1291195047]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.45, 0.45, 1)
+theme_override_font_sizes/font_size = 36
+text = "OPTIONS"
+horizontal_alignment = 1
+
+[node name="Exit" type="Label" parent="MenuLayer/MenuContainer" unique_id=1946239901]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.45, 0.45, 1)
+theme_override_font_sizes/font_size = 36
+text = "EXIT"
+horizontal_alignment = 1
+
+[node name="Cursor" type="Label" parent="MenuLayer" unique_id=1173958793]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -80.0
+offset_right = -190.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.089684196, 0.8775626, 0.8046434, 1)
+theme_override_font_sizes/font_size = 36
+text = ">"
+horizontal_alignment = 1
+
+[node name="LevelLayer" type="Control" parent="." unique_id=448747338]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
+mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=1380716847]
-layout_mode = 2
-alignment = 1
-
-[node name="GameNameLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer" unique_id=917961614]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.089684196, 0.8775626, 0.8046434, 1)
-theme_override_colors/font_shadow_color = Color(0.79638255, 0.4514708, 0.7691373, 1)
-theme_override_constants/line_spacing = 1
-theme_override_constants/shadow_outline_size = 1
-theme_override_font_sizes/font_size = 40
-text = "STREETS OF BLOOD"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer" unique_id=1312002764]
-layout_mode = 2
-
-[node name="StartButton" type="Button" parent="Panel/MarginContainer/VBoxContainer" unique_id=678591647]
-layout_mode = 2
-theme = ExtResource("3_70rqd")
-text = "Начать игру"
-
-[node name="ContinueButton" type="Button" parent="Panel/MarginContainer/VBoxContainer" unique_id=1480069100]
-layout_mode = 2
-theme = ExtResource("3_70rqd")
-text = "Продолжить"
-
-[node name="SettingsButton" type="Button" parent="Panel/MarginContainer/VBoxContainer" unique_id=1758431684]
-layout_mode = 2
-theme = ExtResource("3_70rqd")
-text = "Настройки"
-
-[node name="ExitButton" type="Button" parent="Panel/MarginContainer/VBoxContainer" unique_id=1488763211]
-layout_mode = 2
-theme = ExtResource("3_70rqd")
-text = "Выход"
-
-[node name="Settings" type="Control" parent="." unique_id=1544515612]
+[node name="LevelPanel" type="Panel" parent="LevelLayer" unique_id=751084082]
 visible = false
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -150.0
+offset_right = 250.0
+offset_bottom = 150.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="Panel" type="Panel" parent="Settings" unique_id=674866199]
+[node name="LevelTitle" type="Label" parent="LevelLayer/LevelPanel" unique_id=1122855209]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 15.0
+offset_right = 200.0
+offset_bottom = 55.0
 grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Label" type="Label" parent="Settings/Panel" unique_id=525811768]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 143
-text = "ТУТ БУДУТ НАСТРОЙКИ"
+theme_override_colors/font_color = Color(0.089684196, 0.8775626, 0.8046434, 1)
+theme_override_font_sizes/font_size = 28
+text = "SELECT LEVEL"
 horizontal_alignment = 1
-vertical_alignment = 1
 
-[node name="BackButton" type="Button" parent="Settings" unique_id=461778975]
-layout_mode = 0
-offset_left = 433.0
-offset_top = 752.0
-offset_right = 1587.0
-offset_bottom = 874.0
-theme_override_font_sizes/font_size = 81
-text = "НАЗАД"
+[node name="LevelVBox" type="VBoxContainer" parent="LevelLayer/LevelPanel" unique_id=1569338869]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 70.0
+offset_right = -40.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1938512068]
+[node name="LevelCursor" type="Label" parent="LevelLayer/LevelPanel" unique_id=686595159]
+layout_mode = 1
+offset_left = 40.0
+offset_top = 70.0
+offset_right = 70.0
+offset_bottom = 100.0
+theme_override_colors/font_color = Color(0.089684196, 0.8775626, 0.8046434, 1)
+theme_override_font_sizes/font_size = 32
+text = ">"
+
+[node name="OptionsLayer" type="Control" parent="." unique_id=832693339]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="OptionsScreen" parent="OptionsLayer" unique_id=1638791811 instance=ExtResource("3_opts")]
+visible = false
+layout_mode = 1
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=961648565]
 environment = SubResource("Environment_70rqd")

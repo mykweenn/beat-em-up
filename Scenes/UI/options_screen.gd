@@ -33,6 +33,8 @@ func _process(_delta: float) -> void:
 
 
 func handle_input() -> void:
+	if not visible:
+		return
 	if Input.is_action_just_pressed("ui_down"):
 		current_selection_index = clampi(current_selection_index + 1, 0, activables.size() - 1)
 		refresh()
