@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://dhgjp14ph1aei"]
+
+[ext_resource type="Script" uid="uid://do2ml3tjeusk8" path="res://Scenes/VFX/blood_effect.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cwg7qi138tysq" path="res://Assets/Art/MRB/Spirtes/VFX/blood.png" id="2_blood"]
+
+[sub_resource type="Curve" id="Curve_spray_scale"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_spray_color"]
+colors = PackedColorArray(0.57, 0, 0.12, 1, 0.57, 0, 0.12, 0)
+
+[sub_resource type="Curve" id="Curve_splash_scale"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_splash_color"]
+colors = PackedColorArray(0.57, 0, 0.12, 1, 0.57, 0, 0.12, 0)
+
+[node name="BloodEffect" type="Node2D" unique_id=721241424]
+script = ExtResource("1_script")
+
+[node name="Spray" type="CPUParticles2D" parent="." unique_id=1708951314]
+emitting = false
+amount = 25
+texture = ExtResource("2_blood")
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.95
+direction = Vector2(-1, -0.5)
+spread = 40.0
+gravity = Vector2(0, 800)
+initial_velocity_min = 250.0
+initial_velocity_max = 500.0
+scale_amount_min = 4.0
+scale_amount_max = 10.0
+scale_amount_curve = SubResource("Curve_spray_scale")
+color = Color(0.57, 0, 0.12, 1)
+color_ramp = SubResource("Gradient_spray_color")
+
+[node name="Splash" type="CPUParticles2D" parent="." unique_id=2038145765]
+emitting = false
+amount = 15
+texture = ExtResource("2_blood")
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+direction = Vector2(-1, -1)
+spread = 160.0
+gravity = Vector2(0, 600)
+initial_velocity_min = 100.0
+initial_velocity_max = 250.0
+scale_amount_min = 2.0
+scale_amount_max = 5.0
+scale_amount_curve = SubResource("Curve_splash_scale")
+color = Color(0.57, 0, 0.12, 1)
+color_ramp = SubResource("Gradient_splash_color")
+
+[node name="Puddle" type="Sprite2D" parent="." unique_id=67203704]
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("2_blood")

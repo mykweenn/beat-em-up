@@ -449,6 +449,8 @@ script = ExtResource("16_uokwh")
 [node name="AnimationPlayer" type="AnimationPlayer" parent="CutsceneManager" index="0" unique_id=389663154]
 libraries/ = SubResource("AnimationLibrary_uokwh")
 
+[node name="CanvasModulate" type="CanvasModulate" parent="." index="9" unique_id=694249295]
+
 [editable path="Checkpoints/Checkpoint"]
 [editable path="Checkpoints/Checkpoint2"]
 [editable path="Checkpoints/Checkpoint3"]
