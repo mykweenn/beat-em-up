@@ -93,22 +93,58 @@ position = Vector2(100, 0)
 
 [node name="BasicEnemy" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="0" unique_id=1966584693 instance=ExtResource("5_41trb")]
 position = Vector2(113, 40)
+down_ring_radius = 110.0
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
 
 [node name="BasicEnemy2" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="1" unique_id=2024145364 instance=ExtResource("5_41trb")]
 position = Vector2(61, 92)
+down_ring_radius = 110.0
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
 
 [node name="GoonEnemy" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="2" unique_id=734331289 instance=ExtResource("4_fofc4")]
 position = Vector2(27, 91)
+down_ring_radius = 110.0
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
 can_respawn_knives = false
 
 [node name="BasicEnemy3" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="3" unique_id=962538670 instance=ExtResource("5_41trb")]
 position = Vector2(49, -25)
+down_ring_radius = 110.0
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
 
 [node name="BasicEnemy4" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="4" unique_id=16831986 instance=ExtResource("5_41trb")]
 position = Vector2(28, -21)
+down_ring_radius = 110.0
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
 
 [node name="BasicEnemy5" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="5" unique_id=1693506229 instance=ExtResource("5_41trb")]
 position = Vector2(69, -21)
+down_ring_radius = 110.0
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
 
 [node name="Checkpoint2" parent="Checkpoints" parent_id_path=PackedInt32Array(1705422277) index="1" unique_id=1516395547 instance=ExtResource("3_xnrnn")]
 visible = false
@@ -117,40 +153,112 @@ nb_simultaneous_enemies = 3
 
 [node name="BasicEnemy" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="0" unique_id=335653407 instance=ExtResource("5_41trb")]
 position = Vector2(48, 31)
+down_ring_radius = 110.0
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
 
 [node name="BasicEnemy2" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="1" unique_id=325896098 instance=ExtResource("5_41trb")]
 position = Vector2(71, 31)
+down_ring_radius = 110.0
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
 
 [node name="GoonEnemy" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="2" unique_id=762203245 instance=ExtResource("4_fofc4")]
 position = Vector2(-14, 39)
+down_ring_radius = 110.0
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
 has_knife = true
 
 [node name="GoonEnemy2" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="3" unique_id=645008290 instance=ExtResource("4_fofc4")]
 position = Vector2(84, -11)
+down_ring_radius = 110.0
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
 
 [node name="GoonEnemy3" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="4" unique_id=227145823 instance=ExtResource("4_fofc4")]
 position = Vector2(118, 43)
+down_ring_radius = 110.0
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
 
 [node name="GoonEnemy4" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="5" unique_id=2066513446 instance=ExtResource("4_fofc4")]
 position = Vector2(-15, 60)
+down_ring_radius = 110.0
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
 
 [node name="BasicEnemy3" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="6" unique_id=44444594 instance=ExtResource("5_41trb")]
 position = Vector2(24, 94)
+down_ring_radius = 110.0
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
 
 [node name="BasicEnemy4" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="7" unique_id=578681114 instance=ExtResource("5_41trb")]
 position = Vector2(82, 95)
+down_ring_radius = 110.0
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
 
 [node name="BasicEnemy5" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="8" unique_id=1384808432 instance=ExtResource("5_41trb")]
 position = Vector2(17, -12)
+down_ring_radius = 110.0
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
 
 [node name="ThugEnemy" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="9" unique_id=352961395 instance=ExtResource("6_fofc4")]
 position = Vector2(-36, 62)
+down_ring_radius = 110.0
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
 
 [node name="ThugEnemy2" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="10" unique_id=1133662553 instance=ExtResource("6_fofc4")]
 position = Vector2(120, 57)
+down_ring_radius = 110.0
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
 
 [node name="ThugEnemy3" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="11" unique_id=1644464109 instance=ExtResource("6_fofc4")]
 position = Vector2(54, 92)
+down_ring_radius = 110.0
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
 
 [node name="Checkpoint3" parent="Checkpoints" parent_id_path=PackedInt32Array(1705422277) index="2" unique_id=1168583206 instance=ExtResource("3_xnrnn")]
 position = Vector2(330, 0)
