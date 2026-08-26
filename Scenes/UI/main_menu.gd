@@ -26,6 +26,15 @@ const COLOR_ACTIVE := Color(1.0, 1.0, 1.0)
 const COLOR_INACTIVE := Color(0.45, 0.45, 0.45)
 const COLOR_LOCKED := Color(0.3, 0.3, 0.3)
 
+# === VHS TRACKING ERROR ===
+# Множитель частоты мерцания (sin). Чем выше — тем быстрее «моргает» сигнал.
+const VHS_FLICKER_SPEED := 18.0
+# Минимальная прозрачность при мерцании (0.85 = не темнее 85%).
+const VHS_FLICKER_MIN := 0.85
+# Префиксы текста кнопок.
+const CURSOR_PREFIX := "> "
+const ITEM_PREFIX := "  "
+
 
 func _ready() -> void:
 	for i in range(MENU_ITEMS.size()):
@@ -46,8 +55,11 @@ func _ready() -> void:
 	tween.tween_callback(fade_overlay.hide)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	handle_input()
+	# VHS-эффект применяется каждый кадр к активной/неактивным кнопкам.
+	if state == MenuState.MAIN:
+		_apply_vhs_effects(delta)
 
 
 func handle_input() -> void:
@@ -101,10 +113,28 @@ func refresh_menu() -> void:
 	for i in range(item_labels.size()):
 		var label := item_labels[i]
 		if i == current_index:
-			label.text = "> " + MENU_ITEMS[i]
+			label.text = CURSOR_PREFIX + MENU_ITEMS[i]
 			label.add_theme_color_override("font_color", COLOR_ACTIVE)
 		else:
-			label.text = "  " + MENU_ITEMS[i]
+			label.text = ITEM_PREFIX + MENU_ITEMS[i]
+			label.add_theme_color_override("font_color", COLOR_INACTIVE)
+
+
+# === VHS TRACKING ERROR ===
+
+func _apply_vhs_effects(_delta: float) -> void:
+	for i in range(item_labels.size()):
+		var label := item_labels[i]
+		if i == current_index:
+			# --- АКТИВНАЯ КНОПКА ---
+			# Мерцание прозрачности: sin() с высокой частотой.
+			# (sin(TIME * speed) + 1) / 2  →  от 0.0 до 1.0
+			# Затем map в диапазон [FLICKER_MIN, 1.0].
+			var flicker_raw := (sin(Time.get_ticks_msec() * 0.001 * VHS_FLICKER_SPEED) + 1.0) * 0.5
+			label.modulate.a = lerpf(VHS_FLICKER_MIN, 1.0, flicker_raw)
+		else:
+			# --- НЕАКТИВНАЯ КНОПКА ---
+			label.modulate.a = 1.0
 			label.add_theme_color_override("font_color", COLOR_INACTIVE)
 
 

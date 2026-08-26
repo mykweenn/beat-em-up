@@ -2358,7 +2358,7 @@ rotation = 0.017143406
 scale = Vector2(1.2125572, 1.2729288)
 sprite_frames = SubResource("SpriteFrames_s1fef")
 autoplay = "default"
-frame_progress = 0.6448758
+frame_progress = 0.2643843
 
 [node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="." unique_id=566333838]
 visible = false
@@ -2439,19 +2439,11 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MenuContainer" type="VBoxContainer" parent="UI/MenuLayer" unique_id=1197247606]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -205.0
-offset_top = 4.0
-offset_right = 128.0
-offset_bottom = 362.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 12
+layout_mode = 0
+offset_left = 624.0
+offset_top = 483.0
+offset_right = 1037.0
+offset_bottom = 853.0
 alignment = 1
 
 [node name="NewGame" type="Label" parent="UI/MenuLayer/MenuContainer" unique_id=1345518984]
