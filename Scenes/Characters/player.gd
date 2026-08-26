@@ -24,6 +24,11 @@ var sprint_attack_boost := 0.0
 var effect_time := 1.0
 var effect_delay := 0.04
 
+# running grab slide
+var grab_slide_timer := 0.0
+var grab_slide_duration := 0.15
+var grab_slide_direction := 0.0
+
 func _ready() -> void:
 	super._ready()
 	anim_attacks = ["punch", "punch_alt", "kick", "roundkick",]
@@ -36,8 +41,10 @@ func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
 	procces_time_between_combos()
 	
-	if state == State.DASH or state == State.SPRINT_ATTACK:
+	if state == State.DASH or state == State.SPRINT_ATTACK or state == State.DASH_KICK or state == State.RUNNING_GRAB:
 		ghost(delta)
+	if state == State.RUNNING_GRAB:
+		handle_running_grab(delta)
 
 
 func procces_time_between_combos() -> void:
@@ -56,6 +63,16 @@ func handle_input() -> void:
 	# === СНАЧАЛА ОБРАБАТЫВАЕМ ТЕКУЩИЕ ТЯЖЕЛЫЕ СОСТОЯНИЯ ===
 	# Если мы уже бьем тяжелым ударом — отключаем весь остальной ввод
 	if state == State.HEAVY_ATTACK:
+		return
+
+	# Завершение dash_kick при остановке скольжения
+	if state == State.DASH_KICK and abs(velocity.x) < 50.0:
+		state = State.IDLE
+		velocity.x = 0
+		return
+
+	# Running grab — весь ввод заблокирован пока идёт захват
+	if state == State.RUNNING_GRAB:
 		return
 
 	# === УПРАВЛЕНИЕ В ПОСАДКЕ НА ВРАГА ===
@@ -154,8 +171,18 @@ func handle_input() -> void:
 		SoundPlayer.play(SoundManager.Sound.SWOOSH)
 	if can_sprint_attack() and Input.is_action_just_pressed("attack"):
 		start_sprint_attack()
+	if (state == State.SPRINT or state == State.DASH) and Input.is_action_just_pressed("uppercut"):
+		start_running_grab()
+		return
+	if state == State.SPRINT and Input.is_action_just_pressed("kick"):
+		state = State.DASH_KICK
+		velocity.x = heading.x * speed * 1.6
+		SoundPlayer.play(SoundManager.Sound.SWOOSH)
 	if can_kick() and Input.is_action_just_pressed("kick"):
 		state = State.KICK
+		SoundPlayer.play(SoundManager.Sound.SWOOSH)
+	if can_kick() and Input.is_action_just_pressed("uppercut"):
+		state = State.UPPERCUT
 		SoundPlayer.play(SoundManager.Sound.SWOOSH)
 
 
@@ -269,6 +296,59 @@ func start_sprint_attack() -> void:
 	velocity.x = (heading.x * 2.5) * DASH_SPEED * 0.6
 
 
+func start_running_grab() -> void:
+	state = State.RUNNING_GRAB
+	velocity.x = heading.x * speed * 1.6
+	SoundPlayer.play(SoundManager.Sound.SWOOSH)
+
+
+func handle_running_grab(delta: float) -> void:
+	# Фаза скольжения: протаскиваем врага по инерции
+	if grab_slide_timer > 0.0:
+		grab_slide_timer -= delta
+		# Привязываем врага к позиции игрока
+		if finisher_target != null and is_instance_valid(finisher_target):
+			finisher_target.global_position.x = global_position.x
+			finisher_target.velocity = Vector2.ZERO
+			finisher_target.enemy_block_timer = 0.5
+		# Торможение
+		velocity.x = move_toward(velocity.x, 0.0, 2000.0 * delta)
+		# Скольжение закончилось → mount
+		if grab_slide_timer <= 0.0:
+			velocity.x = 0
+			if finisher_target != null and is_instance_valid(finisher_target):
+				start_mount(finisher_target)
+			else:
+				state = State.IDLE
+			return
+		return
+	# Если анимация завершилась и мы не попали ни в кого — возврат в IDLE
+	if not animation_player.is_playing():
+		state = State.IDLE
+		velocity.x = 0
+		finisher_target = null
+
+
+## Переопределение: при попадании running_grab — захват врага и фаза скольжения
+func on_emit_damage(receiver: DamageReceiver) -> void:
+	if state == State.RUNNING_GRAB:
+		var grabbed_enemy := receiver.get_parent() as Character
+		if grabbed_enemy != null and grabbed_enemy.current_health > 0:
+			# Оглушаем врага для mount
+			grabbed_enemy.state = State.RECOVER
+			grabbed_enemy.enemy_block_timer = 0.5
+			grabbed_enemy.velocity = Vector2.ZERO
+			finisher_target = grabbed_enemy
+			# Запускаем фазу скольжения — протаскиваем врага по инерции
+			grab_slide_timer = grab_slide_duration
+			grab_slide_direction = heading.x
+			velocity.x = heading.x * speed * 0.8
+			SoundPlayer.play(SoundManager.Sound.HIT1)
+			return
+	# Обычная обработка урона
+	super.on_emit_damage(receiver)
+
+
 
 func _on_cutscene_started():
 	pass
@@ -279,7 +359,7 @@ func _on_cutscene_finished():
 
 
 func ghost(delta):
-	if not [State.DASH, State.SPRINT_ATTACK].has(state):
+	if not [State.DASH, State.SPRINT_ATTACK, State.DASH_KICK, State.RUNNING_GRAB].has(state):
 		return
 
 	effect_time -= delta

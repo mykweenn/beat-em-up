@@ -4,8 +4,7 @@ extends Character
 const EDGE_SCREEN_BUFFER := 10
 
 @onready var hit_position: Marker2D = $HitPosition
-@onready var blood_splatter_scene = preload("res://Scenes/VFX/blood_splatter.tscn")
-@onready var blood_puddle_scene = preload("res://Scenes/VFX/blood_puddle.tscn")
+@onready var blood_effect_scene = preload("res://Scenes/VFX/blood_effect.tscn")
 
 @export_category("Durations")
 ## Длительность анимации или процесса появления (спавна) врага в секундах.
@@ -281,46 +280,28 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 		play_hit_shake()
 		return 
 
+	# === РАЗВОРОТ ВРАГА ПРИ DASH_KICK ===
+	# Враги летят за спину игрока и смотрят в противоположную сторону
+	if attacker != null and attacker.state == State.DASH_KICK:
+		heading.x = -direction.x
+	
 	
 	# Всё, что ниже — реальное ранение
 	ComboManager.register_hit.emit()
 	
-	# Спавним первую (основную) лужу и брызги крови
-	var blood_node = blood_splatter_scene.instantiate()
-	var puddle = blood_puddle_scene.instantiate()
-	var spawn_offset := Vector2(randf_range(-30.0, 30.0), randf_range(-15.0, 15.0))
-	blood_node.global_position = position + Vector2(0, -250) + spawn_offset
-	var puddle_offset := Vector2(randf_range(-20.0, 20.0), randf_range(-10.0, 10.0))
-	puddle.global_position = position + puddle_offset
-	
-	if direction.x != 0:
-		var side = -sign(direction.x)
-		blood_node.scale.x = -sign(direction.x)
-		if hit_type == DamageReceiver.HitType.POWER: # <-- Добавили проверку на стан для масштаба
-			blood_node.scale = Vector2(side * 1.8, 1.8)
-			puddle.scale *= 1.7
-		else:
-			blood_node.scale = Vector2(side, 1.0)
-		
-	get_tree().current_scene.add_child(blood_node)
-	get_tree().current_scene.add_child(puddle)
+	# Спавним эффект крови (струя + всплеск + лужа)
+	var blood = blood_effect_scene.instantiate()
+	blood.global_position = position
+	blood.setup(direction, hit_type)
+	get_tree().current_scene.add_child(blood)
 	
 	# === ДОПОЛНИТЕЛЬНЫЙ ДВОЙНОЙ УДАР (СПАВН ВТОРОЙ ПАЧКИ КРОВИ) ===
 	if was_stunned:
-		var extra_blood = blood_splatter_scene.instantiate()
-		# Смещаем вторую струю чуть в сторону для хаотичности
-		var extra_offset := Vector2(randf_range(-40.0, 40.0), randf_range(-20.0, 20.0))
-		extra_blood.global_position = position + Vector2(0, -230) + extra_offset
-		
-		if direction.x != 0:
-			var side = -sign(direction.x)
-			# Немного меняем размер второй струи, чтобы они не выглядели одинаково клонированными
-			extra_blood.scale = Vector2(side * randf_range(1.3, 1.6), randf_range(1.3, 1.6))
-			
+		var extra_blood = blood_effect_scene.instantiate()
+		extra_blood.global_position = position + Vector2(randf_range(-40.0, 40.0), randf_range(-20.0, 20.0))
+		extra_blood.setup(direction, hit_type)
 		get_tree().current_scene.add_child(extra_blood)
-		
-		# Делаем тряску экрана в два раза мощнее
-		play_hit_shake() 
+		play_hit_shake()
 	# ==============================================================
 	
 	play_hit_shake()

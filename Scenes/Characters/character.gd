@@ -5,6 +5,7 @@ const GRAVITY := 3800.0
 
 ## Префаб всплывающего текста («БАМ!» и т.п.) для эффектных ударов
 const FLOATING_TEXT_PREFAB := preload("res://Scenes/VFX/floating_text.tscn")
+const DEATH_SPRITE_PREFAB := preload("res://Scenes/VFX/death_sprite.tscn")
 
 #new dash
 
@@ -107,7 +108,7 @@ const FINISHER_RANGE_Y := 60.0
 
 enum State {IDLE, WALK, ATTACK, TAKEOFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUNDED, DEATH, FLY, PREP_ATTACK, 
 THROW, PICKUP, SHOOT, PREP_SHOOT, RECOVER, DROP, WAIT, APPEARING, SPRINT, DASH, SPRINT_ATTACK, CUTSCENE, BLOCK, 
-KICK, PREPARE_HEAVY_ATTACK, HEAVY_ATTACK, FINISHER, MOUNT}
+KICK, PREPARE_HEAVY_ATTACK, HEAVY_ATTACK, FINISHER, MOUNT, UPPERCUT, DASH_KICK, RUNNING_GRAB}
 enum Type {PLAYER, PUNK, GOON, THUG, BOUNCER, HEAVY}
 
 var ammo_left := 0
@@ -143,6 +144,9 @@ var anim_map : Dictionary = {
 	State.HEAVY_ATTACK: "heavy_attack",
 	State.FINISHER: "finisher",
 	State.MOUNT: "mount",
+	State.UPPERCUT: "uppercut",
+	State.DASH_KICK: "slide_attack",
+	State.RUNNING_GRAB: "running_grab",
 }
 
 var attack_combo_index := 0
@@ -204,6 +208,7 @@ var _cached_receiver_monitorable := false
 var _cached_collateral_monitoring := false
 # Направление взгляда после последнего обновления спрайтов
 var _facing_right := true
+var _death_sprite_spawned := false
 
 
 func _ready():
@@ -311,7 +316,7 @@ func setup_collisions() -> void:
 func handle_movement(delta: float): # Добавили delta в аргументы
 # Если персонаж заблокирован физикой — не даем коду ниже занулять скорость
 	match state:
-		State.HURT, State.FALL, State.FLY, State.BLOCK, State.PREPARE_HEAVY_ATTACK, State.HEAVY_ATTACK, State.FINISHER:
+		State.HURT, State.FALL, State.FLY, State.BLOCK, State.PREPARE_HEAVY_ATTACK, State.HEAVY_ATTACK, State.FINISHER, State.DASH_KICK, State.RUNNING_GRAB:
 			return
 	if state == State.DASH:
 		velocity.x = dash_direction * DASH_SPEED
@@ -327,6 +332,14 @@ func handle_movement(delta: float): # Добавили delta в аргумент
 	if state == State.SPRINT_ATTACK:
 		# Плавно тормозим персонажа во время удара, чтобы он не улетал за экран
 		velocity.x = move_toward(velocity.x, 0.0, 2000.0 * delta)
+		return
+
+	if state == State.DASH_KICK:
+		velocity.x = move_toward(velocity.x, 0.0, 2200.0 * delta)
+		return
+
+	if state == State.RUNNING_GRAB:
+		velocity.x = move_toward(velocity.x, 0.0, 2500.0 * delta)
 		return
 	
 	if can_move():
@@ -405,13 +418,16 @@ func handle_knife_respawn() -> void:
 ## Обрабатывает окончательную смерть персонажа.
 ##
 ## Если персонаж не может возродиться:
-## - постепенно уменьшает прозрачность объекта
-## - удаляет персонажа со сцены после полного исчезновения
-func handle_death(delta) -> void:
-	if state == State.DEATH and not can_respawn:
-		modulate.a -= delta / 2.0
-		if modulate.a <= 0:
-			queue_free()
+## - спавнит статичный спрайт с текущим кадром анимации
+## - запускает обесцвечивание через шейдер
+## - удаляет оригинальный узел персонажа
+func handle_death(_delta) -> void:
+	if state == State.DEATH and not can_respawn and not _death_sprite_spawned:
+		_death_sprite_spawned = true
+		var death_sprite = DEATH_SPRITE_PREFAB.instantiate()
+		death_sprite.setup_from_character(self)
+		get_tree().current_scene.add_child(death_sprite)
+		queue_free()
 
 
 ## Обрабатывает проигрывание анимаций персонажа.
@@ -555,7 +571,7 @@ func can_kick() -> bool:
 ### Если атакует, возвращаем список состояний боевых
 func is_attacking() -> bool:
 	match state:
-		State.ATTACK, State.JUMPKICK, State.SPRINT_ATTACK, State.KICK, State.HEAVY_ATTACK:
+		State.ATTACK, State.JUMPKICK, State.SPRINT_ATTACK, State.KICK, State.HEAVY_ATTACK, State.UPPERCUT, State.DASH_KICK, State.RUNNING_GRAB:
 			return true
 		_:
 			return false
@@ -1015,7 +1031,10 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 	elif hit_type == DamageReceiver.HitType.LAUNCH:
 		state = State.FALL 
 		height_speed = launch_vertical_intensity     
-		velocity = direction * launch_horizontal_intensity 
+		velocity = direction * launch_horizontal_intensity
+		# Апперкот — строго вверх, без горизонтального смещения
+		if attacker != null and attacker.state == State.UPPERCUT:
+			velocity.x = 0
 		HitstopManager.freeze(0.1, 0.1) 
 		DamageManager.heavy_blow_received.emit()
 		SoundPlayer.play(SoundManager.Sound.HIT3, true)
@@ -1068,6 +1087,14 @@ func on_emit_damage(receiver: DamageReceiver):
 		hit_type = DamageReceiver.HitType.POWER
 	if state == State.KICK:
 		hit_type = DamageReceiver.HitType.LAUNCH
+	if state == State.UPPERCUT:
+		hit_type = DamageReceiver.HitType.LAUNCH
+	if state == State.DASH_KICK:
+		hit_type = DamageReceiver.HitType.LAUNCH
+		direction = -heading  # Враги летят за спину игрока
+	if state == State.RUNNING_GRAB:
+		hit_type = DamageReceiver.HitType.LAUNCH
+		direction = heading  # Враги отлетают по ходу движения
 	if state == State.HEAVY_ATTACK:
 		hit_type = DamageReceiver.HitType.POWER
 	# === КРИТИЧЕСКИЙ УРОН ПО ОГЛУШЕННОМУ ВРАГУ ===
