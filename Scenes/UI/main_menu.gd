@@ -12,12 +12,13 @@ const MENU_ITEMS := ["NEW GAME", "CONTINUE", "SELECT LEVEL", "OPTIONS", "EXIT"]
 var level_index := 0
 
 # === НОДЫ (заполняются в _ready) ===
-@onready var cursor: Label = $MenuLayer/Cursor
-@onready var menu_container: VBoxContainer = $MenuLayer/MenuContainer
-@onready var level_panel: Control = $LevelLayer/LevelPanel
-@onready var level_container: VBoxContainer = $LevelLayer/LevelPanel/LevelVBox
-@onready var level_cursor: Label = $LevelLayer/LevelPanel/LevelCursor
-@onready var options_screen: OptionsScreen = $OptionsLayer/OptionsScreen
+@onready var cursor: Label = $UI/MenuLayer/Cursor
+@onready var menu_container: VBoxContainer = $UI/MenuLayer/MenuContainer
+@onready var level_panel: Control = $UI/LevelLayer/LevelPanel
+@onready var level_container: VBoxContainer = $UI/LevelLayer/LevelPanel/LevelVBox
+@onready var level_cursor: Label = $UI/LevelLayer/LevelPanel/LevelCursor
+@onready var options_screen: OptionsScreen = $UI/OptionsLayer/OptionsScreen
+@onready var fade_overlay: ColorRect = $UI/FadeOverlay
 @onready var item_labels: Array[Label] = []
 
 # Визуал
@@ -35,7 +36,14 @@ func _ready() -> void:
 	options_screen.visible = false
 	options_screen.exit.connect(_on_options_exit)
 	SoundPlayer.play_static_menu()
-	MusicPlayer.play(MusicManager.Music.MENU)
+	# MusicPlayer.play(MusicManager.Music.MENU)
+	$MainMenuMusic.play()
+	$AmbientSFX.play()
+	# Fade из чёрного
+	fade_overlay.visible = true
+	var tween := create_tween()
+	tween.tween_property(fade_overlay, "color:a", 0.0, 0.8).from(1.0)
+	tween.tween_callback(fade_overlay.hide)
 
 
 func _process(_delta: float) -> void:

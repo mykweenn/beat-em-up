@@ -1,6 +1,6 @@
 [gd_resource type="Theme" format=3 uid="uid://b2qvp1u1iua2l"]
 
-[ext_resource type="FontFile" uid="uid://b6aadqwj6cp4g" path="res://Assets/Fonts/Tektur/Tektur-VariableFont_wdth,wght.ttf" id="1_c2e4w"]
+[ext_resource type="FontFile" uid="uid://bvumh48xu6hwl" path="res://Assets/Fonts/VCR OSD Mono/VCR_OSD_MONO_1.001.ttf" id="1_c2e4w"]
 
 [resource]
 default_font = ExtResource("1_c2e4w")

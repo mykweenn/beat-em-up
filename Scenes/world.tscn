@@ -1,9 +1,10 @@
-[gd_scene format=3 uid="uid://q5ypbxa7271c"]
+[gd_scene load_steps=4 format=3 uid="uid://q5ypbxa7271c"]
 
 [ext_resource type="Script" uid="uid://ddb4pb1m8h420" path="res://Scenes/world.gd" id="1_5a7ea"]
 [ext_resource type="PackedScene" uid="uid://dmpyv36blnrgk" path="res://Scenes/UI/ui.tscn" id="2_fo5ed"]
 [ext_resource type="Script" uid="uid://d3u5n02swqv7g" path="res://Scenes/actors_container.gd" id="3_k7acu"]
 [ext_resource type="Script" uid="uid://c7bqnpgoqtb3q" path="res://Scenes/camera.gd" id="4_5ukr8"]
+[ext_resource type="PackedScene" path="res://Scenes/UI/debug_overlay.tscn" id="5_dbg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5a7ea"]
 size = Vector2(60, 1082)
@@ -12,6 +13,8 @@ size = Vector2(60, 1082)
 script = ExtResource("1_5a7ea")
 
 [node name="UI" parent="." unique_id=758194309 instance=ExtResource("2_fo5ed")]
+
+[node name="DebugOverlay" parent="." instance=ExtResource("5_dbg")]
 
 [node name="StageContainer" type="Node2D" parent="." unique_id=1085931344]
 

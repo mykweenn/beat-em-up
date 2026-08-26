@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://ctncr1uynlyib"]
+
+[ext_resource type="Shader" uid="uid://b1mnyisncsnul" path="res://Resources/main_menu_shader.gdshader" id="1_lg6yx"]
+
+[resource]
+shader = ExtResource("1_lg6yx")
+shader_parameter/wiggle = 0.03999999910592
+shader_parameter/wiggle_speed = 15.0
+shader_parameter/smear = 1.374000065265
+shader_parameter/blur_samples = 15
+shader_parameter/defocus = 0.0499999988824
