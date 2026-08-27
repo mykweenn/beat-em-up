@@ -13,6 +13,7 @@ var level_index := 0
 
 # === НОДЫ (заполняются в _ready) ===
 @onready var cursor: Label = $UI/MenuLayer/Cursor
+@onready var title_label: Label = $UI/MenuLayer/TitleLabel
 @onready var menu_container: VBoxContainer = $UI/MenuLayer/MenuContainer
 @onready var level_panel: Control = $UI/LevelLayer/LevelPanel
 @onready var level_container: VBoxContainer = $UI/LevelLayer/LevelPanel/LevelVBox
@@ -35,12 +36,20 @@ const VHS_FLICKER_MIN := 0.85
 const CURSOR_PREFIX := "> "
 const ITEM_PREFIX := "  "
 
+# Материал VHS-тряски надписей (дрожание пикселей текста, без изменения раскладки).
+@onready var vhs_label_material: ShaderMaterial = preload("res://Resources/vhs_label_material.tres")
+
 
 func _ready() -> void:
 	for i in range(MENU_ITEMS.size()):
 		var label : Label = menu_container.get_child(i)
 		item_labels.append(label)
 	refresh_menu()
+	# VHS-тряска надписей: один шейдерный материал на все надписи главного меню
+	# (раскладка VBoxContainer не трогается — смещение делает шейдер по пикселям).
+	title_label.material = vhs_label_material
+	for label in item_labels:
+		label.material = vhs_label_material
 	level_panel.visible = false
 	options_screen.visible = false
 	options_screen.exit.connect(_on_options_exit)

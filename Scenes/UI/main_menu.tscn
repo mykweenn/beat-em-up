@@ -576,6 +576,7 @@
 [ext_resource type="Texture2D" uid="uid://cg08wojxu72uj" path="res://Assets/Video/frames/frame_0560.png" id="562_s18wp"]
 [ext_resource type="Texture2D" uid="uid://c7db3ehtp3kj8" path="res://Assets/Video/frames/frame_0561.png" id="563_pnp3s"]
 [ext_resource type="FontFile" uid="uid://buc5njqgkig2m" path="res://Assets/Fonts/impact.ttf" id="567_p57y4"]
+[ext_resource type="Material" uid="uid://dnoqjhduaefpl" path="res://Resources/vhs_label_material.tres" id="568_x1isu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_p57y4"]
 shader = ExtResource("3_p57y4")
@@ -2447,6 +2448,7 @@ offset_bottom = 853.0
 alignment = 1
 
 [node name="NewGame" type="Label" parent="UI/MenuLayer/MenuContainer" unique_id=1345518984]
+material = ExtResource("568_x1isu")
 layout_mode = 2
 theme = ExtResource("3_u7lva")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -2455,6 +2457,7 @@ text = "NEW GAME"
 horizontal_alignment = 1
 
 [node name="Continue" type="Label" parent="UI/MenuLayer/MenuContainer" unique_id=2114905621]
+material = ExtResource("568_x1isu")
 layout_mode = 2
 theme = ExtResource("3_u7lva")
 theme_override_colors/font_color = Color(0.45, 0.45, 0.45, 1)
@@ -2463,6 +2466,7 @@ text = "CONTINUE"
 horizontal_alignment = 1
 
 [node name="SelectLevel" type="Label" parent="UI/MenuLayer/MenuContainer" unique_id=205016437]
+material = ExtResource("568_x1isu")
 layout_mode = 2
 theme = ExtResource("3_u7lva")
 theme_override_colors/font_color = Color(0.45, 0.45, 0.45, 1)
@@ -2471,6 +2475,7 @@ text = "SELECT LEVEL"
 horizontal_alignment = 1
 
 [node name="Options" type="Label" parent="UI/MenuLayer/MenuContainer" unique_id=1291195047]
+material = ExtResource("568_x1isu")
 layout_mode = 2
 theme = ExtResource("3_u7lva")
 theme_override_colors/font_color = Color(0.45, 0.45, 0.45, 1)
@@ -2479,6 +2484,7 @@ text = "OPTIONS"
 horizontal_alignment = 1
 
 [node name="Exit" type="Label" parent="UI/MenuLayer/MenuContainer" unique_id=1946239901]
+material = ExtResource("568_x1isu")
 layout_mode = 2
 theme = ExtResource("3_u7lva")
 theme_override_colors/font_color = Color(0.45, 0.45, 0.45, 1)

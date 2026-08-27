@@ -194,7 +194,7 @@ position = Vector2(-471, 0)
 nb_simultaneous_enemies = 4
 
 [node name="BasicEnemy" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="0" unique_id=1966584693 instance=ExtResource("12_10na3")]
-position = Vector2(679, -56)
+position = Vector2(71, 844)
 max_health = 50
 
 [node name="GoonEnemy" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="1" unique_id=1321743572 instance=ExtResource("14_4ioxg")]

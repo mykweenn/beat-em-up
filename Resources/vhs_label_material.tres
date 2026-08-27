@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dnoqjhduaefpl"]
+
+[ext_resource type="Shader" uid="uid://cp7fw3wp7fqej" path="res://Resources/vhs_label_tracking.gdshader" id="1"]
+
+[resource]
+shader = ExtResource("1")
+shader_parameter/jitter_strength = 0.890000042275
+shader_parameter/jitter_speed = 31.910001515725
+shader_parameter/tracking_strength = 2.5490001210775
+shader_parameter/tracking_speed = 15.940000757149999
+shader_parameter/tracking_bands = 13.55200054872
+shader_parameter/time_scale = 1.0
