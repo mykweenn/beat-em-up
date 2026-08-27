@@ -244,6 +244,19 @@ func reserve_slot(enemy: BasicEnemy) -> EnemySlot:
 	closest_slot.occupy(enemy)
 	return closest_slot
 
+# Возвращает ближайший СВОБОДНЫЙ слот к врагу (без занятия его).
+# Используется врагом, чтобы переоценивать, не появился ли слот ближе текущего.
+func get_closest_free_slot(enemy: BasicEnemy) -> EnemySlot:
+	var closest_slot: EnemySlot = null
+	var min_dist := INF
+	for slot: EnemySlot in enemy_slots:
+		if slot.is_free():
+			var dist := (enemy.global_position - slot.global_position).length_squared()
+			if dist < min_dist:
+				min_dist = dist
+				closest_slot = slot
+	return closest_slot
+
 # Освобождение слота, который был занят врагом
 func free_slot(enemy: BasicEnemy) -> void:
 	# Ищем конкретный слот напрямую через find_custom

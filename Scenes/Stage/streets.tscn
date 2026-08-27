@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://cjituhu2smwr2" path="res://Scenes/Stage/checkpoint.tscn" id="11_rpe1a"]
 [ext_resource type="PackedScene" uid="uid://jep2uj8ujo8a" path="res://Scenes/Characters/basic_enemy.tscn" id="12_10na3"]
 [ext_resource type="PackedScene" uid="uid://b107bhknlisaa" path="res://Scenes/Props/food.tscn" id="13_rpe1a"]
+[ext_resource type="PackedScene" uid="uid://63wipr5strpc" path="res://Scenes/Characters/goon_enemy.tscn" id="14_4ioxg"]
 [ext_resource type="PackedScene" uid="uid://mkd8b1ouke27" path="res://Scenes/Props/barrel.tscn" id="14_10na3"]
 [ext_resource type="PackedScene" uid="uid://djvul6iecvnh6" path="res://Scenes/Stage/cutscene_trigger.tscn" id="15_jufl5"]
 [ext_resource type="Script" uid="uid://bwcjwfooh88cm" path="res://Scenes/Stage/cutscene_manager.gd" id="16_uokwh"]
@@ -193,14 +194,11 @@ position = Vector2(-471, 0)
 nb_simultaneous_enemies = 4
 
 [node name="BasicEnemy" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="0" unique_id=1966584693 instance=ExtResource("12_10na3")]
-position = Vector2(349, 938)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
+position = Vector2(679, -56)
 max_health = 50
+
+[node name="GoonEnemy" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="1" unique_id=1321743572 instance=ExtResource("14_4ioxg")]
+position = Vector2(2564, 879)
 
 [node name="CollisionShape2D" parent="Checkpoints/Checkpoint/PlayerDetectionArea" parent_id_path=PackedInt32Array(1922420126, 289896115) index="0" unique_id=1130211026]
 position = Vector2(963, 819)
@@ -214,66 +212,24 @@ nb_simultaneous_enemies = 4
 
 [node name="BasicEnemy" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1646409968, 214738812) index="0" unique_id=2127243976 instance=ExtResource("12_10na3")]
 position = Vector2(2003, 977)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="BasicEnemy3" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1646409968, 214738812) index="1" unique_id=109644746 instance=ExtResource("12_10na3")]
 position = Vector2(2183, 980)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="BasicEnemy4" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1646409968, 214738812) index="2" unique_id=1696898099 instance=ExtResource("12_10na3")]
 position = Vector2(2334, 996)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="BasicEnemy5" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1646409968, 214738812) index="3" unique_id=107603668 instance=ExtResource("12_10na3")]
 position = Vector2(-185, 971)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="BasicEnemy6" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1646409968, 214738812) index="4" unique_id=1905638149 instance=ExtResource("12_10na3")]
 position = Vector2(-152, 1005)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="BasicEnemy7" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1646409968, 214738812) index="5" unique_id=1269732089 instance=ExtResource("12_10na3")]
 position = Vector2(-222, 976)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="BasicEnemy8" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1646409968, 214738812) index="6" unique_id=777730159 instance=ExtResource("12_10na3")]
 position = Vector2(-141, 1008)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="CollisionShape2D" parent="Checkpoints/Checkpoint2/PlayerDetectionArea" parent_id_path=PackedInt32Array(1646409968, 289896115) index="0" unique_id=1130211026]
 position = Vector2(963, 819)
@@ -287,66 +243,24 @@ nb_simultaneous_enemies = 4
 
 [node name="BasicEnemy" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(1318329992, 214738812) index="0" unique_id=1211946546 instance=ExtResource("12_10na3")]
 position = Vector2(2054, 771)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="BasicEnemy3" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(1318329992, 214738812) index="1" unique_id=443444264 instance=ExtResource("12_10na3")]
 position = Vector2(2351, 980)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="BasicEnemy4" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(1318329992, 214738812) index="2" unique_id=977215512 instance=ExtResource("12_10na3")]
 position = Vector2(2334, 742)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="BasicEnemy5" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(1318329992, 214738812) index="3" unique_id=111923144 instance=ExtResource("12_10na3")]
 position = Vector2(-744, 989)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="BasicEnemy6" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(1318329992, 214738812) index="4" unique_id=1297154193 instance=ExtResource("12_10na3")]
 position = Vector2(-318, 997)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="BasicEnemy7" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(1318329992, 214738812) index="5" unique_id=320193469 instance=ExtResource("12_10na3")]
 position = Vector2(-498, 980)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="BasicEnemy8" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(1318329992, 214738812) index="6" unique_id=1203100467 instance=ExtResource("12_10na3")]
 position = Vector2(-577, 1026)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="CollisionShape2D" parent="Checkpoints/Checkpoint3/PlayerDetectionArea" parent_id_path=PackedInt32Array(1318329992, 289896115) index="0" unique_id=1130211026]
 position = Vector2(963, 819)
@@ -360,66 +274,24 @@ nb_simultaneous_enemies = 4
 
 [node name="BasicEnemy" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1809565, 214738812) index="0" unique_id=1821710526 instance=ExtResource("12_10na3")]
 position = Vector2(2054, 771)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="BasicEnemy3" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1809565, 214738812) index="1" unique_id=84846677 instance=ExtResource("12_10na3")]
 position = Vector2(2351, 980)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="BasicEnemy4" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1809565, 214738812) index="2" unique_id=1913682248 instance=ExtResource("12_10na3")]
 position = Vector2(2334, 742)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="BasicEnemy5" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1809565, 214738812) index="3" unique_id=664897331 instance=ExtResource("12_10na3")]
 position = Vector2(-331, 734)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="BasicEnemy6" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1809565, 214738812) index="4" unique_id=720844720 instance=ExtResource("12_10na3")]
 position = Vector2(-318, 997)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="BasicEnemy7" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1809565, 214738812) index="5" unique_id=1012085789 instance=ExtResource("12_10na3")]
 position = Vector2(-498, 834)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="BasicEnemy8" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1809565, 214738812) index="6" unique_id=1451688560 instance=ExtResource("12_10na3")]
 position = Vector2(-577, 1026)
-down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
 
 [node name="CollisionShape2D" parent="Checkpoints/Checkpoint4/PlayerDetectionArea" parent_id_path=PackedInt32Array(1809565, 289896115) index="0" unique_id=1130211026]
 position = Vector2(963, 819)
@@ -450,6 +322,7 @@ script = ExtResource("16_uokwh")
 libraries/ = SubResource("AnimationLibrary_uokwh")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." index="9" unique_id=694249295]
+color = Color(0.51441246, 0.6801741, 0.7479608, 1)
 
 [editable path="Checkpoints/Checkpoint"]
 [editable path="Checkpoints/Checkpoint2"]

@@ -213,7 +213,16 @@ func goto_melee_position() -> void:
 			player.free_slot(self)
 	elif player_slot == null:
 		player_slot = player.reserve_slot(self)
-		
+	else:
+		# Переоцениваем: если появился свободный слот ближе текущего — тут же переходим на него
+		var closest_free := player.get_closest_free_slot(self)
+		if closest_free != null:
+			var cur_dist := (player_slot.global_position - global_position).length_squared()
+			var new_dist := (closest_free.global_position - global_position).length_squared()
+			if new_dist < cur_dist - 1.0:
+				player.free_slot(self)
+				player_slot = player.reserve_slot(self)
+
 	if player_slot != null:
 		var direction := (player_slot.global_position - global_position).normalized()
 		if is_player_within_range():

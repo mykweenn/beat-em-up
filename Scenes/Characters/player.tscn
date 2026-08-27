@@ -1448,6 +1448,7 @@ DASH_DURATION = 0.3
 autodestroy_on_drop = true
 damage_gun_shot = 8
 damage_power = 6
+has_knife = true
 max_ammo_per_gun = 3
 finisher_damage_multiplier = 1.0
 mount_height = 10.0
@@ -1518,7 +1519,7 @@ vframes = 10
 frame = 80
 
 [node name="WeaponPosition" parent="KnifeSprite" index="0" unique_id=1866994207]
-position = Vector2(17, -14)
+position = Vector2(17, -160)
 
 [node name="GunSprite" parent="." index="9" unique_id=1109774171]
 texture = ExtResource("6_khnq4")

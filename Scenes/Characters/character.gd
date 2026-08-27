@@ -105,6 +105,10 @@ const FINISHER_RANGE_Y := 60.0
 @onready var projectile_aim: RayCast2D = $ProjectileAim
 @onready var weapon_position: Node2D = $KnifeSprite/WeaponPosition
 
+# Базовые позиции ножа и пушки (из сцены), вокруг которых двигается высота.
+var _knife_base_position := Vector2.ZERO
+var _gun_base_position := Vector2.ZERO
+
 
 enum State {IDLE, WALK, ATTACK, TAKEOFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUNDED, DEATH, FLY, PREP_ATTACK, 
 THROW, PICKUP, SHOOT, PREP_SHOOT, RECOVER, DROP, WAIT, APPEARING, SPRINT, DASH, SPRINT_ATTACK, CUTSCENE, BLOCK, 
@@ -212,6 +216,10 @@ var _death_sprite_spawned := false
 
 
 func _ready():
+	# Сохраняем базовые позиции ножа и пушки из сцены,
+	# чтобы set_sprite_height_position поднимал их без затирания.
+	_knife_base_position = knife_sprite.position
+	_gun_base_position = gun_sprite.position
 	damage_emitter.area_entered.connect(on_emit_damage.bind())
 	damage_receiver.damage_received.connect(on_receive_damage.bind())
 	collateral_damage_emitter.area_entered.connect(on_emit_collateral_damage.bind())
@@ -282,9 +290,10 @@ func set_sprite_visibility() -> void:
 ## - корректировке хитбоксов/анимаций
 func set_sprite_height_position() -> void:
 	character_sprite.position = Vector2.UP * height
-	knife_sprite.position = Vector2.UP * height
-	# knife_sprite.position = weapon_position.global_position
-	gun_sprite.position = Vector2.UP * height
+	# Нож и пушка: поднимаем их базовую позицию на высоту, не затирая
+	# позицию, заданную в сцене (например, у goon нож настроен на -197).
+	knife_sprite.position = _knife_base_position + Vector2.UP * height
+	gun_sprite.position = _gun_base_position + Vector2.UP * height
 
 
 ## Настраивает состояние коллизий и зон взаимодействия персонажа.
@@ -879,10 +888,16 @@ func on_throw_complete() -> void:
 		has_knife = false
 	SoundPlayer.play(SoundManager.Sound.SWOOSH)
 	
-	# Точка на земле: X от оружия (чтобы летел из руки), Y от ног врага
-		# Передаем точную точку руки, а высоту ставим в 0.0, чтобы движок не смещал её дважды
-	var collectible_global_position := weapon_position.global_position
-	var collectible_height := 0.0
+	# Точка старта ножа: горизонталь берём из руки, вертикаль — из ног
+	# (как в shot_gun). Высоту руки высчитываем как разницу между ногами
+	# и глобальной позицией оружия — это даёт полную высоту руки.
+	var collectible_global_position := Vector2(weapon_position.global_position.x, global_position.y)
+	var collectible_height := global_position.y - weapon_position.global_position.y
+	
+	# Выталкиваем нож вперёд по направлению броска, чтобы он не спавнился
+	# внутри кидающего и не задевал его собственный DamageReceiver
+	# (полуширина DamageReceiver у игрока ~80px, поэтому запас большой).
+	collectible_global_position += heading * 120.0
 	
 	EntityManager.spawn_collectible.emit(collectible_type, Collectible.State.FLY, collectible_global_position, heading, collectible_height, false)
 
@@ -959,8 +974,8 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 
 		# === ЛОГИКА БЛОКИРОВАНИЯ ===
 	if state == State.BLOCK:
-		# Удар в спину для игрока — блок не работает, урон проходит
-		if type == Type.PLAYER and is_hit_from_behind:
+		# Удар в спину — блок не работает, урон проходит (и у игрока, и у врагов)
+		if is_hit_from_behind:
 			pass # Пропускаем блок, урон проходит обычным путём
 		else:
 			# Проверяем, не прилетел ли в нас заряженный удар от нападающего
