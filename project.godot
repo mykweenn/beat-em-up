@@ -16,7 +16,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="Streets of Blood"
 config/description="Nevsky's game prototype"
-config/tags=PackedStringArray("bytestudio", "morevna", "prototype")
+config/tags=PackedStringArray("bytestudio", "prototype")
 run/main_scene="uid://dmbygnmdtaw0c"
 config/features=PackedStringArray("4.7", "Forward Plus")
 

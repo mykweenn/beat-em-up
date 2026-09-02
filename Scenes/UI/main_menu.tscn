@@ -15,16 +15,15 @@
 [ext_resource type="Shader" uid="uid://b1mnyisncsnul" path="res://Resources/main_menu_shader.gdshader" id="7_cejvf"]
 [ext_resource type="Texture2D" uid="uid://wiro6d3s0qtw" path="res://Assets/Video/frames/frame_0005.png" id="7_j4vii"]
 [ext_resource type="Texture2D" uid="uid://d2260jbeahd86" path="res://Assets/Video/frames/frame_0006.png" id="8_sd715"]
-[ext_resource type="AudioStream" uid="uid://bc0lv7ggshgjt" path="res://Assets/Music/Виа Самоцветы - Вся Жизнь Впереди.mp3" id="8_wqme5"]
-[ext_resource type="AudioStream" uid="uid://btegyfl2whhfr" path="res://Assets/Music/ВИА_Самоцветы_Юрия_Маликова_Мой_адрес_Советский_Союз.mp3" id="9_jewm6"]
+[ext_resource type="AudioStream" uid="uid://r2g2fb3qwfih" path="res://Assets/Music/via_vsya_jizn_vperedi.mp3" id="9_jewm6"]
 [ext_resource type="Texture2D" uid="uid://baay26ks7bgpt" path="res://Assets/Video/frames/frame_0007.png" id="9_ocfxh"]
 [ext_resource type="Texture2D" uid="uid://bidedlnqjcuha" path="res://Assets/Video/frames/frame_0008.png" id="10_0c3e5"]
-[ext_resource type="AudioStream" uid="uid://3lwgcfu5dien" path="res://Assets/Music/Звенит_январская_вьюга_Нина_Бродская.mp3" id="10_cejvf"]
-[ext_resource type="AudioStream" uid="uid://chach5g3ugaha" path="res://Assets/Music/Лучший_город_Земли_Муслим_Магомаев.mp3" id="11_jewm6"]
+[ext_resource type="AudioStream" uid="uid://ddwbtyfgtm7v" path="res://Assets/Music/zvenit_january_vjuga.mp3" id="10_cejvf"]
+[ext_resource type="AudioStream" uid="uid://d3yhp0dkteskg" path="res://Assets/Music/luchi_gorod_zemli.mp3" id="11_jewm6"]
 [ext_resource type="Texture2D" uid="uid://blnx14755udyh" path="res://Assets/Video/frames/frame_0009.png" id="11_x86yu"]
 [ext_resource type="Texture2D" uid="uid://qukr7fiuxd02" path="res://Assets/Video/frames/frame_0010.png" id="12_7uffi"]
 [ext_resource type="Texture2D" uid="uid://dphyvmemgmydw" path="res://Assets/Video/frames/frame_0011.png" id="13_dbqru"]
-[ext_resource type="AudioStream" uid="uid://dacpqsjus1tl2" path="res://Assets/Music/Street sounds in a small Russian city.mp3" id="13_ru8vt"]
+[ext_resource type="AudioStream" uid="uid://ds6vslikpvlo6" path="res://Assets/Music/Le perv - Carpenter Brut.mp3" id="13_ru8vt"]
 [ext_resource type="Texture2D" uid="uid://v267k31lw0c2" path="res://Assets/Video/frames/frame_0012.png" id="14_i2oo7"]
 [ext_resource type="Texture2D" uid="uid://fh5l1ykiltky" path="res://Assets/Video/frames/frame_0013.png" id="15_jdwjv"]
 [ext_resource type="Texture2D" uid="uid://dvggw0t558fg1" path="res://Assets/Video/frames/frame_0014.png" id="16_56sqt"]
@@ -577,6 +576,11 @@
 [ext_resource type="Texture2D" uid="uid://c7db3ehtp3kj8" path="res://Assets/Video/frames/frame_0561.png" id="563_pnp3s"]
 [ext_resource type="FontFile" uid="uid://buc5njqgkig2m" path="res://Assets/Fonts/impact.ttf" id="567_p57y4"]
 [ext_resource type="Material" uid="uid://dnoqjhduaefpl" path="res://Resources/vhs_label_material.tres" id="568_x1isu"]
+[ext_resource type="Script" uid="uid://ifaj773rnnfl" path="res://Scenes/UI/ticker_container.gd" id="570_sd715"]
+[ext_resource type="Shader" uid="uid://bu43qsvw5gvng" path="res://Scenes/UI/vhs_text_shake.gdshader" id="571_ocfxh"]
+[ext_resource type="FontFile" uid="uid://chs7jfxhb2vqa" path="res://Assets/Fonts/Rodchenko/RodchenkoLightCond.otf" id="572_ocfxh"]
+[ext_resource type="Shader" uid="uid://cwtt71dielhnx" path="res://Themes/anamorphic_flare.gdshader" id="573_ocfxh"]
+[ext_resource type="AudioStream" uid="uid://cux2s0peyvjq5" path="res://Assets/Music/rain_sfx_2.wav" id="577_x1isu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_p57y4"]
 shader = ExtResource("3_p57y4")
@@ -2315,6 +2319,23 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sd715"]
+bg_color = Color(0, 0, 0, 0.6431373)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sd715"]
+shader = ExtResource("571_ocfxh")
+shader_parameter/shake_speed = 30.0
+shader_parameter/shake_intensity = 0.003
+shader_parameter/shake_block_size = 20.0
+shader_parameter/color_split = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s1fef"]
+shader = ExtResource("573_ocfxh")
+shader_parameter/brightness_threshold = 0.8
+shader_parameter/flare_intensity = 2.0
+shader_parameter/flare_stretch = 0.04
+shader_parameter/flare_color = Color(0.1, 0.4, 1, 1)
+
 [sub_resource type="Environment" id="Environment_70rqd"]
 background_mode = 3
 glow_enabled = true
@@ -2329,7 +2350,7 @@ shader_parameter/defocus = 0.0
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_k33u3"]
 streams_count = 4
-stream_0/stream = ExtResource("8_wqme5")
+stream_0/stream = ExtResource("13_ru8vt")
 stream_1/stream = ExtResource("9_jewm6")
 stream_2/stream = ExtResource("10_cejvf")
 stream_3/stream = ExtResource("11_jewm6")
@@ -2578,6 +2599,33 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
+[node name="TickerContainer" type="Panel" parent="UI" unique_id=1683226295]
+clip_contents = true
+offset_left = 59.0
+offset_top = 42.0
+offset_right = 1040.0
+offset_bottom = 146.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_sd715")
+script = ExtResource("570_sd715")
+
+[node name="TickerLabel" type="Label" parent="UI/TickerContainer" unique_id=1546735302]
+material = SubResource("ShaderMaterial_sd715")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_u7lva")
+theme_override_fonts/font = ExtResource("572_ocfxh")
+theme_override_font_sizes/font_size = 75
+text = "ВНИМАНИЕ ЭТО ДАЖЕ НЕ АЛЬФА-ВЕРСИЯ ИГРЫ"
+
+[node name="ColorRect" type="ColorRect" parent="UI" unique_id=1466212474]
+material = SubResource("ShaderMaterial_s1fef")
+offset_right = 1821.0
+offset_bottom = 965.0
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=961648565]
 environment = SubResource("Environment_70rqd")
 
@@ -2606,10 +2654,11 @@ defocus_chance = 0.1
 
 [node name="MainMenuMusic" type="AudioStreamPlayer" parent="." unique_id=740292933]
 stream = SubResource("AudioStreamRandomizer_k33u3")
+volume_db = -16.889
 bus = &"MuffledSound"
 
 [node name="AmbientSFX" type="AudioStreamPlayer" parent="." unique_id=1311278425]
-stream = ExtResource("13_ru8vt")
-volume_db = 9.431
+stream = ExtResource("577_x1isu")
+volume_db = 19.555
 autoplay = true
 bus = &"Street_Ambiance"

@@ -8,13 +8,13 @@ enum Music {INTRO, MENU, STAGE1, STAGE2, STAGE1_ALT, ARENA, STREETS}
 var autoplayer_music : AudioStream = null
 
 const MUSIC_MAP : Dictionary = {
-	Music.INTRO: preload("res://Assets/Music/03.mp3"),
+	Music.INTRO: preload("res://Assets/Music/Kane   Lynch 2 Dog Days - Singapore Nights.mp3"),
 	Music.MENU: preload("res://Assets/Music/Kane   Lynch 2 Dog Days - Singapore Nights.mp3"),
 	Music.STAGE1: preload("res://Assets/Music/Le perv - Carpenter Brut.mp3"),
-	Music.STAGE2: preload("res://Assets/Music/Kaito_Shoma_Claymore_Phonk_Metal_Группа_Ls_Beats.mp3"),
-	Music.STAGE1_ALT: preload("res://Assets/Music/03.mp3"),
-	Music.ARENA: preload("res://Assets/Music/03.mp3"),
-	Music.STREETS: preload("res://Assets/Music/Mother Russia Bleeds OST (Fixions) - Secret Blades.mp3"),
+	Music.STAGE2: preload("res://Assets/Music/Le perv - Carpenter Brut.mp3"),
+	Music.STAGE1_ALT: preload("res://Assets/Music/Le perv - Carpenter Brut.mp3"),
+	Music.ARENA: preload("res://Assets/Music/Le perv - Carpenter Brut.mp3"),
+	Music.STREETS: preload("res://Assets/Music/Le perv - Carpenter Brut.mp3"),
 }
 
 

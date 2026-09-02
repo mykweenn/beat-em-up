@@ -19,6 +19,7 @@
 [ext_resource type="AudioStream" uid="uid://0e0mwasgbcfl" path="res://Assets/SFX/Pause.wav" id="17_jstji"]
 [ext_resource type="AudioStream" uid="uid://cesor0slmcoox" path="res://Assets/SFX/UnPause.wav" id="18_jldu6"]
 [ext_resource type="AudioStream" uid="uid://cf0wcb4kjkdft" path="res://Assets/SFX/StaticVHS.wav" id="18_t6xiq"]
+[ext_resource type="AudioStream" uid="uid://dnbxocfceibn3" path="res://Assets/SFX/click_power.mp3" id="20_3hoyn"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_2yie3"]
 random_pitch = 1.0170096
@@ -106,5 +107,10 @@ bus = &"SFX"
 
 [node name="SFXStaticMenu" type="AudioStreamPlayer" parent="." unique_id=556653651]
 stream = ExtResource("18_t6xiq")
+volume_db = -9.0
+bus = &"SFX"
+
+[node name="SFXClick2" type="AudioStreamPlayer" parent="." unique_id=348742965]
+stream = ExtResource("20_3hoyn")
 volume_db = -9.0
 bus = &"SFX"

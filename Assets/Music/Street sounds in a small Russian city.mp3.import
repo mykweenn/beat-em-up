@@ -2,13 +2,12 @@
 
 importer="mp3"
 type="AudioStreamMP3"
-uid="uid://dacpqsjus1tl2"
-path="res://.godot/imported/Street sounds in a small Russian city.mp3-857909012890fe1c0ce78dc51eafa32e.mp3str"
+uid="uid://egkid6ca8pl0"
+valid=false
 
 [deps]
 
-source_file="res://Assets/Music/Street sounds in a small Russian city.mp3"
-dest_files=["res://.godot/imported/Street sounds in a small Russian city.mp3-857909012890fe1c0ce78dc51eafa32e.mp3str"]
+source_file="res://Assets/Music/reserve/Street sounds in a small Russian city.mp3"
 
 [params]
 

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://rteyqs5qi2vf"]
 
 [ext_resource type="Script" uid="uid://cd0c4ad3rfkbf" path="res://Scenes/UI/hint_popup.gd" id="1_3mgbt"]
-[ext_resource type="Texture2D" uid="uid://p7tmlaha6orn" path="res://Assets/Art/nevsky characters/cat/1.6_emotions_V3.webp" id="2_3mgbt"]
+[ext_resource type="Texture2D" uid="uid://dp8w5k27rski6" path="res://Assets/Art/skeletons - Copy.webp" id="2_3mgbt"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3mgbt"]
 atlas = ExtResource("2_3mgbt")
@@ -62,6 +62,7 @@ _data = {
 }
 
 [node name="HintPopup" type="Control" unique_id=290490208]
+visible = false
 z_index = 100
 layout_mode = 3
 anchors_preset = 15

@@ -4,13 +4,13 @@ extends Node
 @onready var sounds : Array[AudioStreamPlayer] = [$SFXClick, $SFXFood, $SFXGogogo, $SFXGrunt, 
 $SFXGunshot, $SFXHit, $SFXHit2, $SFXHit3, 
 $SFXKnife, $SFXSwoosh, $SFXParry, $SFXChargeAttack, 
-$SFXCollisionHit, $SFXFinisher, $SFXPause, $SFXUnpause, $SFXStaticMenu]
+$SFXCollisionHit, $SFXFinisher, $SFXPause, $SFXUnpause, $SFXStaticMenu, $SFXClick2]
 
 @onready var sfx_static_menu: AudioStreamPlayer = $SFXStaticMenu
 
 enum Sound {CLICK, FOOD, GOGOGO, GRUNT, GUNSHOT, HIT1, 
 HIT2, HIT3, KNIFE, SWOOSH, PARRY, CHARGE_ATTACK, 
-COLLISION_HIT, FINISHER, PAUSE, UNPAUSE, STATIC_MENU}
+COLLISION_HIT, FINISHER, PAUSE, UNPAUSE, STATIC_MENU, CLICK_2}
 
 
 func _ready() -> void:

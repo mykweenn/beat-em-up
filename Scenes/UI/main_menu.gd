@@ -53,7 +53,7 @@ func _ready() -> void:
 	level_panel.visible = false
 	options_screen.visible = false
 	options_screen.exit.connect(_on_options_exit)
-	SoundPlayer.play_static_menu()
+	SoundPlayer.stop_static_menu()
 	# MusicPlayer.play(MusicManager.Music.MENU)
 	$MainMenuMusic.play()
 	$AmbientSFX.play()
@@ -99,11 +99,11 @@ func handle_main_input() -> void:
 func execute_menu_action() -> void:
 	match current_index:
 		0:
-			SoundPlayer.play(SoundManager.Sound.HIT1)
+			SoundPlayer.play(SoundManager.Sound.CLICK_2)
 			SoundPlayer.stop_static_menu()
 			GameManager.start_new_game()
 		1:
-			SoundPlayer.play(SoundManager.Sound.HIT1)
+			SoundPlayer.play(SoundManager.Sound.CLICK_2)
 			SoundPlayer.stop_static_menu()
 			GameManager.continue_game()
 		2:
@@ -185,11 +185,11 @@ func handle_level_input() -> void:
 		refresh_level_list()
 	elif Input.is_action_just_pressed("ui_accept"):
 		if level_index < GameManager.get_unlocked_level_count():
-			SoundPlayer.play(SoundManager.Sound.HIT1)
+			SoundPlayer.play(SoundManager.Sound.CLICK_2)
 			SoundPlayer.stop_static_menu()
 			GameManager.load_level(level_index)
 		else:
-			SoundPlayer.play(SoundManager.Sound.HIT2)
+			SoundPlayer.play(SoundManager.Sound.CLICK_2)
 	elif Input.is_action_just_pressed("ui_cancel"):
 		SoundPlayer.play(SoundManager.Sound.CLICK)
 		hide_level_panel()
