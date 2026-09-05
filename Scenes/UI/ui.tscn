@@ -15,7 +15,7 @@
 [ext_resource type="Theme" uid="uid://b2qvp1u1iua2l" path="res://gui_theme.tres" id="13_fy0us"]
 [ext_resource type="Texture2D" uid="uid://cy3tw8lp7prhf" path="res://Assets/UI/MobileControls/Icons/Default/icon_button_a.png" id="14_h6tq4"]
 [ext_resource type="Texture2D" uid="uid://bs6spmedmtjf1" path="res://Assets/UI/MobileControls/Icons/Default/icon_sword.png" id="14_t7te2"]
-[ext_resource type="Shader" uid="uid://bssq82abpwxrs" path="res://Resources/vhs.gdshader" id="16_56q1t"]
+[ext_resource type="Shader" uid="uid://cwtt71dielhnx" path="res://Themes/anamorphic_flare.gdshader" id="17_fevae"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_56q1t"]
 atlas = ExtResource("4_t7te2")
@@ -51,29 +51,12 @@ expand_margin_bottom = 10.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_t7te2"]
 radius = 55.26
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_t7te2"]
-shader = ExtResource("16_56q1t")
-shader_parameter/overlay = false
-shader_parameter/scanlines_opacity = 0.10000000475
-shader_parameter/scanlines_width = 0.25
-shader_parameter/grille_opacity = 0.094000004465
-shader_parameter/resolution = Vector2(720, 480)
-shader_parameter/pixelate = true
-shader_parameter/roll = true
-shader_parameter/roll_speed = 0.2
-shader_parameter/roll_size = 2.678000127205
-shader_parameter/roll_variation = 4.45100020816262
-shader_parameter/distort_intensity = 0.0050000002375
-shader_parameter/noise_opacity = 0.1200000057
-shader_parameter/noise_speed = 5.0
-shader_parameter/static_noise_intensity = 0.02000000095
-shader_parameter/aberration = 0.01100004802250009
-shader_parameter/brightness = 1.4
-shader_parameter/discolor = false
-shader_parameter/warp_amount = 0.0
-shader_parameter/clip_warp = false
-shader_parameter/vignette_intensity = 0.4
-shader_parameter/vignette_opacity = 0.202000009595
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ny3ap"]
+shader = ExtResource("17_fevae")
+shader_parameter/brightness_threshold = 0.3950000187625
+shader_parameter/flare_intensity = 2.0
+shader_parameter/flare_stretch = 0.04
+shader_parameter/flare_color = Color(0.1, 0.4, 1, 1)
 
 [node name="UI" type="CanvasLayer" unique_id=758194309]
 process_mode = 3
@@ -110,6 +93,7 @@ stretch_mode = 2
 
 [node name="EnemyHealthBar" parent="MarginContainer/UIContainer" unique_id=1596695575 instance=ExtResource("3_c7mb3")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -176,6 +160,7 @@ metadata/_edit_use_anchors_ = true
 
 [node name="GoIndicator" parent="MarginContainer/UIContainer" unique_id=1422744002 instance=ExtResource("7_jfwrg")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -336,14 +321,9 @@ texture_normal = ExtResource("14_h6tq4")
 shape = SubResource("CircleShape2D_t7te2")
 action = "jump"
 
-[node name="ShaderRect" type="ColorRect" parent="." unique_id=1204503510]
-visible = false
-z_index = 1
-material = SubResource("ShaderMaterial_t7te2")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="AnamorphicFlare" type="ColorRect" parent="." unique_id=2043105184]
+material = SubResource("ShaderMaterial_ny3ap")
+offset_right = 1821.0
+offset_bottom = 965.0
 
 [editable path="MarginContainer/UIContainer/EnemyHealthBar"]

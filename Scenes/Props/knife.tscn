@@ -113,7 +113,8 @@ size = Vector2(44, 39.75)
 [node name="Knife" unique_id=995031682 instance=ExtResource("1_w8qsw")]
 monitorable = true
 autodestroy = true
-speed = 850.0
+damage = 20
+speed = 1200.0
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=192311108]
 position = Vector2(0, -39)

@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://c0r8blit4iyny" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_7_bg_buildings.png" id="8_r13cy"]
 [ext_resource type="Texture2D" uid="uid://bfjds8y7pugmu" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_8_fg_buildings.png" id="9_4ioxg"]
 [ext_resource type="Texture2D" uid="uid://dsfmrtkg152dw" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_9_wall.png" id="10_fy23a"]
+[ext_resource type="Texture2D" uid="uid://cv8dmfke5ld8o" path="res://Assets/Art/backgrounds/32x32 textures (1).png" id="10_mrqk7"]
 [ext_resource type="Texture2D" uid="uid://ghdeu4rmmusd" path="res://Assets/Art/MRB/Spirtes/VFX/raindrop.png" id="11_r13cy"]
 [ext_resource type="PackedScene" uid="uid://cjituhu2smwr2" path="res://Scenes/Stage/checkpoint.tscn" id="11_rpe1a"]
 [ext_resource type="PackedScene" uid="uid://jep2uj8ujo8a" path="res://Scenes/Characters/basic_enemy.tscn" id="12_10na3"]
@@ -18,6 +19,9 @@
 [ext_resource type="PackedScene" uid="uid://mkd8b1ouke27" path="res://Scenes/Props/barrel.tscn" id="14_10na3"]
 [ext_resource type="PackedScene" uid="uid://djvul6iecvnh6" path="res://Scenes/Stage/cutscene_trigger.tscn" id="15_jufl5"]
 [ext_resource type="Script" uid="uid://bwcjwfooh88cm" path="res://Scenes/Stage/cutscene_manager.gd" id="16_uokwh"]
+[ext_resource type="Texture2D" uid="uid://c3hb0peiqmibu" path="res://Assets/Art/backgrounds/2d_lights_and_shadows_neutral_point_light.webp" id="17_fy23a"]
+[ext_resource type="Shader" uid="uid://umaniw2a6tph" path="res://Themes/lynchlike.gdshader" id="20_b1yrp"]
+[ext_resource type="Shader" uid="uid://cniqiaesl2ric" path="res://Scenes/Stage/lens_distortion.gdshader" id="22_l00ln"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uokwh"]
 size = Vector2(7234, 46)
@@ -47,6 +51,29 @@ _data = {
 &"intro": SubResource("Animation_jufl5")
 }
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l00ln"]
+shader = ExtResource("22_l00ln")
+shader_parameter/distortion_intensity = 0.05
+shader_parameter/aberration_intensity = 0.01
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mrqk7"]
+shader = ExtResource("20_b1yrp")
+shader_parameter/streak_threshold = 0.9350000206625
+shader_parameter/streak_length = 0.18300000799398
+shader_parameter/streak_intensity = 3.694000175465
+shader_parameter/streak_color = Color(0.85, 0.92, 1, 1)
+shader_parameter/chromatic_aberration = 0.006000000285
+shader_parameter/noise_amount = 0.0290000013775
+shader_parameter/vignette_intensity = 0.870000041325
+
+[sub_resource type="Environment" id="Environment_s1fef"]
+glow_enabled = true
+glow_levels/1 = 0.66
+glow_intensity = 2.7
+glow_bloom = 0.46
+glow_blend_mode = 0
+glow_hdr_threshold = 0.5
+
 [node name="Streets" unique_id=402859074 instance=ExtResource("1_g7de4")]
 music = 2
 
@@ -64,7 +91,6 @@ scroll_scale = Vector2(0.001, 0.001)
 [node name="Sky" type="Parallax2D" parent="Backgrounds" index="1" unique_id=2011142918]
 scale = Vector2(5, 5)
 scroll_scale = Vector2(0.001, 0.001)
-repeat_size = Vector2(723, 0)
 
 [node name="SkySprite" type="Sprite2D" parent="Backgrounds/Sky" index="0" unique_id=557032542]
 scale = Vector2(0.99999994, 0.99999994)
@@ -74,7 +100,6 @@ centered = false
 [node name="Parallax2D6" type="Parallax2D" parent="Backgrounds" index="2" unique_id=2025943016]
 scale = Vector2(5, 5)
 scroll_scale = Vector2(0.001, 0.001)
-repeat_size = Vector2(723, 0)
 
 [node name="Stars" type="Sprite2D" parent="Backgrounds/Parallax2D6" index="0" unique_id=2139641709]
 scale = Vector2(0.99999994, 0.99999994)
@@ -83,7 +108,6 @@ centered = false
 
 [node name="Parallax2D4" type="Parallax2D" parent="Backgrounds" index="3" unique_id=1054514764]
 scale = Vector2(5, 5)
-repeat_size = Vector2(723, 0)
 
 [node name="Moon" type="Sprite2D" parent="Backgrounds/Parallax2D4" index="0" unique_id=953953005]
 scale = Vector2(0.99999994, 0.99999994)
@@ -92,7 +116,6 @@ centered = false
 
 [node name="Parallax2D3" type="Parallax2D" parent="Backgrounds" index="4" unique_id=99120144]
 scale = Vector2(5, 5)
-repeat_size = Vector2(723, 0)
 autoscroll = Vector2(10.28, 0)
 
 [node name="Clouds2" type="Sprite2D" parent="Backgrounds/Parallax2D3" index="0" unique_id=1361338186]
@@ -102,7 +125,6 @@ centered = false
 
 [node name="Parallax2D2" type="Parallax2D" parent="Backgrounds" index="5" unique_id=38200040]
 scale = Vector2(5, 5)
-repeat_size = Vector2(723, 0)
 autoscroll = Vector2(8.49, 0)
 
 [node name="Clouds" type="Sprite2D" parent="Backgrounds/Parallax2D2" index="0" unique_id=741236475]
@@ -113,7 +135,7 @@ centered = false
 [node name="Parallax2D" type="Parallax2D" parent="Backgrounds" index="6" unique_id=1056068741]
 scale = Vector2(5, 5)
 scroll_scale = Vector2(0.25, 0.25)
-repeat_size = Vector2(723, 0)
+scroll_offset = Vector2(99, 0)
 
 [node name="HousesBackground" type="Sprite2D" parent="Backgrounds/Parallax2D" index="0" unique_id=1328994413]
 scale = Vector2(0.99999994, 0.99999994)
@@ -123,7 +145,7 @@ centered = false
 [node name="HousesMidground" type="Parallax2D" parent="Backgrounds" index="7" unique_id=917993473]
 scale = Vector2(5, 5)
 scroll_scale = Vector2(0.1, 0.1)
-repeat_size = Vector2(723, 0)
+scroll_offset = Vector2(164.99998, 0)
 
 [node name="MainBackground7" type="Sprite2D" parent="Backgrounds/HousesMidground" index="0" unique_id=2114520310]
 scale = Vector2(0.99999994, 0.99999994)
@@ -133,16 +155,56 @@ centered = false
 [node name="HousesForeground" type="Parallax2D" parent="Backgrounds" index="8" unique_id=1714154221]
 scale = Vector2(5, 5)
 scroll_scale = Vector2(0.12, 0.12)
-repeat_size = Vector2(723, 0)
+scroll_offset = Vector2(158.99998, 0)
 
 [node name="MainBackground8" type="Sprite2D" parent="Backgrounds/HousesForeground" index="0" unique_id=520570638]
 scale = Vector2(0.99999994, 0.99999994)
 texture = ExtResource("9_4ioxg")
 centered = false
 
+[node name="PointLight2D" type="PointLight2D" parent="Backgrounds/HousesForeground" index="1" unique_id=1747568758]
+position = Vector2(82.799995, 95)
+scale = Vector2(0.98437506, 1.765625)
+color = Color(0.9166287, 0.9905314, 0, 1)
+texture = ExtResource("10_mrqk7")
+
+[node name="PointLight2D2" type="PointLight2D" parent="Backgrounds/HousesForeground" index="2" unique_id=1058956431]
+position = Vector2(123.00001, 100.20001)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("17_fy23a")
+
+[node name="PointLight2D3" type="PointLight2D" parent="Backgrounds/HousesForeground" index="3" unique_id=1554458765]
+position = Vector2(155.00003, 122.59999)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("17_fy23a")
+
+[node name="PointLight2D4" type="PointLight2D" parent="Backgrounds/HousesForeground" index="4" unique_id=1984704369]
+position = Vector2(220.79999, 119.40001)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("17_fy23a")
+
+[node name="PointLight2D5" type="PointLight2D" parent="Backgrounds/HousesForeground" index="5" unique_id=15063177]
+position = Vector2(292, 125.4)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("17_fy23a")
+
+[node name="PointLight2D6" type="PointLight2D" parent="Backgrounds/HousesForeground" index="6" unique_id=448491959]
+position = Vector2(408.2, 123.200005)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("17_fy23a")
+
+[node name="PointLight2D7" type="PointLight2D" parent="Backgrounds/HousesForeground" index="7" unique_id=1849337018]
+position = Vector2(511.4, 122.8)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("17_fy23a")
+
+[node name="PointLight2D8" type="PointLight2D" parent="Backgrounds/HousesForeground" index="8" unique_id=586018587]
+position = Vector2(479.40002, 98.8)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("17_fy23a")
+
 [node name="Wall" type="Parallax2D" parent="Backgrounds" index="9" unique_id=637899255]
 scale = Vector2(5, 5)
-repeat_size = Vector2(723, 0)
 
 [node name="MainBackground9" type="Sprite2D" parent="Backgrounds/Wall" index="0" unique_id=1700786141]
 position = Vector2(0, 0.8)
@@ -323,6 +385,29 @@ libraries/ = SubResource("AnimationLibrary_uokwh")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." index="9" unique_id=694249295]
 color = Color(0.51441246, 0.6801741, 0.7479608, 1)
+
+[node name="ShaderUI" type="CanvasLayer" parent="." index="10" unique_id=1799559544]
+
+[node name="LensRect" type="ColorRect" parent="ShaderUI" index="0" unique_id=707906271]
+z_index = 1
+material = SubResource("ShaderMaterial_l00ln")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ShaderRect" type="ColorRect" parent="ShaderUI" index="1" unique_id=749676475]
+z_index = 1
+material = SubResource("ShaderMaterial_mrqk7")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="11" unique_id=1258779386]
+environment = SubResource("Environment_s1fef")
 
 [editable path="Checkpoints/Checkpoint"]
 [editable path="Checkpoints/Checkpoint2"]

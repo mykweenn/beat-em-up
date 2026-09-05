@@ -518,7 +518,7 @@ func flip_sprites():
 	character_sprite.flip_h = not faces_right
 	var side := 1.0 if faces_right else -1.0
 	knife_sprite.scale.x = side
-	gun_sprite.scale.x = side
+	gun_sprite.scale.x = side * 6
 	projectile_aim.scale.x = side
 	damage_emitter.scale.x = side
 
@@ -1099,7 +1099,7 @@ func on_emit_damage(receiver: DamageReceiver):
 		hit_type = DamageReceiver.HitType.LAUNCH
 		current_damage = damage_power
 	if state == State.SPRINT_ATTACK:
-		hit_type = DamageReceiver.HitType.POWER
+		hit_type = DamageReceiver.HitType.LAUNCH
 	if state == State.KICK:
 		hit_type = DamageReceiver.HitType.LAUNCH
 	if state == State.UPPERCUT:

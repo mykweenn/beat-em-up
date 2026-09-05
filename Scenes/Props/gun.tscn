@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://dtpmno753dbn7"]
 
 [ext_resource type="PackedScene" uid="uid://dush60hj76vcx" path="res://Scenes/Props/collectable.tscn" id="1_mfcms"]
-[ext_resource type="Texture2D" uid="uid://bflx1cmi2suic" path="res://Assets/Art/props/gun.png" id="2_ymhxg"]
+[ext_resource type="Texture2D" uid="uid://cdfpfskv866el" path="res://Assets/Art/props/Beretta_Sprite.webp" id="2_ymhxg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ymhxg"]
+size = Vector2(72, 51)
 
 [sub_resource type="Animation" id="Animation_ymhxg"]
 length = 0.001
@@ -83,21 +84,22 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j3olw"]
-size = Vector2(3, 3)
+size = Vector2(44, 32)
 
 [node name="Gun" unique_id=995031682 instance=ExtResource("1_mfcms")]
 damage = 3
 knockdown_intensity = 200.0
+speed = 900.0
 type = 1
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=192311108]
-position = Vector2(0, -3)
+position = Vector2(-1, -7.5)
 shape = SubResource("RectangleShape2D_ymhxg")
 
 [node name="CollectibleSprite" parent="." index="1" unique_id=1942615502]
 texture = ExtResource("2_ymhxg")
 centered = false
-offset = Vector2(-8, -8)
+offset = Vector2(-37.105, -30.6)
 
 [node name="AnimationPlayer" parent="." index="3" unique_id=820106158]
 libraries/ = SubResource("AnimationLibrary_1wtac")

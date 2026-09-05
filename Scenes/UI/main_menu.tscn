@@ -2331,7 +2331,7 @@ shader_parameter/color_split = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_s1fef"]
 shader = ExtResource("573_ocfxh")
-shader_parameter/brightness_threshold = 0.8
+shader_parameter/brightness_threshold = 0.3950000187625
 shader_parameter/flare_intensity = 2.0
 shader_parameter/flare_stretch = 0.04
 shader_parameter/flare_color = Color(0.1, 0.4, 1, 1)
@@ -2621,7 +2621,7 @@ theme_override_fonts/font = ExtResource("572_ocfxh")
 theme_override_font_sizes/font_size = 75
 text = "ВНИМАНИЕ ЭТО ДАЖЕ НЕ АЛЬФА-ВЕРСИЯ ИГРЫ"
 
-[node name="ColorRect" type="ColorRect" parent="UI" unique_id=1466212474]
+[node name="AnamorphicFlare" type="ColorRect" parent="UI" unique_id=1466212474]
 material = SubResource("ShaderMaterial_s1fef")
 offset_right = 1821.0
 offset_bottom = 965.0
@@ -2650,7 +2650,7 @@ zoom_min = 1.0
 zoom_max = 2.0
 zoom_speed = 1.3
 zoom_tremor = 0.05
-defocus_chance = 0.1
+defocus_chance = 0.8
 
 [node name="MainMenuMusic" type="AudioStreamPlayer" parent="." unique_id=740292933]
 stream = SubResource("AudioStreamRandomizer_k33u3")
