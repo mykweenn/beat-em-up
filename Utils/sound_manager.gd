@@ -15,6 +15,8 @@ COLLISION_HIT, FINISHER, PAUSE, UNPAUSE, STATIC_MENU, CLICK_2}
 
 func _ready() -> void:
 	sfx_static_menu.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	# Шипение меню продолжает звучать и в паузе
+	sfx_static_menu.process_mode = Node.PROCESS_MODE_ALWAYS
 
 
 func play(sfx: Sound, tweak_pitch: bool = false) -> void:

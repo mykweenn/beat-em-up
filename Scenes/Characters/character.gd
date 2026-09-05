@@ -694,6 +694,11 @@ func start_mount_punch() -> void:
 	finisher_anim_current = "finisher_" + str(finisher_anim_index + 1)
 	finisher_anim_index = (finisher_anim_index + 1) % 2
 	state = State.FINISHER
+	# Тряска камеры в момент начала добивания (замах)
+	if type == Type.PLAYER:
+		var cam := get_viewport().get_camera_2d()
+		if cam and cam.has_method("trigger_finisher_windup_shake"):
+			cam.trigger_finisher_windup_shake()
 
 
 ## Обрабатывает активное добивание (вызывается из _physics_process).
@@ -810,6 +815,11 @@ func _apply_finisher_damage() -> void:
 	mount_idle_timer = 0.0 # попадание продлевает время сидения
 	HitstopManager.freeze(0.12, 0.12)
 	SoundPlayer.play(SoundManager.Sound.FINISHER)
+	# Тряска камеры в момент удара добивания
+	if type == Type.PLAYER:
+		var cam := get_viewport().get_camera_2d()
+		if cam and cam.has_method("trigger_finisher_impact_shake"):
+			cam.trigger_finisher_impact_shake()
 
 	# spawn_finisher_text(target)
 	target.on_receive_damage(amount, direction, DamageReceiver.HitType.KNOCKDOWN, self)

@@ -8,6 +8,8 @@ var sfx_volume := 5
 func set_music_volume(value: int) -> void:
 	music_volume = value
 	AudioServer.set_bus_volume_db(1, linear_to_db(value / 10.0))
+	# Если пауза открыта и музыка приглушена — пересчитываем приглушение
+	MusicPlayer.on_options_music_volume_changed()
 
 
 func set_sfx_volume(value: int) -> void:

@@ -60,6 +60,8 @@ func handle_input() -> void:
 			options_screen = OPTIONS_SCREEN_PREFAB.instantiate()
 			options_screen.exit.connect(unpause)
 			add_child(options_screen)
+			# Музыка продолжает играть, но приглушается — удобно настраивать громкость
+			MusicPlayer.set_ducked(true)
 			get_tree().paused = true
 			SoundPlayer.play(SoundManager.Sound.PAUSE)
 			SoundPlayer.play_static_menu()
@@ -70,6 +72,7 @@ func handle_input() -> void:
 
 func unpause() -> void:
 	options_screen.queue_free()
+	MusicPlayer.set_ducked(false)
 	get_tree().paused = false
 	SoundPlayer.stop_static_menu()
 	

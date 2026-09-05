@@ -40,11 +40,26 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
 	procces_time_between_combos()
+	_update_camera_effects()
 	
 	if state == State.DASH or state == State.SPRINT_ATTACK or state == State.DASH_KICK or state == State.RUNNING_GRAB:
 		ghost(delta)
 	if state == State.RUNNING_GRAB:
 		handle_running_grab(delta)
+
+
+## Поддерживает эффекты камеры, привязанные к состоянию игрока:
+## - во время спринта (State.SPRINT) включается «ручная» тряска камеры
+##   (имитация съёмки с рук при беге);
+## - вне спринта тряска выключается.
+func _update_camera_effects() -> void:
+	var cam := get_viewport().get_camera_2d()
+	if cam == null or not cam.has_method("set_handheld_shake"):
+		return
+	if state == State.SPRINT:
+		cam.set_handheld_shake(true)
+	else:
+		cam.set_handheld_shake(false)
 
 
 func procces_time_between_combos() -> void:

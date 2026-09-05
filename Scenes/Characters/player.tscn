@@ -1433,9 +1433,6 @@ size = Vector2(56, 28.5)
 collision_layer = 2
 collision_mask = 137
 script = ExtResource("2_al8ar")
-max_duration_between_successful_hits = 2000
-double_tap_time = 0.25
-sprint_duration = 0.35
 can_respawn = true
 damage = 4
 max_health = 30
@@ -1451,6 +1448,9 @@ has_gun = true
 max_ammo_per_gun = 5
 finisher_damage_multiplier = 1.0
 mount_height = 10.0
+max_duration_between_successful_hits = 2000
+double_tap_time = 0.25
+sprint_duration = 0.35
 
 [node name="ShadowSprite" parent="." index="0" unique_id=1441173628]
 visible = true
