@@ -37,6 +37,24 @@ extends Camera2D
 ## Амплитуда наклона камеры во время тряски-вспышки (радианы).
 @export var burst_rotation_amp := 0.008
 
+@export_group("Player Hurt (Урон игроку)")
+## Интенсивность тряски при получении урона игроком.
+@export var hurt_shake_intensity := 4.0
+## Длительность тряски при получении урона игроком (сек).
+@export var hurt_shake_duration := 0.15
+
+@export_group("Finisher Zoom (Добивание)")
+## Во сколько раз камера приближается к игроку во время добивания/посадки.
+@export var finisher_zoom_scale := 1.22
+## Время наезда (и отъезда) камеры при добивании (сек).
+@export var finisher_zoom_time := 0.25
+
+@export_group("Finisher Focus (Фокус)")
+## Вертикальное кадрирование при добивании: расстояние от линии земли
+## персонажей (player.position.y) до центра камеры.
+## Больше значение — персонажи выше в кадре, меньше — ниже.
+@export var finisher_focus_y_offset := 220.0
+
 var is_shaking := false
 var time_start_shacking := Time.get_ticks_msec()
 
@@ -50,6 +68,10 @@ var is_handheld_shake := false
 var burst_shake_intensity := 0.0
 var burst_shake_duration := 0.0
 var burst_shake_start := 0
+
+# === ЗУМ ПРИ ДОБИВАНИИ ===
+var _finisher_zoom_active := false
+var _finisher_zoom_tween : Tween = null
 
 func _init() -> void:
 	DamageManager.heavy_blow_received.connect(on_heavy_blow_received.bind())
@@ -85,6 +107,10 @@ func trigger_finisher_windup_shake() -> void:
 func trigger_finisher_impact_shake() -> void:
 	trigger_burst_shake(burst_impact_intensity, burst_impact_duration)
 
+## Тряска при получении урона игроком. Параметры из инспектора.
+func trigger_damage_shake() -> void:
+	trigger_burst_shake(hurt_shake_intensity, hurt_shake_duration)
+
 ## Одноразовая тряска-вспышка с затуханием (приоритет выше остальных трясок).
 func trigger_burst_shake(intensity: float, duration: float) -> void:
 	if not OptionsManager.is_screenshake_enabled:
@@ -92,6 +118,18 @@ func trigger_burst_shake(intensity: float, duration: float) -> void:
 	burst_shake_intensity = intensity
 	burst_shake_duration = duration
 	burst_shake_start = Time.get_ticks_msec()
+
+## Зум-наезд на игрока во время добивания/посадки и отъезд обратно.
+func set_finisher_zoom(active: bool) -> void:
+	if _finisher_zoom_active == active:
+		return
+	_finisher_zoom_active = active
+	if _finisher_zoom_tween != null and _finisher_zoom_tween.is_valid():
+		_finisher_zoom_tween.kill()
+	var target := Vector2(finisher_zoom_scale, finisher_zoom_scale) if active else Vector2.ONE
+	_finisher_zoom_tween = create_tween()
+	_finisher_zoom_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	_finisher_zoom_tween.tween_property(self, "zoom", target, finisher_zoom_time)
 
 func _process(_delta: float) -> void:
 	var now := Time.get_ticks_msec()

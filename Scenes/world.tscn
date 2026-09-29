@@ -13,6 +13,7 @@ size = Vector2(60, 1082)
 script = ExtResource("1_5a7ea")
 
 [node name="UI" parent="." unique_id=758194309 instance=ExtResource("2_fo5ed")]
+hint_scene = null
 
 [node name="DebugOverlay" parent="." unique_id=159090967 instance=ExtResource("5_dbg")]
 
@@ -27,6 +28,8 @@ script = ExtResource("4_5ukr8")
 duration_shake = 100
 shake_intensity = 20
 handheld_intensity = 2.0
+burst_impact_intensity = 12.0
+finisher_focus_y_offset = -220.0
 
 [node name="InvisibleWalls" type="Node2D" parent="Camera" unique_id=1669451277]
 position = Vector2(-50, -32)

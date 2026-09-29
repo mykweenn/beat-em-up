@@ -17,6 +17,7 @@ const ENEMY_MAP := {
 	Character.Type.THUG: preload("res://Scenes/Characters/thug_enemy.tscn"),
 	Character.Type.BOUNCER: preload("res://Scenes/Characters/igor_boss.tscn"),
 	Character.Type.HEAVY: preload("res://Scenes/Characters/big_enemy.tscn"),
+	Character.Type.LEAPER: preload("res://Scenes/Characters/leaper_enemy.tscn"),
 }
 
 @export var player : Player

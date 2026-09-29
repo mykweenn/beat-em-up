@@ -1,7 +1,7 @@
 class_name MusicManager
 extends Node
 
-enum Music {INTRO, MENU, STAGE1, STAGE2, STAGE1_ALT, ARENA, STREETS}
+enum Music {INTRO, MENU, STAGE1, STAGE2, STAGE1_ALT, ARENA, STREETS, BACK_STREETS}
 
 ## Индекс шины музыки в AudioServer (см. OptionsManager.set_music_volume).
 const MUSIC_BUS_IDX := 1
@@ -12,6 +12,13 @@ const MUSIC_BUS_IDX := 1
 ## Плавность перехода громкости при входе/выходе из паузы (сек).
 @export var duck_fade_duration := 0.3
 
+@export_group("Death Slowmo")
+## Во сколько раз замедлять воспроизведение музыки при смерти игрока.
+## pitch_scale < 1 = медленнее и ниже по тону (эффект slow-mo).
+@export var slowmo_pitch := 0.55
+## Плавность перехода к замедленному воспроизведению (сек).
+@export var slowmo_fade_duration := 0.4
+
 @onready var music_stream_player: AudioStreamPlayer = $MusicStreamPlayer
 
 var autoplayer_music : AudioStream = null
@@ -20,6 +27,7 @@ var is_ducked := false
 var _restore_volume_db := 0.0
 var _duck_volume := 0.0
 var _duck_tween : Tween = null
+var _slowmo_tween : Tween = null
 
 const MUSIC_MAP : Dictionary = {
 	Music.INTRO: preload("res://Assets/Music/Kane   Lynch 2 Dog Days - Singapore Nights.mp3"),
@@ -29,6 +37,7 @@ const MUSIC_MAP : Dictionary = {
 	Music.STAGE1_ALT: preload("res://Assets/Music/Le perv - Carpenter Brut.mp3"),
 	Music.ARENA: preload("res://Assets/Music/Le perv - Carpenter Brut.mp3"),
 	Music.STREETS: preload("res://Assets/Music/Le perv - Carpenter Brut.mp3"),
+	Music.BACK_STREETS: preload("res://Assets/Music/Le perv - Carpenter Brut.mp3"),
 }
 
 
@@ -66,6 +75,17 @@ func set_ducked(active: bool) -> void:
 	else:
 		_duck_tween = create_tween()
 		_duck_tween.tween_method(_apply_duck_volume, _duck_volume, 0.0, duck_fade_duration)
+
+
+## Включает/выключает замедленное воспроизведение музыки (сцена смерти игрока).
+## Восстановление (active=false) возвращает pitch_scale к 1.0.
+func set_slowmo(active: bool) -> void:
+	if _slowmo_tween:
+		_slowmo_tween.kill()
+	_slowmo_tween = create_tween()
+	_slowmo_tween.set_ignore_time_scale(true)
+	_slowmo_tween.tween_property(
+		music_stream_player, "pitch_scale", slowmo_pitch if active else 1.0, slowmo_fade_duration)
 
 
 ## Вызывается из OptionsManager, когда пользователь крутит слайдер громкости музыки

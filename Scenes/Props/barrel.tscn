@@ -9,7 +9,7 @@ radius = 19.999996
 height = 126.00001
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8iu16"]
-size = Vector2(128, 76.5)
+size = Vector2(128, 180)
 
 [node name="Barrel" type="StaticBody2D" unique_id=478529645]
 collision_layer = 8
@@ -34,7 +34,7 @@ shape = SubResource("CapsuleShape2D_rxjeq")
 collision_layer = 64
 
 [node name="CollisionShape2D" parent="DamageReceiver" index="0" unique_id=792311117]
-position = Vector2(0, -104.75)
+position = Vector2(0, -90)
 shape = SubResource("RectangleShape2D_8iu16")
 
 [editable path="DamageReceiver"]

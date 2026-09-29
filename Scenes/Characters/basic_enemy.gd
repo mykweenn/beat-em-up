@@ -30,7 +30,7 @@ const EDGE_SCREEN_BUFFER := 10
 ## Радиус «кольца» вокруг лежащего игрока: ближники держат дистанцию, а не занимают слоты.
 @export var down_ring_radius := 110.0
 ## Множитель скорости при отходе / кружении вокруг лежащего игрока.
-@export var down_ring_speed_scale := 0.55
+@export var down_ring_speed_scale := 0.7
 ## Краткий шок сразу после лонча/нокдауна игрока.
 @export var launch_shock_min := 0.15
 @export var launch_shock_max := 0.45

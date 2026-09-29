@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://djvul6iecvnh6" path="res://Scenes/Stage/cutscene_trigger.tscn" id="15_jufl5"]
 [ext_resource type="Script" uid="uid://bwcjwfooh88cm" path="res://Scenes/Stage/cutscene_manager.gd" id="16_uokwh"]
 [ext_resource type="Texture2D" uid="uid://c3hb0peiqmibu" path="res://Assets/Art/backgrounds/2d_lights_and_shadows_neutral_point_light.webp" id="17_fy23a"]
+[ext_resource type="PackedScene" uid="uid://cleaperen015k" path="res://Scenes/Characters/leaper_enemy.tscn" id="17_txalh"]
 [ext_resource type="Shader" uid="uid://umaniw2a6tph" path="res://Themes/lynchlike.gdshader" id="20_b1yrp"]
 [ext_resource type="Shader" uid="uid://cniqiaesl2ric" path="res://Scenes/Stage/lens_distortion.gdshader" id="22_l00ln"]
 
@@ -58,13 +59,13 @@ shader_parameter/aberration_intensity = 0.01
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mrqk7"]
 shader = ExtResource("20_b1yrp")
-shader_parameter/streak_threshold = 0.9350000206625
-shader_parameter/streak_length = 0.18300000799398
+shader_parameter/streak_threshold = 0.82
+shader_parameter/streak_length = 0.12
 shader_parameter/streak_intensity = 3.694000175465
 shader_parameter/streak_color = Color(0.85, 0.92, 1, 1)
-shader_parameter/chromatic_aberration = 0.006000000285
-shader_parameter/noise_amount = 0.0290000013775
-shader_parameter/vignette_intensity = 0.870000041325
+shader_parameter/chromatic_aberration = 0.003
+shader_parameter/noise_amount = 0.03
+shader_parameter/vignette_intensity = 0.3
 
 [sub_resource type="Environment" id="Environment_s1fef"]
 glow_enabled = true
@@ -134,7 +135,6 @@ centered = false
 
 [node name="Parallax2D" type="Parallax2D" parent="Backgrounds" index="6" unique_id=1056068741]
 scale = Vector2(5, 5)
-scroll_scale = Vector2(0.25, 0.25)
 scroll_offset = Vector2(99, 0)
 
 [node name="HousesBackground" type="Sprite2D" parent="Backgrounds/Parallax2D" index="0" unique_id=1328994413]
@@ -144,7 +144,6 @@ centered = false
 
 [node name="HousesMidground" type="Parallax2D" parent="Backgrounds" index="7" unique_id=917993473]
 scale = Vector2(5, 5)
-scroll_scale = Vector2(0.1, 0.1)
 scroll_offset = Vector2(164.99998, 0)
 
 [node name="MainBackground7" type="Sprite2D" parent="Backgrounds/HousesMidground" index="0" unique_id=2114520310]
@@ -154,7 +153,6 @@ centered = false
 
 [node name="HousesForeground" type="Parallax2D" parent="Backgrounds" index="8" unique_id=1714154221]
 scale = Vector2(5, 5)
-scroll_scale = Vector2(0.12, 0.12)
 scroll_offset = Vector2(158.99998, 0)
 
 [node name="MainBackground8" type="Sprite2D" parent="Backgrounds/HousesForeground" index="0" unique_id=520570638]
@@ -178,28 +176,53 @@ position = Vector2(155.00003, 122.59999)
 scale = Vector2(0.19999996, 0.19999996)
 texture = ExtResource("17_fy23a")
 
-[node name="PointLight2D4" type="PointLight2D" parent="Backgrounds/HousesForeground" index="4" unique_id=1984704369]
-position = Vector2(220.79999, 119.40001)
+[node name="PointLight2D9" type="PointLight2D" parent="Backgrounds/HousesForeground" index="4" unique_id=1130999940]
+position = Vector2(155.00003, 91.000015)
 scale = Vector2(0.19999996, 0.19999996)
 texture = ExtResource("17_fy23a")
 
-[node name="PointLight2D5" type="PointLight2D" parent="Backgrounds/HousesForeground" index="5" unique_id=15063177]
-position = Vector2(292, 125.4)
+[node name="PointLight2D10" type="PointLight2D" parent="Backgrounds/HousesForeground" index="5" unique_id=1015385198]
+position = Vector2(50.400017, 122.4)
 scale = Vector2(0.19999996, 0.19999996)
 texture = ExtResource("17_fy23a")
 
-[node name="PointLight2D6" type="PointLight2D" parent="Backgrounds/HousesForeground" index="6" unique_id=448491959]
-position = Vector2(408.2, 123.200005)
+[node name="PointLight2D11" type="PointLight2D" parent="Backgrounds/HousesForeground" index="6" unique_id=1753358397]
+position = Vector2(50.600006, 88.80002)
 scale = Vector2(0.19999996, 0.19999996)
 texture = ExtResource("17_fy23a")
 
-[node name="PointLight2D7" type="PointLight2D" parent="Backgrounds/HousesForeground" index="7" unique_id=1849337018]
-position = Vector2(511.4, 122.8)
+[node name="PointLight2D12" type="PointLight2D" parent="Backgrounds/HousesForeground" index="7" unique_id=307490585]
+position = Vector2(253.00002, 117.8)
 scale = Vector2(0.19999996, 0.19999996)
 texture = ExtResource("17_fy23a")
 
-[node name="PointLight2D8" type="PointLight2D" parent="Backgrounds/HousesForeground" index="8" unique_id=586018587]
-position = Vector2(479.40002, 98.8)
+[node name="PointLight2D13" type="PointLight2D" parent="Backgrounds/HousesForeground" index="8" unique_id=1292512352]
+position = Vector2(327.6, 117.80002)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("17_fy23a")
+
+[node name="PointLight2D22" type="PointLight2D" parent="Backgrounds/HousesForeground" index="9" unique_id=1532411074]
+position = Vector2(590.00006, 123.600006)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("17_fy23a")
+
+[node name="PointLight2D23" type="PointLight2D" parent="Backgrounds/HousesForeground" index="10" unique_id=1087491079]
+position = Vector2(620.60004, 125.200005)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("17_fy23a")
+
+[node name="PointLight2D24" type="PointLight2D" parent="Backgrounds/HousesForeground" index="11" unique_id=1230211421]
+position = Vector2(621.2, 91.40002)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("17_fy23a")
+
+[node name="PointLight2D25" type="PointLight2D" parent="Backgrounds/HousesForeground" index="12" unique_id=943185485]
+position = Vector2(661.60004, 101.200005)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("17_fy23a")
+
+[node name="PointLight2D26" type="PointLight2D" parent="Backgrounds/HousesForeground" index="13" unique_id=1597202881]
+position = Vector2(692.80005, 94.00001)
 scale = Vector2(0.19999996, 0.19999996)
 texture = ExtResource("17_fy23a")
 
@@ -261,6 +284,17 @@ max_health = 50
 
 [node name="GoonEnemy" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="1" unique_id=1321743572 instance=ExtResource("14_4ioxg")]
 position = Vector2(2564, 879)
+duration_between_melee_attacks = 1000
+duration_prep_range_attacks = 500
+duration_prep_melee_attacks = 500
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
+
+[node name="LeaperEnemy" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="2" unique_id=1730098657 instance=ExtResource("17_txalh")]
+position = Vector2(294, 933)
+down_ring_speed_scale = 0.7
 
 [node name="CollisionShape2D" parent="Checkpoints/Checkpoint/PlayerDetectionArea" parent_id_path=PackedInt32Array(1922420126, 289896115) index="0" unique_id=1130211026]
 position = Vector2(963, 819)
@@ -273,7 +307,7 @@ position = Vector2(1758, 0)
 nb_simultaneous_enemies = 4
 
 [node name="BasicEnemy" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1646409968, 214738812) index="0" unique_id=2127243976 instance=ExtResource("12_10na3")]
-position = Vector2(2003, 977)
+position = Vector2(-120, 327)
 
 [node name="BasicEnemy3" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1646409968, 214738812) index="1" unique_id=109644746 instance=ExtResource("12_10na3")]
 position = Vector2(2183, 980)
@@ -366,6 +400,7 @@ position = Vector2(1261, 977)
 
 [node name="Barrel" parent="Containers" parent_id_path=PackedInt32Array(2076321560) index="1" unique_id=478529645 instance=ExtResource("14_10na3")]
 position = Vector2(700, 1005)
+content_type = 1
 
 [node name="Barrel2" parent="Containers" parent_id_path=PackedInt32Array(2076321560) index="2" unique_id=1169848281 instance=ExtResource("14_10na3")]
 position = Vector2(1119, 1045)
@@ -389,6 +424,7 @@ color = Color(0.51441246, 0.6801741, 0.7479608, 1)
 [node name="ShaderUI" type="CanvasLayer" parent="." index="10" unique_id=1799559544]
 
 [node name="LensRect" type="ColorRect" parent="ShaderUI" index="0" unique_id=707906271]
+visible = false
 z_index = 1
 material = SubResource("ShaderMaterial_l00ln")
 anchors_preset = 15

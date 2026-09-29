@@ -3,6 +3,10 @@ extends CharacterBody2D
 
 const GRAVITY := 3800.0
 
+## Общий ускоритель темпа анимаций всех персонажей (>1 — бой резче и быстрее).
+## Применяется к AnimationPlayer каждого персонажа в _ready().
+const ANIMATION_SPEED_SCALE := 1.12
+
 ## Префаб всплывающего текста («БАМ!» и т.п.) для эффектных ударов
 const FLOATING_TEXT_PREFAB := preload("res://Scenes/VFX/floating_text.tscn")
 const DEATH_SPRITE_PREFAB := preload("res://Scenes/VFX/death_sprite.tscn")
@@ -42,7 +46,7 @@ const DEATH_SPRITE_PREFAB := preload("res://Scenes/VFX/death_sprite.tscn")
 @export var launch_vertical_intensity: float = 1200.0   # Сила подбрасывания вверх
 @export var launch_horizontal_intensity: float = 650.0 # Сила отлета в сторону
 ## Сколько секунд нужно удерживать кнопку для полной зарядки удара
-@export var charge_required_time : float = 0.80
+@export var charge_required_time : float = 0.70
 
 @export_group("Weapons")
 ## Если true, выброшенное или выпавшее оружие автоматически уничтожается.
@@ -84,6 +88,12 @@ const DEATH_SPRITE_PREFAB := preload("res://Scenes/VFX/death_sprite.tscn")
 @export var finisher_max_duration : float = 1.0
 ## Множитель урона одного удара в посадке на врага (от damage_power).
 @export var mount_punch_damage_multiplier : float = 0.6
+## На сколько урона возрастает каждый следующий удачный удар в одной посадке
+## (аддитивно к базе damage_power * mount_punch_damage_multiplier).
+@export var mount_punch_streak_growth := 1
+## Вампиризм при добивании: сколько процентов урона каждого успешного удара
+## посадки/добивания игрок возвращает себе как здоровье.
+@export_range(0, 100) var finisher_vampirism_percent := 20
 ## Сколько секунд можно сидеть на враге без ударов, прежде чем он сбросит игрока.
 @export var mount_throw_delay : float = 4.0
 ## Высота (в пикселях), на которую поднимается спрайт игрока при посадке на врага.
@@ -113,7 +123,7 @@ var _gun_base_position := Vector2.ZERO
 enum State {IDLE, WALK, ATTACK, TAKEOFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUNDED, DEATH, FLY, PREP_ATTACK, 
 THROW, PICKUP, SHOOT, PREP_SHOOT, RECOVER, DROP, WAIT, APPEARING, SPRINT, DASH, SPRINT_ATTACK, CUTSCENE, BLOCK, 
 KICK, PREPARE_HEAVY_ATTACK, HEAVY_ATTACK, FINISHER, MOUNT, UPPERCUT, DASH_KICK, RUNNING_GRAB}
-enum Type {PLAYER, PUNK, GOON, THUG, BOUNCER, HEAVY}
+enum Type {PLAYER, PUNK, GOON, THUG, BOUNCER, HEAVY, LEAPER}
 
 var ammo_left := 0
 var anim_attacks := []
@@ -165,9 +175,11 @@ var time_since_knife_dismiss := Time.get_ticks_msec()
 
 #new dash
 var dash_timer := 0.0
-var dash_direction := 0.0
+var dash_direction := Vector2.ZERO
 var last_left_press_time := -1.0
 var last_right_press_time := -1.0
+var last_up_press_time := -1.0
+var last_down_press_time := -1.0
 
 # block
 var block_health : float = 0.0
@@ -202,6 +214,8 @@ var finisher_anim_current := ""
 var is_mounting := false
 # Сколько секунд игрок уже сидит на враге без ударов (до сброса врагом)
 var mount_idle_timer := 0.0
+# Серия успешных ударов подряд в текущей посадке (урон растёт за каждое попадание)
+var mount_punch_streak := 0
 
 # Кэш последней проигранной анимации: не дергаем AnimationPlayer без необходимости
 var _current_animation := ""
@@ -216,6 +230,7 @@ var _death_sprite_spawned := false
 
 
 func _ready():
+	animation_player.speed_scale = ANIMATION_SPEED_SCALE
 	# Сохраняем базовые позиции ножа и пушки из сцены,
 	# чтобы set_sprite_height_position поднимал их без затирания.
 	_knife_base_position = knife_sprite.position
@@ -328,14 +343,14 @@ func handle_movement(delta: float): # Добавили delta в аргумент
 		State.HURT, State.FALL, State.FLY, State.BLOCK, State.PREPARE_HEAVY_ATTACK, State.HEAVY_ATTACK, State.FINISHER, State.DASH_KICK, State.RUNNING_GRAB:
 			return
 	if state == State.DASH:
-		velocity.x = dash_direction * DASH_SPEED
+		velocity.x = dash_direction.x * DASH_SPEED
+		velocity.y = dash_direction.y * DASH_SPEED
 		dash_timer -= delta
 		if dash_timer <= 0:
 			state = State.IDLE
-			velocity.x = 0
+			velocity = Vector2.ZERO
 			# === СБРАСЫВАЕМ НАПРАВЛЕНИЕ ДЭША ===
-			dash_direction = 0.0 
-			# ===================================
+			dash_direction = Vector2.ZERO 
 		return
 
 	if state == State.SPRINT_ATTACK:
@@ -435,7 +450,14 @@ func handle_death(_delta) -> void:
 		_death_sprite_spawned = true
 		var death_sprite = DEATH_SPRITE_PREFAB.instantiate()
 		death_sprite.setup_from_character(self)
-		get_tree().current_scene.add_child(death_sprite)
+		# Кладём труп в ActorsContainer — он отсортирован по Y, поэтому
+		# трупы корректно перекрываются с живыми персонажами.
+		var world_node := get_tree().current_scene
+		var actors_container := world_node.get_node_or_null("ActorsContainer") if world_node else null
+		if actors_container:
+			actors_container.add_child(death_sprite)
+		else:
+			world_node.add_child(death_sprite)
 		queue_free()
 
 
@@ -547,7 +569,7 @@ func can_block() -> bool:
 
 func can_get_hurt() -> bool:
 	match state:
-		State.IDLE, State.WALK, State.TAKEOFF, State.LAND, State.PREP_ATTACK, State.BLOCK, State.RECOVER, State.PREPARE_HEAVY_ATTACK:
+		State.IDLE, State.WALK, State.TAKEOFF, State.LAND, State.PREP_ATTACK, State.BLOCK, State.RECOVER, State.PREPARE_HEAVY_ATTACK, State.MOUNT, State.FINISHER:
 			return true
 		_:
 			pass
@@ -673,6 +695,7 @@ func start_mount(target: Character) -> void:
 	finisher_hit_timer = INF
 	finisher_elapsed = 0.0
 	mount_idle_timer = 0.0
+	mount_punch_streak = 0 # новая посадка — новая серия усиления урона
 	is_mounting = true
 	state = State.MOUNT
 	velocity = Vector2.ZERO
@@ -739,6 +762,7 @@ func handle_finisher(delta: float) -> void:
 ##   чтобы она не встала, пока на ней сидят
 ## - по истечении mount_throw_delay без ударов жертва сбрасывает игрока
 func handle_mount(delta: float) -> void:
+	_update_camera_finisher_zoom()
 	# Страховка: внешнее воздействие сменило состояние — тихо освобождаем маунт
 	if is_mounting and state != State.MOUNT and state != State.FINISHER:
 		is_mounting = false
@@ -761,6 +785,17 @@ func handle_mount(delta: float) -> void:
 	mount_idle_timer += delta
 	if mount_idle_timer >= mount_throw_delay:
 		throw_player_off()
+
+
+## Держит камеру «наезжающей» на игрока во время добивания/посадки
+## и отдаляющейся обратно после завершения (зум-наезд из camera.gd).
+func _update_camera_finisher_zoom() -> void:
+	if type != Type.PLAYER:
+		return
+	var cam := get_viewport().get_camera_2d()
+	if cam == null or not cam.has_method("set_finisher_zoom"):
+		return
+	cam.set_finisher_zoom(state == State.MOUNT or state == State.FINISHER)
 
 
 ## Жертва сбрасывает игрока: подбрасывает его в полёт назад без урона.
@@ -808,10 +843,17 @@ func _apply_finisher_damage() -> void:
 		return
 	# Цель могла умереть или сменить состояние за время замаха — тогда промах
 	if target.current_health <= 0 or (target.state != State.RECOVER and target.state != State.GROUNDED):
+		mount_punch_streak = 0 # промах прерывает серию усиления
 		return
 	var direction := Vector2.LEFT if target.global_position.x < global_position.x else Vector2.RIGHT
-	var multiplier := mount_punch_damage_multiplier if is_mounting else finisher_damage_multiplier
-	var amount := int(damage_power * multiplier)
+	var amount: int
+	if is_mounting:
+		# Урон в седле растёт с каждым успешным ударом: 3, 4, 5, 6...
+		var base := int(damage_power * mount_punch_damage_multiplier)
+		amount = base + mount_punch_streak * mount_punch_streak_growth
+		mount_punch_streak += 1
+	else:
+		amount = int(damage_power * finisher_damage_multiplier)
 	mount_idle_timer = 0.0 # попадание продлевает время сидения
 	HitstopManager.freeze(0.12, 0.12)
 	SoundPlayer.play(SoundManager.Sound.FINISHER)
@@ -823,6 +865,12 @@ func _apply_finisher_damage() -> void:
 
 	# spawn_finisher_text(target)
 	target.on_receive_damage(amount, direction, DamageReceiver.HitType.KNOCKDOWN, self)
+	# Вампиризм: за каждый успешный удар добивания игрок возвращает часть
+	# нанесённого урона как здоровье (компенсация за уязвимость в посадке).
+	if type == Type.PLAYER:
+		var heal := int(round(amount * (finisher_vampirism_percent / 100.0)))
+		if heal > 0:
+			set_health(current_health + heal)
 	# Добивание со смертельным исходом — усиленный хитстоп
 	if is_instance_valid(target) and target.current_health <= 0:
 		HitstopManager.freeze(0.55, 0.55)
@@ -1032,6 +1080,13 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 
 
 	# Обычное получение урона (выполняется, если не блокировали или block пробили)
+	# Урон во время посадки/добивания сбивает игрока с жертвы на землю,
+	# иначе спрайт повис бы в воздухе на mount_height в состоянии HURT.
+	if is_mounting:
+		is_mounting = false
+		finisher_target = null
+	height = 0.0
+	height_speed = 0.0
 	attack_combo_index = 0
 	can_respawn_knives = false
 	if has_knife:
@@ -1043,6 +1098,12 @@ func on_receive_damage(amount: int, direction: Vector2, hit_type: DamageReceiver
 		EntityManager.spawn_collectible.emit(Collectible.Type.GUN, Collectible.State.FALL, global_position, Vector2.ZERO, 0.0, autodestroy_on_drop)
 	
 	set_health(current_health - amount)
+	
+	# === ТРЯСКА КАМЕРЫ ПРИ ПОЛУЧЕНИИ УРОНА ИГРОКОМ ===
+	if type == Type.PLAYER:
+		var cam := get_viewport().get_camera_2d()
+		if cam and cam.has_method("trigger_damage_shake"):
+			cam.trigger_damage_shake()
 	
 	if current_health == 0 or hit_type == DamageReceiver.HitType.KNOCKDOWN:
 		state = State.FALL

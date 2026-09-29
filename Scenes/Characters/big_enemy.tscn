@@ -149,7 +149,7 @@ animations = [{
 damage = 12
 max_health = 120
 type = 4
-speed = 220.0
+speed = 250.0
 
 [node name="CollisionShape2D" parent="." index="2" unique_id=1248216289]
 shape = SubResource("CapsuleShape2D_42q05")

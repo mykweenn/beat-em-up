@@ -1,0 +1,400 @@
+[gd_scene format=3 uid="uid://b3k0fnawo6m5c"]
+
+[ext_resource type="PackedScene" uid="uid://c6g8v2tyiijwi" path="res://Scenes/Stage/stage.tscn" id="1_2dklx"]
+[ext_resource type="Texture2D" uid="uid://co87jkfole8mx" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_1_ground.png" id="2_qnuib"]
+[ext_resource type="Texture2D" uid="uid://b8plc6lec7lid" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_2_stars.png" id="3_7vu41"]
+[ext_resource type="Texture2D" uid="uid://ck8b7igfj8jeg" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_3_moon.png" id="4_bbrdf"]
+[ext_resource type="Texture2D" uid="uid://buk3h8g4p8fye" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_4_clouds_1.png" id="5_fsrrp"]
+[ext_resource type="Texture2D" uid="uid://bx2u72g71vyja" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_5_clouds_2.png" id="6_bh43a"]
+[ext_resource type="Texture2D" uid="uid://dtfl8edmy0dof" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_6_far_buildings.png" id="7_lu4m1"]
+[ext_resource type="Texture2D" uid="uid://c0r8blit4iyny" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_7_bg_buildings.png" id="8_d0moo"]
+[ext_resource type="Texture2D" uid="uid://bfjds8y7pugmu" path="res://Assets/Art/MRB/Background/post_soviet_city_parallax/layer_8_fg_buildings.png" id="9_myuqj"]
+[ext_resource type="Texture2D" uid="uid://cv8dmfke5ld8o" path="res://Assets/Art/backgrounds/32x32 textures (1).png" id="10_h7try"]
+[ext_resource type="Texture2D" uid="uid://c3hb0peiqmibu" path="res://Assets/Art/backgrounds/2d_lights_and_shadows_neutral_point_light.webp" id="11_1yafk"]
+[ext_resource type="Texture2D" uid="uid://ghdeu4rmmusd" path="res://Assets/Art/MRB/Spirtes/VFX/raindrop.png" id="12_woupw"]
+[ext_resource type="PackedScene" uid="uid://cjituhu2smwr2" path="res://Scenes/Stage/checkpoint.tscn" id="13_f5ol6"]
+[ext_resource type="PackedScene" uid="uid://jep2uj8ujo8a" path="res://Scenes/Characters/basic_enemy.tscn" id="14_k808a"]
+[ext_resource type="PackedScene" uid="uid://63wipr5strpc" path="res://Scenes/Characters/goon_enemy.tscn" id="15_qt0yy"]
+[ext_resource type="PackedScene" uid="uid://cleaperen015k" path="res://Scenes/Characters/leaper_enemy.tscn" id="16_4rgvo"]
+[ext_resource type="Shader" uid="uid://cniqiaesl2ric" path="res://Scenes/Stage/lens_distortion.gdshader" id="21_r4bim"]
+[ext_resource type="Shader" uid="uid://umaniw2a6tph" path="res://Themes/lynchlike.gdshader" id="22_crjht"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1ofdn"]
+size = Vector2(3622.25, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r3q12"]
+size = Vector2(3623.25, 20)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1ofdn"]
+shader = ExtResource("21_r4bim")
+shader_parameter/distortion_intensity = 0.05
+shader_parameter/aberration_intensity = 0.01
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r3q12"]
+shader = ExtResource("22_crjht")
+shader_parameter/streak_threshold = 0.82
+shader_parameter/streak_length = 0.12
+shader_parameter/streak_intensity = 3.694000175465
+shader_parameter/streak_color = Color(0.85, 0.92, 1, 1)
+shader_parameter/chromatic_aberration = 0.003
+shader_parameter/noise_amount = 0.03
+shader_parameter/vignette_intensity = 0.3
+
+[sub_resource type="Environment" id="Environment_1ofdn"]
+glow_enabled = true
+glow_levels/1 = 0.66
+glow_intensity = 2.7
+glow_bloom = 0.46
+glow_blend_mode = 0
+glow_hdr_threshold = 0.5
+
+[node name="Stage" unique_id=402859074 instance=ExtResource("1_2dklx")]
+music = 6
+
+[node name="MainBackground2" type="Sprite2D" parent="Backgrounds" parent_id_path=PackedInt32Array(1008490267) index="1" unique_id=1005955044]
+visible = false
+scale = Vector2(9.9296875, 9.9296875)
+texture = ExtResource("2_qnuib")
+centered = false
+
+[node name="Parallax2D" type="Parallax2D" parent="Backgrounds/MainBackground2" index="0" unique_id=573846931]
+scroll_scale = Vector2(0.001, 0.001)
+
+[node name="Sky" type="Parallax2D" parent="Backgrounds" parent_id_path=PackedInt32Array(1008490267) index="2" unique_id=359495546]
+scale = Vector2(5, 5)
+scroll_scale = Vector2(0.001, 0.001)
+
+[node name="SkySprite" type="Sprite2D" parent="Backgrounds/Sky" index="0" unique_id=1715390830]
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("2_qnuib")
+centered = false
+
+[node name="SkySprite2" type="Sprite2D" parent="Backgrounds/Sky" index="1" unique_id=1214685607]
+position = Vector2(0, 46)
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("2_qnuib")
+centered = false
+
+[node name="Parallax2D6" type="Parallax2D" parent="Backgrounds" parent_id_path=PackedInt32Array(1008490267) index="3" unique_id=1933423709]
+scale = Vector2(5, 5)
+scroll_scale = Vector2(0.001, 0.001)
+
+[node name="Stars" type="Sprite2D" parent="Backgrounds/Parallax2D6" index="0" unique_id=594887120]
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("3_7vu41")
+centered = false
+
+[node name="Parallax2D4" type="Parallax2D" parent="Backgrounds" parent_id_path=PackedInt32Array(1008490267) index="4" unique_id=1804202752]
+scale = Vector2(5, 5)
+
+[node name="Moon" type="Sprite2D" parent="Backgrounds/Parallax2D4" index="0" unique_id=1530008955]
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("4_bbrdf")
+centered = false
+
+[node name="Parallax2D3" type="Parallax2D" parent="Backgrounds" parent_id_path=PackedInt32Array(1008490267) index="5" unique_id=1747168665]
+scale = Vector2(5, 5)
+autoscroll = Vector2(10.28, 0)
+
+[node name="Clouds2" type="Sprite2D" parent="Backgrounds/Parallax2D3" index="0" unique_id=709547365]
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("5_fsrrp")
+centered = false
+
+[node name="Parallax2D2" type="Parallax2D" parent="Backgrounds" parent_id_path=PackedInt32Array(1008490267) index="6" unique_id=543221005]
+scale = Vector2(5, 5)
+autoscroll = Vector2(8.49, 0)
+
+[node name="Clouds" type="Sprite2D" parent="Backgrounds/Parallax2D2" index="0" unique_id=1508552595]
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("6_bh43a")
+centered = false
+
+[node name="Parallax2D" type="Parallax2D" parent="Backgrounds" parent_id_path=PackedInt32Array(1008490267) index="7" unique_id=1221463325]
+scale = Vector2(5, 5)
+scroll_offset = Vector2(99, 0)
+
+[node name="HousesBackground" type="Sprite2D" parent="Backgrounds/Parallax2D" index="0" unique_id=1553442706]
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("7_lu4m1")
+centered = false
+
+[node name="HousesMidground" type="Parallax2D" parent="Backgrounds" parent_id_path=PackedInt32Array(1008490267) index="8" unique_id=1200414383]
+scale = Vector2(5, 5)
+scroll_offset = Vector2(164.99998, 0)
+
+[node name="MainBackground7" type="Sprite2D" parent="Backgrounds/HousesMidground" index="0" unique_id=738173687]
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("8_d0moo")
+centered = false
+
+[node name="HousesForeground" type="Parallax2D" parent="Backgrounds" parent_id_path=PackedInt32Array(1008490267) index="9" unique_id=1582968061]
+scale = Vector2(5, 5)
+scroll_offset = Vector2(158.99998, 0)
+
+[node name="MainBackground8" type="Sprite2D" parent="Backgrounds/HousesForeground" index="0" unique_id=826596850]
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("9_myuqj")
+centered = false
+
+[node name="PointLight2D" type="PointLight2D" parent="Backgrounds/HousesForeground" index="1" unique_id=1997066133]
+position = Vector2(82.799995, 95)
+scale = Vector2(0.98437506, 1.765625)
+color = Color(0.9166287, 0.9905314, 0, 1)
+texture = ExtResource("10_h7try")
+
+[node name="PointLight2D2" type="PointLight2D" parent="Backgrounds/HousesForeground" index="2" unique_id=1360632039]
+position = Vector2(123.00001, 100.20001)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("11_1yafk")
+
+[node name="PointLight2D3" type="PointLight2D" parent="Backgrounds/HousesForeground" index="3" unique_id=2061682610]
+position = Vector2(155.00003, 122.59999)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("11_1yafk")
+
+[node name="PointLight2D9" type="PointLight2D" parent="Backgrounds/HousesForeground" index="4" unique_id=2019787151]
+position = Vector2(155.00003, 91.000015)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("11_1yafk")
+
+[node name="PointLight2D10" type="PointLight2D" parent="Backgrounds/HousesForeground" index="5" unique_id=1093691500]
+position = Vector2(50.400017, 122.4)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("11_1yafk")
+
+[node name="PointLight2D11" type="PointLight2D" parent="Backgrounds/HousesForeground" index="6" unique_id=18955289]
+position = Vector2(50.600006, 88.80002)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("11_1yafk")
+
+[node name="PointLight2D12" type="PointLight2D" parent="Backgrounds/HousesForeground" index="7" unique_id=582936640]
+position = Vector2(253.00002, 117.8)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("11_1yafk")
+
+[node name="PointLight2D13" type="PointLight2D" parent="Backgrounds/HousesForeground" index="8" unique_id=1636293743]
+position = Vector2(327.6, 117.80002)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("11_1yafk")
+
+[node name="PointLight2D22" type="PointLight2D" parent="Backgrounds/HousesForeground" index="9" unique_id=2006305564]
+position = Vector2(590.00006, 123.600006)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("11_1yafk")
+
+[node name="PointLight2D23" type="PointLight2D" parent="Backgrounds/HousesForeground" index="10" unique_id=917531711]
+position = Vector2(620.60004, 125.200005)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("11_1yafk")
+
+[node name="PointLight2D24" type="PointLight2D" parent="Backgrounds/HousesForeground" index="11" unique_id=2133798321]
+position = Vector2(621.2, 91.40002)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("11_1yafk")
+
+[node name="PointLight2D25" type="PointLight2D" parent="Backgrounds/HousesForeground" index="12" unique_id=777713968]
+position = Vector2(661.60004, 101.200005)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("11_1yafk")
+
+[node name="PointLight2D26" type="PointLight2D" parent="Backgrounds/HousesForeground" index="13" unique_id=1577492004]
+position = Vector2(692.80005, 94.00001)
+scale = Vector2(0.19999996, 0.19999996)
+texture = ExtResource("11_1yafk")
+
+[node name="CPUParticlesBG" type="CPUParticles2D" parent="Backgrounds" parent_id_path=PackedInt32Array(1008490267) index="10" unique_id=93531571]
+z_index = 3
+position = Vector2(3227, 6)
+amount = 1000
+texture = ExtResource("12_woupw")
+lifetime = 4.0
+emission_shape = 3
+emission_rect_extents = Vector2(5000, 1)
+spread = 13.35
+scale_amount_min = 2.0
+scale_amount_max = 2.0
+color = Color(1, 1, 1, 0.21176471)
+
+[node name="CPUParticlesFG" type="CPUParticles2D" parent="Backgrounds" parent_id_path=PackedInt32Array(1008490267) index="11" unique_id=980571922]
+position = Vector2(3227, 6)
+amount = 1000
+texture = ExtResource("12_woupw")
+lifetime = 4.0
+emission_shape = 3
+emission_rect_extents = Vector2(5000, 1)
+spread = 13.35
+scale_amount_min = 2.0
+scale_amount_max = 2.0
+color = Color(1, 1, 1, 0.49019608)
+
+[node name="StaticBody2D" parent="WorldColliders" parent_id_path=PackedInt32Array(2107852687) index="0" unique_id=213431888]
+position = Vector2(21, 1113)
+
+[node name="CollisionShape2D" parent="WorldColliders/StaticBody2D" index="0" unique_id=835774580]
+position = Vector2(1779.875, 10)
+shape = SubResource("RectangleShape2D_1ofdn")
+
+[node name="StaticBody2D2" parent="WorldColliders" parent_id_path=PackedInt32Array(2107852687) index="1" unique_id=431410113]
+position = Vector2(24, 1506)
+
+[node name="CollisionShape2D" parent="WorldColliders/StaticBody2D2" index="0" unique_id=1739475003]
+position = Vector2(1780.375, 0)
+shape = SubResource("RectangleShape2D_r3q12")
+
+[node name="Checkpoint" parent="Checkpoints" parent_id_path=PackedInt32Array(1705422277) index="0" unique_id=1922420126 instance=ExtResource("13_f5ol6")]
+position = Vector2(-471, 433)
+nb_simultaneous_enemies = 4
+
+[node name="BasicEnemy" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="0" unique_id=1966584693 instance=ExtResource("14_k808a")]
+position = Vector2(71, 844)
+max_health = 50
+
+[node name="GoonEnemy" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="1" unique_id=1221176624 instance=ExtResource("15_qt0yy")]
+position = Vector2(2564, 879)
+duration_between_melee_attacks = 1000
+duration_prep_range_attacks = 500
+duration_prep_melee_attacks = 500
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
+
+[node name="LeaperEnemy" parent="Checkpoints/Checkpoint/Enemies" parent_id_path=PackedInt32Array(1922420126, 214738812) index="2" unique_id=365902715 instance=ExtResource("16_4rgvo")]
+position = Vector2(294, 933)
+down_ring_speed_scale = 0.7
+
+[node name="CollisionShape2D" parent="Checkpoints/Checkpoint/PlayerDetectionArea" parent_id_path=PackedInt32Array(1922420126, 289896115) index="0" unique_id=1130211026]
+position = Vector2(963, 819)
+
+[node name="CollisionShape2D" parent="Checkpoints/Checkpoint/CheckpointPlayArea" parent_id_path=PackedInt32Array(1922420126, 1777217405) index="0" unique_id=1539741835]
+position = Vector2(941, 839)
+
+[node name="Checkpoint2" parent="Checkpoints" parent_id_path=PackedInt32Array(1705422277) index="1" unique_id=842542626 instance=ExtResource("13_f5ol6")]
+position = Vector2(1758, 433)
+nb_simultaneous_enemies = 4
+
+[node name="BasicEnemy" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(842542626, 214738812) index="0" unique_id=905799470 instance=ExtResource("14_k808a")]
+position = Vector2(-120, 327)
+
+[node name="BasicEnemy3" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(842542626, 214738812) index="1" unique_id=281311716 instance=ExtResource("14_k808a")]
+position = Vector2(2183, 980)
+
+[node name="BasicEnemy4" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(842542626, 214738812) index="2" unique_id=1624031986 instance=ExtResource("14_k808a")]
+position = Vector2(2334, 996)
+
+[node name="BasicEnemy5" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(842542626, 214738812) index="3" unique_id=582599258 instance=ExtResource("14_k808a")]
+position = Vector2(-185, 971)
+
+[node name="BasicEnemy6" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(842542626, 214738812) index="4" unique_id=2014114055 instance=ExtResource("14_k808a")]
+position = Vector2(-152, 1005)
+
+[node name="BasicEnemy7" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(842542626, 214738812) index="5" unique_id=987059277 instance=ExtResource("14_k808a")]
+position = Vector2(-222, 976)
+
+[node name="BasicEnemy8" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(842542626, 214738812) index="6" unique_id=577483704 instance=ExtResource("14_k808a")]
+position = Vector2(-141, 1008)
+
+[node name="CollisionShape2D" parent="Checkpoints/Checkpoint2/PlayerDetectionArea" parent_id_path=PackedInt32Array(842542626, 289896115) index="0" unique_id=1130211026]
+position = Vector2(963, 819)
+
+[node name="CollisionShape2D" parent="Checkpoints/Checkpoint2/CheckpointPlayArea" parent_id_path=PackedInt32Array(842542626, 1777217405) index="0" unique_id=1539741835]
+position = Vector2(941, 839)
+
+[node name="Checkpoint3" parent="Checkpoints" parent_id_path=PackedInt32Array(1705422277) index="2" unique_id=2054776141 instance=ExtResource("13_f5ol6")]
+position = Vector2(4038, 433)
+nb_simultaneous_enemies = 4
+
+[node name="BasicEnemy" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(2054776141, 214738812) index="0" unique_id=440380635 instance=ExtResource("14_k808a")]
+position = Vector2(2054, 771)
+
+[node name="BasicEnemy3" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(2054776141, 214738812) index="1" unique_id=641566182 instance=ExtResource("14_k808a")]
+position = Vector2(2351, 980)
+
+[node name="BasicEnemy4" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(2054776141, 214738812) index="2" unique_id=673324686 instance=ExtResource("14_k808a")]
+position = Vector2(2334, 742)
+
+[node name="BasicEnemy5" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(2054776141, 214738812) index="3" unique_id=924105502 instance=ExtResource("14_k808a")]
+position = Vector2(-744, 989)
+
+[node name="BasicEnemy6" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(2054776141, 214738812) index="4" unique_id=1431313316 instance=ExtResource("14_k808a")]
+position = Vector2(-318, 997)
+
+[node name="BasicEnemy7" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(2054776141, 214738812) index="5" unique_id=125367043 instance=ExtResource("14_k808a")]
+position = Vector2(-498, 980)
+
+[node name="BasicEnemy8" parent="Checkpoints/Checkpoint3/Enemies" parent_id_path=PackedInt32Array(2054776141, 214738812) index="6" unique_id=156515983 instance=ExtResource("14_k808a")]
+position = Vector2(-577, 1026)
+
+[node name="CollisionShape2D" parent="Checkpoints/Checkpoint3/PlayerDetectionArea" parent_id_path=PackedInt32Array(2054776141, 289896115) index="0" unique_id=1130211026]
+position = Vector2(963, 819)
+
+[node name="CollisionShape2D" parent="Checkpoints/Checkpoint3/CheckpointPlayArea" parent_id_path=PackedInt32Array(2054776141, 1777217405) index="0" unique_id=1539741835]
+position = Vector2(941, 839)
+
+[node name="Checkpoint4" parent="Checkpoints" parent_id_path=PackedInt32Array(1705422277) index="3" unique_id=1435014475 instance=ExtResource("13_f5ol6")]
+position = Vector2(6211, 433)
+nb_simultaneous_enemies = 4
+
+[node name="BasicEnemy" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1435014475, 214738812) index="0" unique_id=1506706076 instance=ExtResource("14_k808a")]
+position = Vector2(2054, 771)
+
+[node name="BasicEnemy3" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1435014475, 214738812) index="1" unique_id=1857923195 instance=ExtResource("14_k808a")]
+position = Vector2(2351, 980)
+
+[node name="BasicEnemy4" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1435014475, 214738812) index="2" unique_id=1137640163 instance=ExtResource("14_k808a")]
+position = Vector2(2334, 742)
+
+[node name="BasicEnemy5" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1435014475, 214738812) index="3" unique_id=1032323581 instance=ExtResource("14_k808a")]
+position = Vector2(-331, 734)
+
+[node name="BasicEnemy6" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1435014475, 214738812) index="4" unique_id=648755919 instance=ExtResource("14_k808a")]
+position = Vector2(-318, 997)
+
+[node name="BasicEnemy7" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1435014475, 214738812) index="5" unique_id=937038413 instance=ExtResource("14_k808a")]
+position = Vector2(-498, 834)
+
+[node name="BasicEnemy8" parent="Checkpoints/Checkpoint4/Enemies" parent_id_path=PackedInt32Array(1435014475, 214738812) index="6" unique_id=810039772 instance=ExtResource("14_k808a")]
+position = Vector2(-577, 1026)
+
+[node name="CollisionShape2D" parent="Checkpoints/Checkpoint4/PlayerDetectionArea" parent_id_path=PackedInt32Array(1435014475, 289896115) index="0" unique_id=1130211026]
+position = Vector2(963, 819)
+
+[node name="CollisionShape2D" parent="Checkpoints/Checkpoint4/CheckpointPlayArea" parent_id_path=PackedInt32Array(1435014475, 1777217405) index="0" unique_id=1539741835]
+position = Vector2(941, 839)
+
+[node name="PlayerSpawnLocation" parent="." index="6" unique_id=686465435]
+position = Vector2(99, 1331)
+
+[node name="ShaderUI" type="CanvasLayer" parent="." index="9" unique_id=2098508410]
+
+[node name="LensRect" type="ColorRect" parent="ShaderUI" index="0" unique_id=252161602]
+visible = false
+z_index = 1
+material = SubResource("ShaderMaterial_1ofdn")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ShaderRect" type="ColorRect" parent="ShaderUI" index="1" unique_id=1847769170]
+z_index = 1
+material = SubResource("ShaderMaterial_r3q12")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." index="10" unique_id=1747707311]
+color = Color(0.51441246, 0.6801741, 0.7479608, 1)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="11" unique_id=649957333]
+environment = SubResource("Environment_1ofdn")
+
+[editable path="Checkpoints/Checkpoint"]
+[editable path="Checkpoints/Checkpoint2"]
+[editable path="Checkpoints/Checkpoint3"]
+[editable path="Checkpoints/Checkpoint4"]

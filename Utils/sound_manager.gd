@@ -8,6 +8,14 @@ $SFXCollisionHit, $SFXFinisher, $SFXPause, $SFXUnpause, $SFXStaticMenu, $SFXClic
 
 @onready var sfx_static_menu: AudioStreamPlayer = $SFXStaticMenu
 
+@export_group("Death Slowmo")
+## Во сколько раз замедлять воспроизведение звуков при смерти игрока.
+@export var slowmo_pitch := 0.7
+## Плавность перехода к замедленному воспроизведению (сек).
+@export var slowmo_fade_duration := 0.4
+
+var _slowmo_tween : Tween = null
+
 enum Sound {CLICK, FOOD, GOGOGO, GRUNT, GUNSHOT, HIT1, 
 HIT2, HIT3, KNIFE, SWOOSH, PARRY, CHARGE_ATTACK, 
 COLLISION_HIT, FINISHER, PAUSE, UNPAUSE, STATIC_MENU, CLICK_2}
@@ -29,6 +37,18 @@ func play(sfx: Sound, tweak_pitch: bool = false) -> void:
 
 func play_static_menu() -> void:
 	sfx_static_menu.play()
+
+
+## Включает/выключает замедленное воспроизведение всех звуков (сцена смерти игрока).
+## Восстановление (active=false) возвращает pitch_scale к 1.0.
+func set_slowmo(active: bool) -> void:
+	if _slowmo_tween:
+		_slowmo_tween.kill()
+	_slowmo_tween = create_tween()
+	_slowmo_tween.set_ignore_time_scale(true)
+	var target := slowmo_pitch if active else 1.0
+	for sfx in sounds:
+		_slowmo_tween.parallel().tween_property(sfx, "pitch_scale", target, slowmo_fade_duration)
 
 
 func stop_static_menu() -> void:

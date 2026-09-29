@@ -311,6 +311,38 @@ tracks/2/keys = {
 "values": [10]
 }
 
+[sub_resource type="Animation" id="Animation_dlcqn"]
+resource_name = "jump"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [71]
+}
+
+[sub_resource type="Animation" id="Animation_a10v1"]
+resource_name = "jump_attack"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [46]
+}
+
 [sub_resource type="Animation" id="Animation_gahj8"]
 resource_name = "land"
 length = 0.1
@@ -711,6 +743,8 @@ _data = {
 &"grounded": SubResource("Animation_yh2kj"),
 &"hurt": SubResource("Animation_htmx0"),
 &"idle": SubResource("Animation_sv7hw"),
+&"jump": SubResource("Animation_dlcqn"),
+&"jump_attack": SubResource("Animation_a10v1"),
 &"land": SubResource("Animation_gahj8"),
 &"pickup": SubResource("Animation_mb024"),
 &"punch": SubResource("Animation_cd4t8"),
@@ -747,22 +781,22 @@ collision_layer = 4
 collision_mask = 12
 script = ExtResource("2_amwov")
 duration_appear = 1000.0
-duration_between_melee_attacks = 1000
-duration_between_range_attacks = 4000
-duration_prep_range_attacks = 500
-duration_prep_melee_attacks = 500
+duration_between_melee_attacks = 750
+duration_between_range_attacks = 3000
+duration_prep_range_attacks = 350
+duration_prep_melee_attacks = 350
 shake_strength = 12.0
 shake_duration = 0.08
 down_ring_radius = 110.0
-down_ring_speed_scale = 0.55
-launch_shock_min = 0.15
-launch_shock_max = 0.45
-getup_stagger_min = 0.3
-getup_stagger_max = 0.8
+down_ring_speed_scale = 0.7
+launch_shock_min = 0.1
+launch_shock_max = 0.3
+getup_stagger_min = 0.15
+getup_stagger_max = 0.5
 damage = 2
 max_health = 20
 type = 1
-speed = 400.0
+speed = 430.0
 duration_grounded = 1000.0
 flight_speed = 1200.0
 knockback_intensity = 50.0

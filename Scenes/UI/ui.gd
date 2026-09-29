@@ -1,8 +1,6 @@
 class_name UI
 extends CanvasLayer
 
-const DEATH_SCREEN_PREFAB := preload("res://Scenes/UI/death_screen.tscn")
-const GAME_OVER_PREFAB := preload("res://Scenes/UI/game_over_screen.tscn")
 const OPTIONS_SCREEN_PREFAB := preload("res://Scenes/UI/options_screen.tscn")
 
 @onready var enemy_avatar: TextureRect = %EnemyAvatar
@@ -18,6 +16,22 @@ const OPTIONS_SCREEN_PREFAB := preload("res://Scenes/UI/options_screen.tscn")
 @export var duration_health_bar_visible : int
 @export var hint_scene: PackedScene = preload("res://Scenes/UI/hint_popup.tscn")
 
+@export_group("Death Sequence")
+## Целевой масштаб времени во время смерти игрока (меньше 1 = slow-mo).
+@export var death_slowmo_scale := 0.25
+## Время плавного замедления времени (сек).
+@export var death_slowmo_ramp_time := 0.4
+## Во сколько раз камера приближается к игроку при смерти.
+@export var death_camera_zoom := 1.6
+## Время наезда камеры на игрока (сек).
+@export var death_camera_time := 0.7
+## Пауза на кадре с игроком до затемнения (сек).
+@export var death_hold_time := 1.1
+## Плавность затемнения экрана (сек).
+@export var death_fade_time := 1.5
+## Пауза в черноте перед рестартом уровня (сек).
+@export var death_black_hold_time := 0.6
+
 const AVATAR_MAP : Dictionary = {
 	Character.Type.GOON: preload("res://Assets/Art/ui/avatars/avatar-goon.png"),
 	Character.Type.PUNK: preload("res://Assets/Art/ui/avatars/avatar-punk.png"),
@@ -26,11 +40,12 @@ const AVATAR_MAP : Dictionary = {
 	Character.Type.PLAYER: preload("res://Assets/Art/ui/avatars/muromec.webp"),
 	Character.Type.BOUNCER: preload("res://Assets/Art/ui/avatars/avatar-boss.png"),
 	Character.Type.HEAVY: preload("res://Assets/Art/ui/avatars/avatar-boss.png"),
+	Character.Type.LEAPER: preload("res://Assets/Art/ui/avatars/avatar-thug.png"),
 }
 
-var death_screen : DeathScreen = null
-var game_over_screen : GameOverScreen = null
 var options_screen : OptionsScreen = null
+var is_death_sequence_active := false
+var _death_black_overlay : ColorRect = null
 var time_start_health_bar_visible = Time.get_ticks_msec()
 
 
@@ -55,6 +70,9 @@ func _process(_delta: float) -> void:
 
 
 func handle_input() -> void:
+	# Не даём открыть паузу во время кинематографичной смерти
+	if is_death_sequence_active:
+		return
 	if Input.is_action_just_pressed("ui_cancel"):
 		if options_screen == null:
 			options_screen = OPTIONS_SCREEN_PREFAB.instantiate()
@@ -85,23 +103,14 @@ func on_combo_reset(points: int) -> void:
 func on_character_health_change(type: Character.Type, current_health: int, max_health: int) -> void:
 	if type == Character.Type.PLAYER:
 		player_health_bar.refresh(current_health, max_health)
-		if current_health <= 0 and death_screen == null:
-			death_screen = DEATH_SCREEN_PREFAB.instantiate()
-			death_screen.game_over.connect(on_game_over.bind())
-			add_child(death_screen)
+		if current_health <= 0:
+			start_death_sequence()
 	else:
 		time_start_health_bar_visible = Time.get_ticks_msec()
 		enemy_avatar.texture = AVATAR_MAP[type]
 		enemy_health_bar.refresh(current_health, max_health)
 		enemy_avatar.visible = true
 		enemy_health_bar.visible = true
-
-
-func on_game_over() -> void:
-	if game_over_screen == null:
-		game_over_screen = GAME_OVER_PREFAB.instantiate()
-		game_over_screen.set_score(score_indicator.real_score)
-		add_child(game_over_screen)
 
 
 func on_checkpoint_complete(_checkpoint: Checkpoint) -> void:
@@ -119,3 +128,69 @@ func start_wiggle() -> void:
 	tween.tween_property(current_task_label, "rotation_degrees", -5, 0.8)
 	tween.tween_property(current_task_label, "rotation_degrees", 5, 0.8)
 	tween.tween_property(current_task_label, "rotation_degrees", 0, 0.35)
+
+
+## Кинематографичная смерть игрока:
+## 1) плавное замедление времени (slow-mo) + замедление музыки и звуков;
+## 2) камера подъезжает к игроку и приближается;
+## 3) затемнение экрана; 4) перезапуск текущего уровня.
+func start_death_sequence() -> void:
+	if is_death_sequence_active:
+		return
+	is_death_sequence_active = true
+
+	var world := get_parent() as World
+	var cam := world.get_node_or_null("Camera") as Camera2D
+
+	# 1. Плавно замедляем время (весь мир уходит в slow-mo) и аудио
+	var slow_tween := create_tween()
+	slow_tween.set_ignore_time_scale(true)
+	slow_tween.tween_method(_set_time_scale, Engine.time_scale, death_slowmo_scale, death_slowmo_ramp_time)
+	MusicPlayer.set_slowmo(true)
+	SoundPlayer.set_slowmo(true)
+
+	# 2. Камера наезжает на игрока и приближается
+	if cam != null:
+		world.is_death_sequence_active = true
+		cam.position_smoothing_enabled = false
+		if cam.has_method("set_handheld_shake"):
+			cam.set_handheld_shake(false)
+		if cam.has_method("set_finisher_zoom"):
+			cam.set_finisher_zoom(false)
+		var focus := world.player.global_position if world.player != null else cam.global_position
+		var cam_tween := create_tween().set_parallel(true).set_ignore_time_scale(true)
+		cam_tween.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
+		cam_tween.tween_property(cam, "global_position", focus, death_camera_time)
+		cam_tween.tween_property(cam, "zoom", Vector2(death_camera_zoom, death_camera_zoom), death_camera_time)
+
+	# 3. Держим кадр на умирающем игроке
+	await get_tree().create_timer(death_hold_time, true, false, true).timeout
+
+	# 4. Затемнение экрана
+	_create_death_overlay()
+	var fade_tween := create_tween().set_ignore_time_scale(true)
+	fade_tween.tween_property(_death_black_overlay, "color:a", 1.0, death_fade_time)
+
+	# 5. Короткая пауза в темноте
+	await get_tree().create_timer(death_black_hold_time, true, false, true).timeout
+
+	# 6. Возвращаем время и аудио, перезапускаем уровень
+	_set_time_scale(1.0)
+	MusicPlayer.set_slowmo(false)
+	SoundPlayer.set_slowmo(false)
+	GameManager.load_level(GameManager.current_level_index)
+
+
+func _set_time_scale(value: float) -> void:
+	Engine.time_scale = value
+
+
+func _create_death_overlay() -> void:
+	if _death_black_overlay != null:
+		return
+	var overlay := ColorRect.new()
+	overlay.color = Color(0, 0, 0, 0)
+	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_death_black_overlay = overlay
+	add_child(overlay)

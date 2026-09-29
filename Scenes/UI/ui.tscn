@@ -63,6 +63,7 @@ process_mode = 3
 layer = 2
 script = ExtResource("1_fo61o")
 duration_health_bar_visible = 1000
+death_black_hold_time = 1.9
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=549755307]
 anchors_preset = 15

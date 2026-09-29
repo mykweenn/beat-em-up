@@ -307,12 +307,24 @@ func handle_double_tap_dash():
 				state = State.SPRINT # В обычном состоянии включаем бег
 		last_right_press_time = current_time
 
+	# UP — рывок вглубь сцены (вверх по экрану): быстрый рывок, как горизонтальный дэш
+	if Input.is_action_just_pressed("ui_up"):
+		if current_time - last_up_press_time <= DOUBLE_TAP_TIME:
+			start_dash(Vector2.UP)
+		last_up_press_time = current_time
+
+	# DOWN — рывок вглубь сцены (вниз по экрану): быстрый рывок, как горизонтальный дэш
+	if Input.is_action_just_pressed("ui_down"):
+		if current_time - last_down_press_time <= DOUBLE_TAP_TIME:
+			start_dash(Vector2.DOWN)
+		last_down_press_time = current_time
+
 
 func start_dash(direction: Vector2):
 	HitstopManager.freeze(0.03, 0.03)
 	state = State.DASH
 	dash_timer = DASH_DURATION
-	dash_direction = direction.x
+	dash_direction = direction
 	
 	# === ОБНОВЛЯЕМ НАПРАВЛЕНИЕ ВЗГЛЯДА ===
 	if direction.x != 0:

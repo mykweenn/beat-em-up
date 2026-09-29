@@ -6,11 +6,11 @@
 load_path = "res://.godot/imported/goon_enemy 96X96.png-62271fc9e98c2bf69dd9d535185d9536.ctex"
 
 [node name="GoonEnemy" unique_id=1966584693 instance=ExtResource("1_pcdoe")]
-duration_between_range_attacks = 3000
+duration_between_range_attacks = 2300
 damage = 5
 max_health = 18
 type = 2
-speed = 600.0
+speed = 660.0
 sprint_speed = 850.0
 can_respawn_knives = true
 duration_between_knife_respawn = 1000

@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://cleaperen015k"]
+
+[ext_resource type="PackedScene" uid="uid://jep2uj8ujo8a" path="res://Scenes/Characters/basic_enemy.tscn" id="1_leap"]
+[ext_resource type="Script" uid="uid://cleaperenxv2k" path="res://Scenes/Characters/leaper_enemy.gd" id="2_leap"]
+
+[node name="LeaperEnemy" unique_id=1966584693 instance=ExtResource("1_leap")]
+script = ExtResource("2_leap")
+leap_attack_range = 400.0
+leap_min_range = 170.0
+leap_prep_delay = 0.6
+leap_velocity = 650.0
+leap_cooldown = 1.3
+duration_between_melee_attacks = 600
+duration_between_range_attacks = 4000
+duration_prep_range_attacks = 500
+duration_prep_melee_attacks = 500
+down_ring_speed_scale = 0.55
+launch_shock_min = 0.15
+launch_shock_max = 0.45
+getup_stagger_min = 0.3
+getup_stagger_max = 0.8
+damage = 4
+max_health = 16
+type = 6
+duration_grounded = 1100.0
+jump_intesnity = 1350.0
+
+[editable path="DamageEmitter"]
+[editable path="DamageReceiver"]
+[editable path="CollateralDamageEmitter"]

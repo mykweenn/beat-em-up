@@ -1,18 +1,11 @@
 extends Sprite2D
 
-const DESATURATE_SHADER := preload("res://Resources/desaturate_death.gdshader")
-
-var desaturation := 0.0:
-	set(value):
-		desaturation = value
-		if material:
-			material.set_shader_parameter("desaturation", desaturation)
+## Во сколько раз затемнять труп (0..1; меньше = темнее).
+@export var corpse_darken := 0.7
+## Время плавного затемнения после смерти (сек).
+@export var corpse_darken_time := 2.0
 
 func setup_from_character(character: Character) -> void:
-	var shader_mat = ShaderMaterial.new()
-	shader_mat.shader = DESATURATE_SHADER
-	material = shader_mat
-
 	global_position = character.global_position
 
 	var animated : AnimatedSprite2D = character.get_node_or_null("AnimatedSprite2D")
@@ -21,10 +14,11 @@ func setup_from_character(character: Character) -> void:
 	if animated and animated.visible:
 		texture = animated.sprite_frames.get_frame_texture(
 			animated.animation, animated.frame)
+		centered = animated.centered
+		offset = animated.offset
 		global_position = animated.global_position
 		scale = animated.global_scale
 		flip_h = animated.flip_h
-		z_index = animated.z_index
 	elif char_sprite and char_sprite.texture:
 		var tex : Texture2D = char_sprite.texture
 		var tw := tex.get_width()
@@ -38,16 +32,18 @@ func setup_from_character(character: Character) -> void:
 		texture = AtlasTexture.new()
 		texture.atlas = tex
 		texture.region = Rect2(col * fw, row * fh, fw, fh)
+		centered = char_sprite.centered
+		offset = char_sprite.offset
 		global_position = char_sprite.global_position
-		if char_sprite.centered:
-			global_position -= char_sprite.offset
-		else:
-			global_position += char_sprite.offset
 		scale = char_sprite.scale
 		flip_h = char_sprite.flip_h
-		z_index = char_sprite.z_index
+
+	# Труп сортируется по Y вместе с персонажами: у всех z_index = 0,
+	# чтобы y-sort в ActorsContainer честно перемешивал их по высоте.
+	z_index = 0
 
 func _ready() -> void:
-	desaturation = 0.0
+	# Плавное затемнение от нормального цвета к тёмному
+	modulate = Color.WHITE
 	var tween = create_tween()
-	tween.tween_property(self, "desaturation", 1.0, 2.0)
+	tween.tween_property(self, "modulate", Color(corpse_darken, corpse_darken, corpse_darken, 1.0), corpse_darken_time)

@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://c68oxwq7pd2bh" path="res://Assets/Art/backgrounds/window.png" id="13_yuqwf"]
 [ext_resource type="Texture2D" uid="uid://dwpx3f7pub4pd" path="res://Assets/Art/backgrounds/rails.png" id="14_pqoun"]
 [ext_resource type="Texture2D" uid="uid://bqu8n8323d46c" path="res://Assets/Art/particles/light.png" id="15_beq1x"]
+[ext_resource type="PackedScene" uid="uid://cleaperen015k" path="res://Scenes/Characters/leaper_enemy.tscn" id="16_leqp"]
 
 [sub_resource type="Animation" id="Animation_beq1x"]
 length = 0.001
@@ -259,6 +260,12 @@ launch_shock_min = 0.15
 launch_shock_max = 0.45
 getup_stagger_min = 0.3
 getup_stagger_max = 0.8
+
+[node name="LeaperEnemy" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="12" unique_id=1729912011 instance=ExtResource("16_leqp")]
+position = Vector2(158, 45)
+
+[node name="LeaperEnemy2" parent="Checkpoints/Checkpoint2/Enemies" parent_id_path=PackedInt32Array(1516395547, 214738812) index="13" unique_id=1729912012 instance=ExtResource("16_leqp")]
+position = Vector2(163, 78)
 
 [node name="Checkpoint3" parent="Checkpoints" parent_id_path=PackedInt32Array(1705422277) index="2" unique_id=1168583206 instance=ExtResource("3_xnrnn")]
 position = Vector2(330, 0)

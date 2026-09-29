@@ -31,6 +31,7 @@ func _ready() -> void:
 	# Дефолтный уровень (всегда доступен)
 	if level_registry.is_empty():
 		add_level("STAGE 1: УЛИЦЫ", "res://Scenes/Stage/streets.tscn")
+		add_level("STAGE 2: ЗАДНИЙ ДВОР", "res://Scenes/Stage/back_streets.tscn")
 
 
 ## Добавляет уровень в реестр. Вызывайте из main_menu.gd или из кода.
@@ -39,8 +40,9 @@ func add_level(level_name: String, scene_path: String) -> void:
 
 
 ## Возвращает количество доступных (разблокированных) уровней.
+## Все уровни из реестра доступны для выбора в меню.
 func get_unlocked_level_count() -> int:
-	return mini(level_registry.size(), last_completed_level + 2)
+	return level_registry.size()
 
 
 ## Загружает уровень по индексу из реестра.
